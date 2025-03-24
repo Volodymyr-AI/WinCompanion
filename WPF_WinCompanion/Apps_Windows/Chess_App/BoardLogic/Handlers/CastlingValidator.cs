@@ -24,11 +24,14 @@ public class CastlingValidator
 
     public bool CanCastle(ChessSquare kingSquare, ChessSquare rookSquare, ChessBoardModel board)
     {
+        //If King or Rook have already moved, castling is impossible
         if (_kingMoved[kingSquare.Piece.Color] || _rookMoved[(kingSquare.Piece.Color, rookSquare.Column)])
             return false;
+        //If King and Rook not on the same Row
         if(kingSquare.Row != rookSquare.Row)
             return false;
 
+        //Which way to Rook from King we are watching
         int step = rookSquare.Column > kingSquare.Column ? 1 : -1;
         
         //Check if between King and Rook no either pieces
