@@ -1,0 +1,105 @@
+﻿<Window x:Class="WPF_WinCompanion.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:WPF_WinCompanion"
+        xmlns:controls="clr-namespace:WPF_WinCompanion.Controls"
+        mc:Ignorable="d"
+        Title="WinCompanion" Height="500" Width="1200"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanMinimize"
+        FontFamily="Arial"
+        Style="{StaticResource MaterialDesignWindow}">
+    <Window.Background>
+        <ImageBrush Stretch="UniformToFill"  ImageSource="D:\Visual Studio\Solutions\WinCompanion\WPF_WinCompanion\Images\Background Images\ocean.jpg"/>
+    </Window.Background>
+    <!-- Apps icons -->
+    <Window.Resources>
+        <Style x:Key="IconStyle" TargetType="Border">
+            <Setter Property="Width" Value="90"/>
+            <Setter Property="Height" Value="80"/>
+            <Setter Property="CornerRadius" Value="20"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Gray"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="0,5,0,5"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect ShadowDepth="0" BlurRadius="5" Opacity="0"/>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="BorderBrush" Value="LightCyan"/>
+                    <Setter Property="BorderThickness" Value="1" />
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect ShadowDepth="0" BlurRadius="10" Opacity="0.5"/>
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    <!-- Field for adding app-icons -->
+    <Grid>
+        <!-- Upper panel -->
+        <Grid HorizontalAlignment="Center" VerticalAlignment="Top" Height="24" Width="1200" Background="#80FFFFFF" Margin="0,0,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0,0,0" Grid.Column="0">
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0,0,0">
+                    <TextBlock Text="$" Foreground="Black" FontFamily="Arial" FontWeight="Heavy" FontSize="17" VerticalAlignment="Center"/>
+                    <TextBlock Name="DollarValue" Text="40.40" FontFamily="Arial" Foreground="Black" FontWeight="Medium" FontSize="17" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0,10,0">
+                    <TextBlock Text="€" Foreground="Black" FontFamily="Arial" FontWeight="Heavy" FontSize="17" VerticalAlignment="Center"/>
+                    <TextBlock Name="EuroValue" Text="41.30" FontFamily="Arial" Foreground="Black" FontWeight="Medium" FontSize="17" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="1">
+                    <TextBlock Text="£" Foreground="Black" FontFamily="Arial" FontWeight="Heavy" FontSize="17" VerticalAlignment="Center"/>
+                    <TextBlock Name="PoundValue" Text="45.15" FontFamily="Arial" Foreground="Black" FontWeight="Medium" FontSize="17" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                </StackPanel>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10,0,15,0" Grid.Column="1">
+                <TextBlock Name="DateTimeText" Foreground="Black" FontFamily="Arial" FontWeight="ExtraLight" FontSize="17" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+        <!-- Apps -->
+        <WrapPanel HorizontalAlignment="Left" VerticalAlignment="Top" Height="460" Width="800" Margin="0,24,0,0">
+            <StackPanel Margin="10" Width="100" Height="110" VerticalAlignment="Top" MouseUp="WeatherApp_Click">
+                <Border Style="{StaticResource IconStyle}">
+                    <Image Source="D:\Visual Studio\Solutions\WinCompanion\WPF_WinCompanion\Images\Icons\weather-icon.png" Stretch="Uniform"/>
+                </Border>
+                <TextBlock Text="Weather" HorizontalAlignment="Center" Foreground="White" FontFamily="Andalus" FontWeight="Medium" FontSize="15"/>
+            </StackPanel>
+            <StackPanel Margin="10" Width="100" Height="110" VerticalAlignment="Top" MouseUp="FinanceTracker_Click">
+                <Border Style="{StaticResource IconStyle}">
+                    <Image Source="D:\Visual Studio\Solutions\WinCompanion\WPF_WinCompanion\Images\Icons\finance.png" Stretch="Uniform"/>
+                </Border>
+                <TextBlock Text="Finances" HorizontalAlignment="Center" Foreground="White" FontFamily="Andalus" FontWeight="Medium" FontSize="15"/>
+            </StackPanel>
+            <StackPanel Margin="10" Width="100" Height="110" VerticalAlignment="Top" MouseUp="NotesApp_Click">
+                <Border Style="{StaticResource IconStyle}">
+                    <Image Source="D:\Visual Studio\Solutions\WinCompanion\WPF_WinCompanion\Images\Icons\notes.png" Stretch="Uniform"/>
+                </Border>
+                <TextBlock Text="Notes" HorizontalAlignment="Center" Foreground="White" FontFamily="Andalus" FontWeight="Medium" FontSize="15"/>
+            </StackPanel>
+            <StackPanel Margin="10" Width="100" Height="110" VerticalAlignment="Top" MouseUp="ChessApp_Click">
+                <Border Style="{StaticResource IconStyle}">
+                    <Image Source="D:\Visual Studio\Solutions\WinCompanion\WPF_WinCompanion\Images\Icons\chess1.png" Stretch="Uniform"/>
+                </Border>
+                <TextBlock Text="Chess" HorizontalAlignment="Center" Foreground="White" FontFamily="Andalus" FontWeight="Medium" FontSize="15"/>
+            </StackPanel>
+            <!-- Добавьте другие иконки для других приложений здесь -->
+        </WrapPanel>
+        <!-- Widgets -->
+        <WrapPanel>
+
+        </WrapPanel>
+        <controls:MarqueeControl x:Name="MarqueeControl" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" />
+    </Grid>
+</Window>

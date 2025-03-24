@@ -1,0 +1,152 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MaterialDesignColors" Version="3.1.0" />
+    <PackageReference Include="MaterialDesignThemes" Version="5.1.0" />
+    <PackageReference Include="NewsAPI" Version="0.7.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Currency_Exchange.Service\Currency_Exchange.Service.csproj" />
+    <ProjectReference Include="..\News_Widget.MainPage\News_Widget.MainPage.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Apps_Windows\Chess_App\Views\ChessWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <XamlRuntime>Wpf</XamlRuntime>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Remove="Images\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Images\ChessApp\White\bishop.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\White\bishop.png</Link>
+    </None>
+    <None Update="Images\ChessApp\White\king.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\White\king.png</Link>
+    </None>
+    <None Update="Images\ChessApp\White\knight.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\White\knight.png</Link>
+    </None>
+    <None Update="Images\ChessApp\White\pawn.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\White\pawn.png</Link>
+    </None>
+    <None Update="Images\ChessApp\White\queen.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\White\queen.png</Link>
+    </None>
+    <None Update="Images\ChessApp\White\rook.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\White\rook.png</Link>
+    </None>
+    <None Update="Images\ChessApp\Black\Bishop.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\Black\Bishop.png</Link>
+    </None>
+    <None Update="Images\ChessApp\Black\King.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\Black\King.png</Link>
+    </None>
+    <None Update="Images\ChessApp\Black\Knight.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\Black\Knight.png</Link>
+    </None>
+    <None Update="Images\ChessApp\Black\Pawn.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\Black\Pawn.png</Link>
+    </None>
+    <None Update="Images\ChessApp\Black\Queen.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\Black\Queen.png</Link>
+    </None>
+    <None Update="Images\ChessApp\Black\Rook.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\Black\Rook.png</Link>
+    </None>
+    <None Update="Images\ChessApp\Black\Bishop.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\Black\Bishop.png</Link>
+    </None>
+    <None Update="Images\ChessApp\Black\King.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\Black\King.png</Link>
+    </None>
+    <None Update="Images\ChessApp\Black\Knight.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\Black\Knight.png</Link>
+    </None>
+    <None Update="Images\ChessApp\Black\Pawn.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\Black\Pawn.png</Link>
+    </None>
+    <None Update="Images\ChessApp\Black\Queen.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\Black\Queen.png</Link>
+    </None>
+    <None Update="Images\ChessApp\Black\Rook.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\Black\Rook.png</Link>
+    </None>
+    <None Remove="Images\**" />
+    <None Update="Images\ChessApp\Black\Bishop.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\Black\Bishop.png</Link>
+    </None>
+    <None Update="Images\ChessApp\Black\King.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\Black\King.png</Link>
+    </None>
+    <None Update="Images\ChessApp\Black\Knight.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\Black\Knight.png</Link>
+    </None>
+    <None Update="Images\ChessApp\Black\Pawn.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\Black\Pawn.png</Link>
+    </None>
+    <None Update="Images\ChessApp\Black\Queen.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\Black\Queen.png</Link>
+    </None>
+    <None Update="Images\ChessApp\Black\Rook.png">
+      <Link>Apps_Windows\Chess_App\ChessApp\Black\Rook.png</Link>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Images\ChessApp\White\Bishop.png" />
+    <None Remove="Images\ChessApp\White\King.png" />
+    <None Remove="Images\ChessApp\White\Knight.png" />
+    <None Remove="Images\ChessApp\White\Pawn.png" />
+    <None Remove="Images\ChessApp\White\Queen.png" />
+    <None Remove="Images\ChessApp\White\Rook.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Images\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="Images\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Apps_Windows\Chess_App\ChessApp\Black\Bishop.png" />
+    <Resource Include="Apps_Windows\Chess_App\ChessApp\Black\Bishop.png" />
+    <None Remove="Apps_Windows\Chess_App\ChessApp\Black\King.png" />
+    <Resource Include="Apps_Windows\Chess_App\ChessApp\Black\King.png" />
+    <None Remove="Apps_Windows\Chess_App\ChessApp\Black\Knight.png" />
+    <Resource Include="Apps_Windows\Chess_App\ChessApp\Black\Knight.png" />
+    <None Remove="Apps_Windows\Chess_App\ChessApp\Black\Pawn.png" />
+    <Resource Include="Apps_Windows\Chess_App\ChessApp\Black\Pawn.png" />
+    <None Remove="Apps_Windows\Chess_App\ChessApp\Black\Queen.png" />
+    <Resource Include="Apps_Windows\Chess_App\ChessApp\Black\Queen.png" />
+    <None Remove="Apps_Windows\Chess_App\ChessApp\Black\Rook.png" />
+    <Resource Include="Apps_Windows\Chess_App\ChessApp\Black\Rook.png" />
+    <None Remove="Apps_Windows\Chess_App\ChessApp\White\Bishop.png" />
+    <Resource Include="Apps_Windows\Chess_App\ChessApp\White\Bishop.png" />
+    <None Remove="Apps_Windows\Chess_App\ChessApp\White\King.png" />
+    <Resource Include="Apps_Windows\Chess_App\ChessApp\White\King.png" />
+    <None Remove="Apps_Windows\Chess_App\ChessApp\White\Knight.png" />
+    <Resource Include="Apps_Windows\Chess_App\ChessApp\White\Knight.png" />
+    <None Remove="Apps_Windows\Chess_App\ChessApp\White\Pawn.png" />
+    <Resource Include="Apps_Windows\Chess_App\ChessApp\White\Pawn.png" />
+    <None Remove="Apps_Windows\Chess_App\ChessApp\White\Queen.png" />
+    <Resource Include="Apps_Windows\Chess_App\ChessApp\White\Queen.png" />
+    <None Remove="Apps_Windows\Chess_App\ChessApp\White\Rook.png" />
+    <Resource Include="Apps_Windows\Chess_App\ChessApp\White\Rook.png" />
+  </ItemGroup>
+
+</Project>
