@@ -1,0 +1,54 @@
+# .NET build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Dd]ist/
+[Dd]ebug-x64/
+[Dd]ebug-x86/
+[Dd]evelopment/
+[Dd]ist-x64/
+[Dd]ist-x86/
+Release/
+Release-x64/
+Release-x86/
+x64/
+x86/
+out/
+
+# User-specific files
+.vs/
+.vs2019/
+.vs2017/
+.idea/
+userconfig.xml
+
+# Windows Installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows Installer files
+*.pdb
+*.obj
+*.tmp
+
+# User-specific files
+*.user
+*.userosscache
+*.suo
+*.userprefs
+
+# Windows Installer files
+*.dll
+*.exe
+
+# JetBrains Rider
+.idea/
+
+# ASP.NET
+project.lock.json
+project.fragment.lock.json
+
+# Additional
+bin/
+obj/
