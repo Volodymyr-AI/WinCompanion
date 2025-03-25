@@ -74,7 +74,8 @@ public class ChessMoveHandler
             return;
         }
         
-        if (_selectedSquare.Piece.IsValidMove(_selectedSquare, clickedSquare, _chessBoardModel.Squares))
+        
+        if (_selectedSquare.Piece.IsValidMove(_selectedSquare, clickedSquare, _chessBoardModel.Squares)) // ERROR HERE
         {
             if (_selectedSquare.Piece is King && Math.Abs(_selectedSquare.Column - clickedSquare.Column) == 2)
             {
@@ -152,9 +153,9 @@ public class ChessMoveHandler
 
     private void HandleCastling(ChessSquare kingSquare, ChessSquare destination)
     {
-        int step = destination.Column > kingSquare.Column ? 1 : -1;
-        int rookColumn = (step == 1) ? 7 : 0; // Check where Rook is
-        ChessSquare rookSquare = _chessBoardModel.Squares.FirstOrDefault(sq => sq.Row == kingSquare.Row && sq.Column == rookColumn);
+        int step = destination.Column > kingSquare.Column ? 1 : -1; // Check in which direction we should move to make castling
+        int rookColumn = (step == 1) ? 7 : 0; // Check column of Rook
+        ChessSquare rookSquare = _chessBoardModel.Squares.FirstOrDefault(sq => sq.Row == kingSquare.Row && sq.Column == rookColumn); // Square of rook must be same to king's row and be on a start column to castle successfully
         if (rookSquare == null) 
         {
             MessageBox.Show("No rook found for castling.");
@@ -165,29 +166,26 @@ public class ChessMoveHandler
             MessageBox.Show("Invalid castling");
             return;
         }
-        
-        MovePiece(destination, kingSquare);
 
-        int rookNewColumn = destination.Column - step;
-        ChessSquare rookNewSquare = _chessBoardModel.Squares.First(sq => sq.Row == rookSquare.Row && sq.Column == rookNewColumn);
-        MovePiece(rookNewSquare, rookSquare);
-        
-        // Проверка на наличие фигуры на клетке короля
-        if (kingSquare.Piece == null)
-        {
-            //MessageBox.Show("No piece on the king's square.");
-            return;
-        }
+        King king = (King)kingSquare.Piece; // Save the King before moving
+        MovePiece(destination, kingSquare); // moving King piece to a new place deleting it from the old square
 
-        // Проверка на ладью перед перемещением
-        if (rookSquare.Piece == null || !(rookSquare.Piece is Rook))
+        int rookNewColumn = destination.Column - step; // Count new column for Rook
+        ChessSquare rookNewSquare = _chessBoardModel.Squares.First(sq => sq.Row == rookSquare.Row && sq.Column == rookNewColumn); // Searching for the square where Rook should step
+        Rook rook = rookSquare.Piece as Rook;
+        MovePiece(rookNewSquare, rookSquare); // Moving Rook to a rookNewSquare
+        
+        // Check new position of a King
+        if (destination.Piece == null || !(destination.Piece is King))
         {
-            MessageBox.Show("Invalid rook on the square.");
+            MessageBox.Show("King is missing after castling.");
             return;
         }
         
-
-        _castlingValidator.MarkKingMoved(kingSquare.Piece.Color);
-        _castlingValidator.MarkRookMoved(rookSquare.Piece.Color, rookSquare.Column);
+        _castlingValidator.MarkKingMoved(king.Color);
+        _castlingValidator.MarkRookMoved(rook.Color, rookSquare.Column);
+        
+        _selectedSquare = null; // unselect king square
+        _currentTurn = _currentTurn == PieceColor.White ? PieceColor.Black : PieceColor.White; // giving turn to opponent
     }
 }
