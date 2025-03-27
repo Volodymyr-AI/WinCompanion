@@ -67,45 +67,53 @@ public static class CheckMateValidator
     }
 
     /// <summary>
-    /// 
+    /// Simulation of possible King moves to know if it still is under check after move
     /// </summary>
     /// <param name="board"></param>
-    /// <param name="from"></param>
-    /// <param name="to"></param>
-    /// <returns></returns>
+    /// <param name="from">Current King square</param>
+    /// <param name="to">Square where King can make a move</param>
+    /// <returns>Returns true for the move if King still under attack and false if not</returns>
     public static bool IsKingCheckAfterMove(ChessBoardModel board, ChessSquare from, ChessSquare to)
     {
         if (board == null || from == null || to == null || from.Piece == null)
             return false;
         
-        var bakcupPiece = to.Piece;
-        var movedPiece = from.Piece;
+        var backupPiece = to.Piece; // Save the piece that is in a desirable square
+        var movedPiece = from.Piece; // Save the piece we are moving (King)
         
-        to.Piece = movedPiece;
-        from.Piece = null;
+        to.Piece = movedPiece; // Our test move to simulate 
+        from.Piece = null; // And making null square where piece used to be
         
-        bool inCheck = IsKingCheck(board, movedPiece.Color);
+        bool inCheck = IsKingCheck(board, movedPiece.Color); // Now we check if King under check after out virtual move
         
-        from.Piece = movedPiece;
-        to.Piece = bakcupPiece;
+        // And now rolling back not to influence a game
+        from.Piece = movedPiece; 
+        to.Piece = backupPiece;
         
         Debug.WriteLine($"Checking if king is in check after move: {inCheck}");
         return inCheck;
     }
-    
-    public static bool CanDefendKing(ChessBoardModel board, PieceColor currentTurn)
+    /// <summary>
+    /// Examine if any piece can help King avoid check by 2 ways
+    /// 1) Take a piece that attacks King
+    /// 2) Protect King by standing above him
+    /// </summary>
+    /// <param name="board"></param>
+    /// <param name="currentTurn"></param>
+    /// <returns></returns>
+    public static bool CanDefendKing(ChessBoardModel board, PieceColor kingColor)
     {
+        if(!IsKingCheck(board, kingColor)) return false;
         // Find square of a King
-        ChessSquare kingSquare = board.Squares.FirstOrDefault(sq => sq.Piece is King && sq.Piece.Color == currentTurn);
-        
-        if (kingSquare == null) return false;
+        ChessSquare kingSquare = board.Squares.First(sq => sq.Piece is King && sq.Piece.Color == kingColor);
 
         // Find all opponent pieces that can attack King
         List<ChessSquare> attackingPieces = board.Squares
             .Where(sq => sq.Piece != null
-                         && sq.Piece.Color != currentTurn
+                         && sq.Piece.Color != kingColor
                          && sq.Piece.IsValidMove(sq, kingSquare, board.Squares))
             .ToList();
+        if (attackingPieces.Any()) return false; // no checkmate if there is no attacking squares
 
         // If King is under attack from 2 pieces at a time only moving King will help
         if (attackingPieces.Count > 1)
@@ -113,24 +121,18 @@ public static class CheckMateValidator
             return false; // Only King move helps
         }
         
-        
-        ChessSquare attackerSquare = attackingPieces.FirstOrDefault();
-        if (attackerSquare == null)
-        {
-            return false; // If no pieces trying to attack the King 
-        }
+        ChessSquare attackerSquare = attackingPieces.First();
         // Check if we can take an attacking piece
         bool canCaptureAttacker = board.Squares
             .Any(sq => sq.Piece != null
-                       && sq.Piece.Color == currentTurn
-                       && sq.Piece.IsValidMove(sq, attackerSquare, board.Squares));
+                       && sq.Piece.Color == kingColor
+                       && sq.Piece.IsValidMove(sq, attackerSquare, board.Squares)
+                       && !IsKingCheckAfterMove(board, sq, attackerSquare));
 
         if (canCaptureAttacker)
-        {
             return true;
-        }
 
-        // Check if there is a way to defend from check ( not working against Knight )
+        // Verify if there is a way to defend from check ( not working against Knight )
         if (!(attackerSquare.Piece is Knight))
         {
             List<ChessSquare> blockingSquare = GetBlockingSquare(board, kingSquare, attackerSquare);
@@ -138,8 +140,9 @@ public static class CheckMateValidator
             {
                 bool canBlock = board.Squares
                     .Any(sq => sq.Piece != null
-                               && sq.Piece.Color == currentTurn
-                               && sq.Piece.IsValidMove(sq, blockSquare, board.Squares));
+                               && sq.Piece.Color == kingColor
+                               && sq.Piece.IsValidMove(sq, blockSquare, board.Squares)
+                               && !IsKingCheckAfterMove(board, blockSquare, blockSquare));
                 
                 if(canBlock)
                     return true;
@@ -155,6 +158,13 @@ public static class CheckMateValidator
         return false; // No way to protect King
     }
 
+    /// <summary>
+    /// If check is made by Rook, Bishop or Queen find a square between King and attacking piece for "protection"
+    /// </summary>
+    /// <param name="board"></param>
+    /// <param name="kingSquare"></param>
+    /// <param name="attackerSquare"></param>
+    /// <returns></returns>
     private static List<ChessSquare> GetBlockingSquare(ChessBoardModel board, ChessSquare kingSquare, ChessSquare attackerSquare)
     {
         List<ChessSquare> blockingSquares = new List<ChessSquare>();
