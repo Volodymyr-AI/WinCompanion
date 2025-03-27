@@ -6,6 +6,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using WPF_WinCompanion.Apps_Windows.Chess_App.BoardLogic;
 using WPF_WinCompanion.Apps_Windows.Chess_App.BoardLogic.Handlers;
+using WPF_WinCompanion.Apps_Windows.Chess_App.BoardLogic.Validators;
 using WPF_WinCompanion.Apps_Windows.Chess_App.Commands;
 using WPF_WinCompanion.Apps_Windows.Chess_App.Helpers;
 using WPF_WinCompanion.Apps_Windows.Chess_App.Models;

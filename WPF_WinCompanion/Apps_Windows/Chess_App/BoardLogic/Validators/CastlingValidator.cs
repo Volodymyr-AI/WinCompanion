@@ -1,10 +1,8 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows;
+﻿using WPF_WinCompanion.Apps_Windows.Chess_App.BoardLogic.Handlers;
 using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
 using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess.Pieces;
 
-namespace WPF_WinCompanion.Apps_Windows.Chess_App.BoardLogic.Handlers;
+namespace WPF_WinCompanion.Apps_Windows.Chess_App.BoardLogic.Validators;
 
 public class CastlingValidator
 {
