@@ -150,6 +150,11 @@ public class ChessMoveHandler
                 Debug.WriteLine($"{_currentTurn} is in check!");
             }
         }
+        else if(StalemateValidator.IsStalemate(_chessBoardModel, _currentTurn))
+        {
+            MessageBox.Show($"Game finished with Stalemate");
+            Debug.WriteLine($"Game is stalemated!");
+        }
     }
 
     private void HandleCastling(ChessSquare kingSquare, ChessSquare destination)
