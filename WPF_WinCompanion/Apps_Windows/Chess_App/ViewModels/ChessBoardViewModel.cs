@@ -21,24 +21,25 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     public ChessBoardModel BoardModel { get; init; } = new();
     public ICommand SquareClickCommand { get; }
     
-    private ChessMoveHandler _chessMoveHandler;
-    
-    private PieceColor _currentTurn = PieceColor.White; // start game with white side
-
-    public CastlingValidator _castlingValidator { get; } = new();
-    
+    private readonly IChessMoveHandler _moveHandler;
+    private readonly GameHandler _gameHandler;
 
     public ChessBoardViewModel()
     {
         ChessBoardInitializer.InitializeBoard(BoardModel);
-        _chessMoveHandler = new ChessMoveHandler(BoardModel, _currentTurn, _castlingValidator);
-        _chessMoveHandler.BoardUpdated += () => OnPropertyChanged(nameof(BoardModel));
+
+        _moveHandler = new ChessMoveHandler(BoardModel, new CastlingValidator(), null);
+        _gameHandler = new GameHandler(BoardModel, _moveHandler);
+        
+        ((ChessMoveHandler)_moveHandler).SetGameHandler(_gameHandler);
+
+        _moveHandler.BoardUpdated += () => OnPropertyChanged(nameof(BoardModel));
 
         SquareClickCommand = new RelayCommand(par =>
         {
             if (par is ChessSquare square)
             {
-                _chessMoveHandler.OnSquareClicked(square);
+                _moveHandler.OnSquareClicked(square);
             }
         });
     }
