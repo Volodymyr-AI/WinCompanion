@@ -8,14 +8,14 @@ using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess.Pieces;
 
 namespace WPF_WinCompanion.Apps_Windows.Chess_App.BoardLogic.Handlers;
 
-public class ChessMoveHandler
+public class ChessMoveHandler : IChessMoveHandler
 {
     private ChessSquare selectedSquare;
     
     private PieceColor _currentTurn;
     private readonly ChessBoardModel _chessBoardModel;
     private readonly CastlingValidator _castlingValidator;
-    private readonly GameHandler _gameHandler;
+    private GameHandler _gameHandler;
     
     public event Action BoardUpdated;
 
@@ -56,7 +56,7 @@ public class ChessMoveHandler
         Console.WriteLine($"{clickedSquare.Piece.Type} unselected");
     }
     
-    private void HandlePieceMovement(ChessSquare clickedSquare)
+    private void HandlePieceMovement(ChessSquare destinationSquare)
     {
         if (_chessBoardModel == null || _chessBoardModel.Squares == null)
         {
@@ -64,12 +64,12 @@ public class ChessMoveHandler
             return;
         }
         
-        if (selectedSquare.Piece.IsValidMove(selectedSquare, clickedSquare, _chessBoardModel.Squares))
+        if (selectedSquare.Piece.IsValidMove(selectedSquare, destinationSquare, _chessBoardModel.Squares))
         {
-            if (selectedSquare.Piece is King && Math.Abs(selectedSquare.Column - clickedSquare.Column) == 2)
-                HandleCastling(selectedSquare, clickedSquare);
+            if (selectedSquare.Piece is King && Math.Abs(selectedSquare.Column - destinationSquare.Column) == 2)
+                HandleCastling(selectedSquare, destinationSquare);
             else
-                MovePiece(clickedSquare);
+                MovePiece(destinationSquare);
         }
         else
         {
@@ -79,36 +79,48 @@ public class ChessMoveHandler
         }
     }
     
-    private void MovePiece(ChessSquare clickedSquare)
+    /// <summary>
+    /// Move the piece selected by the gravel to a new square on the chessboard.
+    /// Updates the board state, changes the move, checks the game status (check, mate, stalemate).
+    /// </summary>
+    /// <param name="destinationSquare">The cell where you want to move the figure.</param>
+    private void MovePiece(ChessSquare destinationSquare)
     {
-        clickedSquare.Piece = selectedSquare.Piece;
+        destinationSquare.Piece = selectedSquare.Piece;
         selectedSquare.Piece = null;
         selectedSquare.IsSelected = false;
 
-        HandlePawnPromotion(clickedSquare);
+        HandlePawnPromotion(destinationSquare);
     
         selectedSquare = null;
         _currentTurn = _gameHandler.Opponent(_currentTurn);
 
         BoardUpdated?.Invoke(); // Inform viewmodel
-        Console.WriteLine($"{clickedSquare.Piece.Type} moved");
+        Console.WriteLine($"{destinationSquare.Piece.Type} moved");
 
-        GameHandler.CheckGameStatus(_chessBoardModel, _currentTurn);
+        //GameHandler.CheckGameStatus(_chessBoardModel, _currentTurn);
+        _gameHandler.CheckGameStatus();
     }
 
-    private void MovePiece(ChessSquare destination, ChessSquare source)
+    /// <summary>
+    /// Moves a piece from one square to another without changing the current move.
+    /// Used for special moves such as castling.
+    /// </summary>
+    /// <param name="destinationSquare">The cell where the figure moves.</param>
+    /// <param name="source">The cell from which the piece moves.</param>
+    private void MovePiece(ChessSquare destinationSquare, ChessSquare sourceSquare)
     {
-        destination.Piece = source.Piece;
-        source.Piece = null;
-        source.IsSelected = false;
+        destinationSquare.Piece = sourceSquare.Piece;
+        sourceSquare.Piece = null;
+        sourceSquare.IsSelected = false;
 
-        if (destination.Piece is Pawn)
+        if (destinationSquare.Piece is Pawn)
         {
-            HandlePawnPromotion(destination);
+            HandlePawnPromotion(destinationSquare);
         }
         
         BoardUpdated?.Invoke();
-        Console.WriteLine($"{destination.Piece.Type} moved to ({destination.Row}, {destination.Column})");
+        Console.WriteLine($"{destinationSquare.Piece.Type} moved to ({destinationSquare.Row}, {destinationSquare.Column})");
     }
     
     private void HandlePawnPromotion(ChessSquare clickedSquare)
@@ -155,5 +167,10 @@ public class ChessMoveHandler
         
         selectedSquare = null; // unselect king square
         _currentTurn = _currentTurn == PieceColor.White ? PieceColor.Black : PieceColor.White; // giving turn to opponent
+    }
+    
+    public void SetGameHandler(GameHandler gameHandler)
+    {
+        _gameHandler = gameHandler;
     }
 }
