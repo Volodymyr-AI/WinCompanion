@@ -58,6 +58,7 @@ public class ChessMoveHandler : IChessMoveHandler
     
     private void HandlePieceMovement(ChessSquare destinationSquare)
     {
+        
         if (_chessBoardModel == null || _chessBoardModel.Squares == null)
         {
             MessageBox.Show("Board is not initialized!");
@@ -66,7 +67,12 @@ public class ChessMoveHandler : IChessMoveHandler
         
         if (selectedSquare.Piece.IsValidMove(selectedSquare, destinationSquare, _chessBoardModel.Squares))
         {
-            if (selectedSquare.Piece is King && Math.Abs(selectedSquare.Column - destinationSquare.Column) == 2)
+            if (selectedSquare.Piece is King && CheckMateValidator.IsKingCheckAfterMove(_chessBoardModel, selectedSquare, destinationSquare) == true)
+            {
+                MessageBox.Show("Invalid move, King still under check");
+                UnselectPiece(selectedSquare);
+            }
+            else if (selectedSquare.Piece is King && Math.Abs(selectedSquare.Column - destinationSquare.Column) == 2)
                 HandleCastling(selectedSquare, destinationSquare);
             else
                 MovePiece(destinationSquare);
