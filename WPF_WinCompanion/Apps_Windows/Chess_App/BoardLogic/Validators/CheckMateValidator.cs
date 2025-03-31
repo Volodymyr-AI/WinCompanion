@@ -8,7 +8,7 @@ namespace WPF_WinCompanion.Apps_Windows.Chess_App.BoardLogic.Validators;
 public static class CheckMateValidator
 {
     /// <summary>
-    ///  
+    ///  Check if King is under attack
     /// </summary>
     /// <param name="board"></param>
     /// <param name="currentTurn"></param>
@@ -33,7 +33,7 @@ public static class CheckMateValidator
     }
 
     /// <summary>
-    /// 
+    /// Check if King is under checkmate
     /// </summary>
     /// <param name="board"></param>
     /// <param name="kingColor"></param>
