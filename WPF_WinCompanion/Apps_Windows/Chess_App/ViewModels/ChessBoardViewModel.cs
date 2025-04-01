@@ -21,6 +21,8 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     public ChessBoardModel BoardModel { get; init; } = new();
     public ICommand SquareClickCommand { get; }
     
+    public PieceColor CurrentTurn => _gameHandler.CurrentTurn;
+    
     private readonly IChessMoveHandler _moveHandler;
     private readonly GameHandler _gameHandler;
 
@@ -30,6 +32,14 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
         _moveHandler = new ChessMoveHandler(BoardModel, new CastlingValidator(), null);
         _gameHandler = new GameHandler(BoardModel, _moveHandler);
+        _gameHandler.PropertyChanged += (sender, args) =>
+        {
+            if (args.PropertyName == nameof(GameHandler.CurrentTurn))
+            {
+                Debug.WriteLine($"🔄 UI notified about CurrentTurn change: {_gameHandler.CurrentTurn}");
+                OnPropertyChanged(nameof(CurrentTurn));
+            }
+        };
         
         ((ChessMoveHandler)_moveHandler).SetGameHandler(_gameHandler);
 

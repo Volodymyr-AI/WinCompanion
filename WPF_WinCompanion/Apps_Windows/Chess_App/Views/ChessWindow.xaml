@@ -151,8 +151,33 @@
         
                 <!-- Turn indicators -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                    <Ellipse Width="20" Height="20" Fill="LimeGreen" Stroke="Black" StrokeThickness="1" Margin="5"/>
-                    <Ellipse Width="20" Height="20" Fill="White" Stroke="Black" StrokeThickness="1" Margin="5"/>
+                    <!-- Left indicator (White's turn) -->
+                    <Ellipse Width="20" Height="20" Stroke="Black" StrokeThickness="1" Margin="5">
+                        <Ellipse.Style>
+                            <Style TargetType="Ellipse">
+                                <Setter Property="Fill" Value="White"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentTurn}" Value="White">
+                                        <Setter Property="Fill" Value="LimeGreen"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Ellipse.Style>
+                    </Ellipse>
+
+                    <!-- Right indicator (Black's turn) -->
+                    <Ellipse Width="20" Height="20" Stroke="Black" StrokeThickness="1" Margin="5">
+                        <Ellipse.Style>
+                            <Style TargetType="Ellipse">
+                                <Setter Property="Fill" Value="White"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding CurrentTurn}" Value="Black">
+                                        <Setter Property="Fill" Value="LimeGreen"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Ellipse.Style>
+                    </Ellipse>
                 </StackPanel>
 
                 <!-- Move history container -->
