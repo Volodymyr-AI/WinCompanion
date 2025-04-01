@@ -7,9 +7,9 @@
         xmlns:local="clr-namespace:WPF_WinCompanion.Apps_Windows.Chess_App"
         xmlns:helpers="clr-namespace:WPF_WinCompanion.Apps_Windows.Chess_App.Helpers"
         mc:Ignorable="d"
-        Title="Chess Board" Height="650" Width="670"
+        Title="Chess Board" Height="650" Width="900"
         ResizeMode="NoResize"
-        Background="WhiteSmoke">
+        Background="LightSlateGray">
     <Window.Resources>
         <helpers:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <!-- Flat button style -->
@@ -29,109 +29,150 @@
         </Style>
     </Window.Resources>
     <Grid Margin="10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="20"/> <!-- Top letters -->
-            <RowDefinition/>             <!-- Chess board -->
-            <RowDefinition Height="20"/> <!-- Bottom letters -->
-        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="20"/> <!-- Left numbers -->
-            <ColumnDefinition/>            <!-- Chess board -->
-            <ColumnDefinition Width="20"/> <!-- Right numbers -->
+            <ColumnDefinition Width="*"/>   <!-- Chess board -->
+            <ColumnDefinition Width="10"/>  <!-- Interval -->
+            <ColumnDefinition Width="280"/> <!-- Right panel -->
         </Grid.ColumnDefinitions>
-        <!-- Top letters -->
-        <ItemsControl Grid.Row="0" Grid.Column="1" ItemsSource="{Binding BoardModel.Letters}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="8"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding}" 
+        
+        <!-- Chess board -->
+        <Border Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/> <!-- Top letters -->
+                    <RowDefinition/>             <!-- Chess board -->
+                    <RowDefinition Height="20"/> <!-- Bottom letters -->
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20"/> <!-- Left numbers -->
+                    <ColumnDefinition/>            <!-- Chess board -->
+                    <ColumnDefinition Width="20"/> <!-- Right numbers -->
+                </Grid.ColumnDefinitions>
+                <!-- Top letters -->
+                <ItemsControl Grid.Row="0" Grid.Column="1" ItemsSource="{Binding BoardModel.Letters}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="8"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" 
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                FontWeight="Bold"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
-        <!-- Bottom letters -->
-        <ItemsControl Grid.Row="2" Grid.Column="1" ItemsSource="{Binding BoardModel.Letters}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="8"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding}" 
+                <!-- Bottom letters -->
+                <ItemsControl Grid.Row="2" Grid.Column="1" ItemsSource="{Binding BoardModel.Letters}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Columns="8"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" 
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                FontWeight="Bold"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
-        <!-- Left numbers -->
-        <ItemsControl Grid.Row="1" Grid.Column="0" ItemsSource="{Binding BoardModel.Numbers}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Rows="8"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding}" 
+                <!-- Left numbers -->
+                <ItemsControl Grid.Row="1" Grid.Column="0" ItemsSource="{Binding BoardModel.Numbers}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="8"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" 
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                FontWeight="Bold"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
-        <!-- Right numbers -->
-        <ItemsControl Grid.Row="1" Grid.Column="2" ItemsSource="{Binding BoardModel.Numbers}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Rows="8"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding}" 
+                <!-- Right numbers -->
+                <ItemsControl Grid.Row="1" Grid.Column="2" ItemsSource="{Binding BoardModel.Numbers}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid Rows="8"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}" 
                                HorizontalAlignment="Center"
                                VerticalAlignment="Center"
                                FontWeight="Bold"/>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
 
-        <!-- Chess board squares -->
-        <Border Grid.Row="1" Grid.Column="1"
-                BorderBrush="Black" BorderThickness="1" Margin="1">
-            <ItemsControl ItemsSource="{Binding BoardModel.Squares}">
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <UniformGrid Rows="8" Columns="8"/>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <Border BorderBrush="Black" BorderThickness="0.5">
-                            <Button Background="{Binding Background}" 
-                                    Command="{Binding DataContext.SquareClickCommand, ElementName=ChessWindowRoot}"
-                                    CommandParameter="{Binding }"
-                                    Style="{StaticResource FlatChessButton}">
-                                <Image Source="{Binding Piece.ImagePath}"
-                                       Visibility="{Binding Piece, Converter={StaticResource NullToVisibilityConverter}}"
-                                       Stretch="Uniform"
-                                       Margin="4"/>
-                            </Button>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl> 
+                <!-- Chess board squares -->
+                <Border Grid.Row="1" Grid.Column="1"
+                        BorderBrush="Black" BorderThickness="1" Margin="1">
+                    <ItemsControl ItemsSource="{Binding BoardModel.Squares}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Rows="8" Columns="8"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                         <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border BorderBrush="Black" BorderThickness="0.5">
+                                    <Button Background="{Binding Background}" 
+                                            Command="{Binding DataContext.SquareClickCommand, ElementName=ChessWindowRoot}"
+                                            CommandParameter="{Binding }"
+                                            Style="{StaticResource FlatChessButton}">
+                                        <Image Source="{Binding Piece.ImagePath}"
+                                            Visibility="{Binding Piece, Converter={StaticResource NullToVisibilityConverter}}"
+                                            Stretch="Uniform"
+                                            Margin="4"/>
+                                    </Button>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl> 
+                </Border>
+            </Grid>
+        </Border>
+        
+        <!-- Right panel -->
+        <Border Grid.Column="2" Background="PeachPuff" CornerRadius="20" Padding="3">
+            <StackPanel HorizontalAlignment="Center">
+        
+                <!-- Turn indicators -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                    <Ellipse Width="20" Height="20" Fill="LimeGreen" Stroke="Black" StrokeThickness="1" Margin="5"/>
+                    <Ellipse Width="20" Height="20" Fill="White" Stroke="Black" StrokeThickness="1" Margin="5"/>
+                </StackPanel>
+
+                <!-- Move history container -->
+                <Border Height="400" Background="Lavender" CornerRadius="20" Padding="10" Margin="10" BorderBrush="DarkSlateBlue" BorderThickness="1">
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel VerticalAlignment="Bottom">
+                            <TextBlock FontSize="14" FontWeight="Bold" TextAlignment="Left" Foreground="Black"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                </Border>
+
+                <!-- Control buttons -->
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
+                    <Button Content="Restart" Background="Gold" FontWeight="Bold" Foreground=" Black" Padding="10,5" Margin="8"/>
+                    <Button Content="&lt;" Background="White" FontWeight="Bold" Foreground="Black" Padding="10,5" Margin="8"/>
+                    <Button Content=">" Background="White" FontWeight="Bold" Foreground="Black" Padding="10,5" Margin="8"/>
+                    <Button Content="Analysis" Background="White" FontWeight="Bold" Foreground="Black" Padding="10,5" Margin="8"/>
+                </StackPanel>
+
+            </StackPanel>
         </Border>
     </Grid>
 </Window>
