@@ -113,7 +113,7 @@ public static class CheckMateValidator
                          && sq.Piece.Color != kingColor
                          && sq.Piece.IsValidMove(sq, kingSquare, board.Squares))
             .ToList();
-        if (attackingPieces.Any()) return false; // no checkmate if there is no attacking squares
+        //if (attackingPieces.Any()) return false; // no checkmate if there is no attacking squares
 
         // If King is under attack from 2 pieces at a time only moving King will help
         if (attackingPieces.Count > 1)
@@ -209,5 +209,19 @@ public static class CheckMateValidator
     public static bool IsSafeForKingToMove(ChessBoardModel board, ChessSquare selectedSquare, ChessSquare destinationSquare)
     {
         return !(selectedSquare.Piece is King && IsKingCheckAfterMove(board, selectedSquare, destinationSquare));
+    }
+    
+    public static bool DoesMoveDefendKing(ChessBoardModel board, ChessSquare from, ChessSquare to)
+    {
+        ChessPiece tempPiece = to.Piece;
+        to.Piece = from.Piece;
+        from.Piece = null;
+        
+        bool stillInCheck = IsKingCheck(board, to.Piece.Color);
+        
+        from.Piece = to.Piece;
+        to.Piece = tempPiece;
+
+        return !stillInCheck;
     }
 }

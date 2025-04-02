@@ -73,7 +73,6 @@ public class ChessMoveHandler : IChessMoveHandler
     /// <param name="destinationSquare">The target square for the move.</param>
     private void HandlePieceMovement(ChessSquare destinationSquare)
     {
-        
         if (_chessBoardModel == null || _chessBoardModel.Squares == null)
         {
             MessageBox.Show("Board is not initialized!");
@@ -89,7 +88,6 @@ public class ChessMoveHandler : IChessMoveHandler
 
         if (CheckMateValidator.IsKingCheck(_chessBoardModel, _gameHandler.CurrentTurn))
         {
-            // If in check, only the King can move to safety or another piece can block/capture the attacking piece
             if (selectedSquare.Piece is King)
             {
                 if (!CheckMateValidator.IsSafeForKingToMove(_chessBoardModel, selectedSquare, destinationSquare))
@@ -101,7 +99,7 @@ public class ChessMoveHandler : IChessMoveHandler
             }
             else
             {
-                if (!CheckMateValidator.CanDefendKing(_chessBoardModel, _gameHandler.CurrentTurn))
+                if (!CheckMateValidator.DoesMoveDefendKing(_chessBoardModel, selectedSquare, destinationSquare))
                 {
                     MessageBox.Show("Invalid move, this move doesn't remove the check!");
                     UnselectPiece(selectedSquare);
@@ -111,7 +109,6 @@ public class ChessMoveHandler : IChessMoveHandler
         }
         else
         {
-            // Check if the move does not expose the King to check
             if (CheckMateValidator.DoesMoveExposeKingToCheck(_chessBoardModel, selectedSquare, destinationSquare))
             {
                 MessageBox.Show("Invalid move, this move exposes the King to check!");
