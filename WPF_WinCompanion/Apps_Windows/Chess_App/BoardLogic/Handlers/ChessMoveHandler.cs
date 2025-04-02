@@ -65,6 +65,11 @@ public class ChessMoveHandler : IChessMoveHandler
         
         if (selectedSquare.Piece.IsValidMove(selectedSquare, destinationSquare, _chessBoardModel.Squares))
         {
+            if (_gameHandler.CheckGameStatus())
+            {
+                UnselectPiece(selectedSquare);
+                return;
+            }
             if (selectedSquare.Piece is King && CheckMateValidator.IsKingCheckAfterMove(_chessBoardModel, selectedSquare, destinationSquare) == true)
             {
                 MessageBox.Show("Invalid move, King still under check");

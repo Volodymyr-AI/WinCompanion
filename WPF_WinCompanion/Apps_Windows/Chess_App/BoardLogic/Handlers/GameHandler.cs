@@ -40,7 +40,7 @@ public class GameHandler : INotifyPropertyChanged
     /// <summary>
     /// Check game status after every move
     /// </summary>
-    public void CheckGameStatus()
+    public bool CheckGameStatus()
     {
         if (CheckMateValidator.IsKingCheck(_boardModel, _currentTurn))
         {
@@ -48,19 +48,22 @@ public class GameHandler : INotifyPropertyChanged
             {
                 MessageBox.Show($"Checkmate! {_currentTurn} lost.");
                 //Debug.WriteLine($"{_currentTurn} is checkmated!");
-                return;
+                return true;
             }
             else
             {
                 MessageBox.Show($"{_currentTurn} - King Check!");
                 //Debug.WriteLine($"{_currentTurn} is in check!");
+                return false;
             }
         }
         else if (StalemateValidator.IsStalemate(_boardModel, _currentTurn))
         {
             MessageBox.Show($"Game finished. Stalemate!");
             //Debug.WriteLine("Game ended in stalemate!");
+            return true;
         }
+        return false;
     }
     /// <summary>
     /// Get opponents color
