@@ -30,6 +30,9 @@ public class ChessMoveHandler : IChessMoveHandler
         if (clickedSquare == null)
             return;
 
+        // Check game status before doing anything
+        if (_gameHandler.CheckGameStatus())
+            return;
         if (selectedSquare == null)
             SelectPiece(clickedSquare);
         else if (selectedSquare == clickedSquare)
