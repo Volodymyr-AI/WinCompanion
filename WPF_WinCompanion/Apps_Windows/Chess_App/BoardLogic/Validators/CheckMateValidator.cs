@@ -183,4 +183,31 @@ public static class CheckMateValidator
         }
         return blockingSquares;
     }
+    
+    /// <summary>
+    /// Checks if moving a piece would expose the King to check.
+    /// </summary>
+    public static bool DoesMoveExposeKingToCheck(ChessBoardModel board, ChessSquare selectedSquare, ChessSquare destinationSquare)
+    {
+        // Simulate move
+        ChessPiece tempPiece = destinationSquare.Piece;
+        destinationSquare.Piece = selectedSquare.Piece;
+        selectedSquare.Piece = null;
+
+        bool exposesKing = IsKingCheck(board, destinationSquare.Piece.Color);
+
+        // Cancel simulation
+        selectedSquare.Piece = destinationSquare.Piece;
+        destinationSquare.Piece = tempPiece;
+
+        return exposesKing;
+    }
+    
+    /// <summary>
+    /// Check if King won't be under check after the move
+    /// </summary>
+    public static bool IsSafeForKingToMove(ChessBoardModel board, ChessSquare selectedSquare, ChessSquare destinationSquare)
+    {
+        return !(selectedSquare.Piece is King && IsKingCheckAfterMove(board, selectedSquare, destinationSquare));
+    }
 }

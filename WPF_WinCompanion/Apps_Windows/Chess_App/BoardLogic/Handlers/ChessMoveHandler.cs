@@ -57,6 +57,20 @@ public class ChessMoveHandler : IChessMoveHandler
         //Console.WriteLine($"{clickedSquare.Piece.Type} unselected");
     }
     
+    /// <summary>
+    /// Handles the movement of a selected chess piece to the specified destination.
+    /// 
+    /// - Ensures the board is initialized.
+    /// - Checks if the move is valid for the selected piece.
+    /// - If the King is in check:
+    ///   - The King can only move to a safe square.
+    ///   - Other pieces can only move if they remove the check.
+    /// - If there is no check:
+    ///   - Ensures the move does not expose the King to check.
+    /// - Handles castling if applicable.
+    /// - Executes the move if all conditions are met.
+    /// </summary>
+    /// <param name="destinationSquare">The target square for the move.</param>
     private void HandlePieceMovement(ChessSquare destinationSquare)
     {
         
@@ -65,25 +79,51 @@ public class ChessMoveHandler : IChessMoveHandler
             MessageBox.Show("Board is not initialized!");
             return;
         }
-        
-        if (selectedSquare.Piece.IsValidMove(selectedSquare, destinationSquare, _chessBoardModel.Squares))
+
+        if (!selectedSquare.Piece.IsValidMove(selectedSquare, destinationSquare, _chessBoardModel.Squares))
         {
-            if (selectedSquare.Piece is King && CheckMateValidator.IsKingCheckAfterMove(_chessBoardModel, selectedSquare, destinationSquare) == true)
+            MessageBox.Show("Invalid move");
+            UnselectPiece(selectedSquare);
+            return;
+        }
+
+        if (CheckMateValidator.IsKingCheck(_chessBoardModel, _gameHandler.CurrentTurn))
+        {
+            // If in check, only the King can move to safety or another piece can block/capture the attacking piece
+            if (selectedSquare.Piece is King)
             {
-                MessageBox.Show("Invalid move, King still under check");
-                UnselectPiece(selectedSquare);
+                if (!CheckMateValidator.IsSafeForKingToMove(_chessBoardModel, selectedSquare, destinationSquare))
+                {
+                    MessageBox.Show("Invalid move, King is still under check!");
+                    UnselectPiece(selectedSquare);
+                    return;
+                }
             }
-            else if (selectedSquare.Piece is King && Math.Abs(selectedSquare.Column - destinationSquare.Column) == 2)
-                HandleCastling(selectedSquare, destinationSquare);
             else
-                MovePiece(destinationSquare);
+            {
+                if (!CheckMateValidator.CanDefendKing(_chessBoardModel, _gameHandler.CurrentTurn))
+                {
+                    MessageBox.Show("Invalid move, this move doesn't remove the check!");
+                    UnselectPiece(selectedSquare);
+                    return;
+                }
+            }
         }
         else
         {
-            MessageBox.Show("Invalid move");
-            selectedSquare.IsSelected = false;
-            selectedSquare = null;
+            // Check if the move does not expose the King to check
+            if (CheckMateValidator.DoesMoveExposeKingToCheck(_chessBoardModel, selectedSquare, destinationSquare))
+            {
+                MessageBox.Show("Invalid move, this move exposes the King to check!");
+                UnselectPiece(selectedSquare);
+                return;
+            }
         }
+
+        if (selectedSquare.Piece is King && Math.Abs(selectedSquare.Column - destinationSquare.Column) == 2)
+            HandleCastling(selectedSquare, destinationSquare);
+        else
+            MovePiece(destinationSquare);
     }
     
     /// <summary>
