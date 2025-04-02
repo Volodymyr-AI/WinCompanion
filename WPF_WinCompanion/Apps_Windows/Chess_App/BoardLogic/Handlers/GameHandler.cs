@@ -52,7 +52,7 @@ public class GameHandler : INotifyPropertyChanged
             }
             else
             {
-                MessageBox.Show($"{_currentTurn} - King Check!");
+                Console.WriteLine($"{_currentTurn} - King Check!");
                 //Debug.WriteLine($"{_currentTurn} is in check!");
                 return false;
             }

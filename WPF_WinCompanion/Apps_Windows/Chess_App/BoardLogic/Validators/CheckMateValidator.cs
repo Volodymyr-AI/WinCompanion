@@ -113,7 +113,7 @@ public static class CheckMateValidator
                          && sq.Piece.Color != kingColor
                          && sq.Piece.IsValidMove(sq, kingSquare, board.Squares))
             .ToList();
-        if (attackingPieces.Any()) return false; // no checkmate if there is no attacking squares
+        //if (attackingPieces.Any()) return false; // no checkmate if there is no attacking squares
 
         // If King is under attack from 2 pieces at a time only moving King will help
         if (attackingPieces.Count > 1)
@@ -182,5 +182,46 @@ public static class CheckMateValidator
             col += colDiraction;
         }
         return blockingSquares;
+    }
+    
+    /// <summary>
+    /// Checks if moving a piece would expose the King to check.
+    /// </summary>
+    public static bool DoesMoveExposeKingToCheck(ChessBoardModel board, ChessSquare selectedSquare, ChessSquare destinationSquare)
+    {
+        // Simulate move
+        ChessPiece tempPiece = destinationSquare.Piece;
+        destinationSquare.Piece = selectedSquare.Piece;
+        selectedSquare.Piece = null;
+
+        bool exposesKing = IsKingCheck(board, destinationSquare.Piece.Color);
+
+        // Cancel simulation
+        selectedSquare.Piece = destinationSquare.Piece;
+        destinationSquare.Piece = tempPiece;
+
+        return exposesKing;
+    }
+    
+    /// <summary>
+    /// Check if King won't be under check after the move
+    /// </summary>
+    public static bool IsSafeForKingToMove(ChessBoardModel board, ChessSquare selectedSquare, ChessSquare destinationSquare)
+    {
+        return !(selectedSquare.Piece is King && IsKingCheckAfterMove(board, selectedSquare, destinationSquare));
+    }
+    
+    public static bool DoesMoveDefendKing(ChessBoardModel board, ChessSquare from, ChessSquare to)
+    {
+        ChessPiece tempPiece = to.Piece;
+        to.Piece = from.Piece;
+        from.Piece = null;
+        
+        bool stillInCheck = IsKingCheck(board, to.Piece.Color);
+        
+        from.Piece = to.Piece;
+        to.Piece = tempPiece;
+
+        return !stillInCheck;
     }
 }
