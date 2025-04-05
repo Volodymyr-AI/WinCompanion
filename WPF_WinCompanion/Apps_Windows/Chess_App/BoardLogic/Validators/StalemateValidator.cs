@@ -13,14 +13,12 @@ public class StalemateValidator
         ChessSquare king = board.Squares.First(sq => sq.Piece is King && sq.Piece.Color == player);
         if (king is null)
         {
-            Debug.WriteLine("IsStalemate: King is null");
             return false;
         }
 
         // If King is under attack ( check ) it's not a stalemate
         if (CheckMateValidator.IsKingCheck(board, player))
         {
-            Debug.WriteLine("IsStalemate: King is in check");
             return false;
         }
 
@@ -34,13 +32,11 @@ public class StalemateValidator
 
                 if (possibleMoves.Any())
                 {
-                    Debug.WriteLine($"IsStalemate: {square.Piece.GetType().Name} at {square.Row}, {square.Column} has valid moves.");
                     return false;
                 }
             }
         }
         
-        Debug.WriteLine("IsStalemate: No legal moves available. Stalemate!");
         return true;
     }
     

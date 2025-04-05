@@ -13,7 +13,6 @@ public class SelectionToBrushConverter : IValueConverter
         // Check if the value is of type ChessSquare
         if (value is ChessSquare square)
         {
-            Console.WriteLine($"Converter called for ({square.Row}, {square.Column}) - IsSelected: {square.IsSelected}");
             // If the square is selected, return a green brush (to highlight the selection)
             if (square.IsSelected)
                 return square.IsSelected ? Brushes.Green : Brushes.Transparent;
@@ -21,7 +20,6 @@ public class SelectionToBrushConverter : IValueConverter
             // If not selected, return the square's original background color
             return square.Background ?? Brushes.Transparent;
         }
-        Console.WriteLine("Converter received invalid value.");
 
         // If the value is not a ChessSquare, return a transparent brush
         return Brushes.Transparent;

@@ -17,7 +17,6 @@ public static class CheckMateValidator
     {
         ChessSquare kingSquare = board.Squares.FirstOrDefault(s => s.Piece is King && s.Piece.Color == currentTurn);
         if (kingSquare == null) return false;
-        Debug.WriteLine(kingSquare != null ? $"King found at {kingSquare.Row}, {kingSquare.Column}" : "King not found");
         
         foreach (var square in board.Squares)
         {
@@ -46,7 +45,6 @@ public static class CheckMateValidator
         }
         
         ChessSquare kingSquare = board.Squares.First(s => s.Piece?.Type == PieceType.King && s.Piece.Color == kingColor);
-        Debug.WriteLine($"{kingSquare} found; Class: CheckMateValidator");
         var possibleKingMoves = MoveGenerator.GetPossibleMoves(kingSquare, board)
             .Where(move => !IsKingCheckAfterMove(board, kingSquare, move))
             .ToList();
@@ -90,7 +88,6 @@ public static class CheckMateValidator
         from.Piece = movedPiece; 
         to.Piece = backupPiece;
         
-        Debug.WriteLine($"Checking if king is in check after move: {inCheck}");
         return inCheck;
     }
     /// <summary>
@@ -150,11 +147,9 @@ public static class CheckMateValidator
 
             if (!canCaptureAttacker && blockingSquare.Count == 0)
             {
-                Debug.WriteLine("Checkmate Debug: No way to defend the king!");
                 return false; // No defense => checkmate
             }
         }
-        Debug.WriteLine("Checkmate Debug: King is in check, but CanDefendKing returned true.");
         return false; // No way to protect King
     }
 
