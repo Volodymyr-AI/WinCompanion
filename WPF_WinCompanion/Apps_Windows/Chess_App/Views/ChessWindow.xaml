@@ -191,7 +191,13 @@
 
                 <!-- Control buttons -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
-                    <Button Content="Restart" Background="Gold" FontWeight="Bold" Foreground=" Black" Padding="10,5" Margin="8"/>
+                    <Button Content="Restart"
+                            Background="Gold"
+                            FontWeight="Bold"
+                            Foreground=" Black"
+                            Padding="10,5"
+                            Margin="8"
+                            Command="{Binding RestartCommand}"/>
                     <Button Content="&lt;" Background="White" FontWeight="Bold" Foreground="Black" Padding="10,5" Margin="8"/>
                     <Button Content=">" Background="White" FontWeight="Bold" Foreground="Black" Padding="10,5" Margin="8"/>
                     <Button Content="Analysis" Background="White" FontWeight="Bold" Foreground="Black" Padding="10,5" Margin="8"/>
