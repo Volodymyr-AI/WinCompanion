@@ -67,6 +67,27 @@ public static class MoveGenerator
         }
         return moves;
     }
+    
+    /// <summary>
+    /// Get squares pawn can attack
+    /// </summary>
+    public static List<ChessSquare> GetPawnAttackSquare(ChessSquare pawn, ChessBoardModel board)
+    {
+        var attackSquares = new List<ChessSquare>();
+        int direction = (pawn.Piece.Color == PieceColor.White) ? -1 : 1;
+
+        int[] attackColumns = { -1, 1 };
+        foreach (int side in attackColumns)
+        {
+            ChessSquare? diagonal = board.GetSquare(pawn.Row + direction, pawn.Column + side);
+            if (diagonal != null)
+            {
+                attackSquares.Add(diagonal);
+            }
+        }
+
+        return attackSquares;
+    }
 
     private static List<ChessSquare> GetKnightMoves(ChessSquare knight, ChessBoardModel board)
     {

@@ -17,17 +17,30 @@ public static class CheckMateValidator
     {
         ChessSquare kingSquare = board.Squares.FirstOrDefault(s => s.Piece is King && s.Piece.Color == currentTurn);
         if (kingSquare == null) return false;
-        
+
         foreach (var square in board.Squares)
         {
-            var possibleMoves = MoveGenerator.GetPossibleMoves(square, board);
+            if (square.Piece == null || square.Piece.Color == currentTurn)
+                continue; // Skip ally pieces
+
+            List<ChessSquare> possibleMoves;
+
+            if (square.Piece is Pawn)
+            {
+                possibleMoves = MoveGenerator.GetPawnAttackSquare(square, board); // Pawns have a unique attack, they cannot attack the way they move, only by diagonal so we need to check this moment
+            }
+            else
+            {
+                possibleMoves = MoveGenerator.GetPossibleMoves(square, board); // For all other pieces
+            }
+
             if (possibleMoves.Contains(kingSquare))
             {
                 Debug.WriteLine($"Check detected! {square.Piece.GetType().Name} at {square.Row}, {square.Column} can attack the king!");
                 return true;
             }
         }
-        
+
         return false;
     }
 
