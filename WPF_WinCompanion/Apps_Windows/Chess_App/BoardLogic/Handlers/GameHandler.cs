@@ -47,20 +47,17 @@ public class GameHandler : INotifyPropertyChanged
             if (CheckMateValidator.IsCheckmate(_boardModel, _currentTurn))
             {
                 MessageBox.Show($"Checkmate! {_currentTurn} lost.");
-                //Debug.WriteLine($"{_currentTurn} is checkmated!");
                 return true;
             }
             else
             {
                 Console.WriteLine($"{_currentTurn} - King Check!");
-                //Debug.WriteLine($"{_currentTurn} is in check!");
                 return false;
             }
         }
         else if (StalemateValidator.IsStalemate(_boardModel, _currentTurn))
         {
             MessageBox.Show($"Game finished. Stalemate!");
-            //Debug.WriteLine("Game ended in stalemate!");
             return true;
         }
         return false;
@@ -76,13 +73,9 @@ public class GameHandler : INotifyPropertyChanged
     /// </summary>
     private void OnMoveMade()
     {
-        //Debug.WriteLine($"🟢 OnMoveMade called! CurrentTurn before: {_currentTurn}");
-    
         CheckGameStatus();
         CurrentTurn = Opponent(_currentTurn);
-
-        //Debug.WriteLine($"🔄 Turn switched to: {CurrentTurn}");
-    
+        
         GameUpdated?.Invoke();
     }
     

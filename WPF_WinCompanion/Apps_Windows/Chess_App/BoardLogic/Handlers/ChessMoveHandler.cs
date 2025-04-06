@@ -47,14 +47,12 @@ public class ChessMoveHandler : IChessMoveHandler
         {
             clickedSquare.IsSelected = true;
             selectedSquare = clickedSquare;
-            //Console.WriteLine($"{clickedSquare.Piece.Type} selected: ({clickedSquare.Row}, {clickedSquare.Column})");
         }
     }
     private void UnselectPiece(ChessSquare clickedSquare)
     {
         selectedSquare.IsSelected = false;
         selectedSquare = null;
-        //Console.WriteLine($"{clickedSquare.Piece.Type} unselected");
     }
     
     /// <summary>
@@ -160,7 +158,6 @@ public class ChessMoveHandler : IChessMoveHandler
         }
         
         BoardUpdated?.Invoke();
-        //Console.WriteLine($"{destinationSquare.Piece.Type} moved to ({destinationSquare.Row}, {destinationSquare.Column})");
     }
     
     private void HandlePawnPromotion(ChessSquare clickedSquare)
