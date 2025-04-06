@@ -20,6 +20,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 {
     public ChessBoardModel BoardModel { get; init; } = new();
     public ICommand SquareClickCommand { get; }
+    public ICommand RestartCommand { get; }
     
     public PieceColor CurrentTurn => _gameHandler.CurrentTurn;
     
@@ -52,6 +53,8 @@ public class ChessBoardViewModel : INotifyPropertyChanged
                 _moveHandler.OnSquareClicked(square);
             }
         });
+
+        RestartCommand = new RelayCommand(_ => _gameHandler.RestartGame());
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
