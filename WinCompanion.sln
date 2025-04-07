@@ -5,6 +5,10 @@ VisualStudioVersion = 17.10.35013.160
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WPF_WinCompanion", "WPF_WinCompanion\WPF_WinCompanion.csproj", "{5950E1BB-AB5A-41EE-B65E-D239DE9B7A25}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChessApp", "ChessApp\ChessApp.csproj", "{498F7D37-FB69-474E-B7C7-A5773F78CC21}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Apps", "Apps", "{310FDCC7-5F0C-4559-A2C7-3212A7849E93}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,11 +19,16 @@ Global
 		{5950E1BB-AB5A-41EE-B65E-D239DE9B7A25}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5950E1BB-AB5A-41EE-B65E-D239DE9B7A25}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5950E1BB-AB5A-41EE-B65E-D239DE9B7A25}.Release|Any CPU.Build.0 = Release|Any CPU
+		{498F7D37-FB69-474E-B7C7-A5773F78CC21}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{498F7D37-FB69-474E-B7C7-A5773F78CC21}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{498F7D37-FB69-474E-B7C7-A5773F78CC21}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{498F7D37-FB69-474E-B7C7-A5773F78CC21}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{498F7D37-FB69-474E-B7C7-A5773F78CC21} = {310FDCC7-5F0C-4559-A2C7-3212A7849E93}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5218C07F-10D4-4590-8FFC-C466C4CBC167}
