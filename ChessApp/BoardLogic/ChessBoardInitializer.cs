@@ -8,14 +8,23 @@ namespace ChessApp.BoardLogic;
 
 public static class ChessBoardInitializer
 {
-    public static void InitializeBoard(ChessBoardModel boardModal)
+    public static void InitializeBoard(ChessBoardModel boardModel)
     {
-        boardModal.Squares.Clear();
+        boardModel.Squares.Clear();
 
-        foreach (var square in BoardGenerator.GenerateSquares())
+        for (int row = 0; row < 8; row++)
         {
-            square.Piece = GetInitialPiece(square.Row, square.Column);
-            boardModal.Squares.Add(square);
+            for (int col = 0; col < 8; col++)
+            {
+                var square = new ChessSquare
+                {
+                    Row = row,
+                    Column = col,
+                    Piece = GetInitialPiece(row, col)
+                };
+
+                boardModel.Squares.Add(square);
+            }
         }
     }
 

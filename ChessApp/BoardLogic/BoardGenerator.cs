@@ -1,7 +1,7 @@
 ﻿using System.Windows.Media;
 using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
 
-namespace WPF_WinCompanion.Apps_Windows.Chess_App.BoardLogic;
+namespace ChessApp.BoardLogic;
 
 public class BoardGenerator
 {
