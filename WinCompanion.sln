@@ -13,8 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "News_Widget", "News_Widget"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "News_Widget.MainPage", "News_Widget.MainPage\News_Widget.MainPage.csproj", "{AFB40E8A-4E41-4D43-B33C-372C4022AF0B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B3E02B80-F2B8-41AF-83E7-D4A14A3CA878}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Widgets", "Widgets", "{C502F96B-0DF8-421E-B820-93412317E8EA}"
 EndProject
 Global
