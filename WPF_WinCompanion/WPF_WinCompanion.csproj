@@ -17,7 +17,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Currency_Exchange.Service\Currency_Exchange.Service.csproj" />
-    <ProjectReference Include="..\News_Widget.MainPage\News_Widget.MainPage.csproj" />
   </ItemGroup>
 
   <ItemGroup>
