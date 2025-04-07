@@ -64,7 +64,7 @@ public static class CheckMateValidator
         
         foreach (var move in possibleKingMoves)
         {
-            Debug.WriteLine($"Possible king escape: {move.Row}, {move.Column}");
+            Debug.WriteLine($"Possible king escape: {ToChessNotation(move.Row, move.Column)}");
         }
 
         if (possibleKingMoves.Any())
@@ -219,6 +219,9 @@ public static class CheckMateValidator
         return !(selectedSquare.Piece is King && IsKingCheckAfterMove(board, selectedSquare, destinationSquare));
     }
     
+    /// <summary>
+    /// Simulate a piece move to check if it can defend an ally King
+    /// </summary>
     public static bool DoesMoveDefendKing(ChessBoardModel board, ChessSquare from, ChessSquare to)
     {
         ChessPiece tempPiece = to.Piece;
@@ -231,5 +234,14 @@ public static class CheckMateValidator
         to.Piece = tempPiece;
 
         return !stillInCheck;
+    }
+
+
+    // Debugging method
+    private static string ToChessNotation(int row, int col)
+    {
+        char file = (char)('A' + col);
+        int rank = 8 - row;
+        return $"{file}{rank}";
     }
 }
