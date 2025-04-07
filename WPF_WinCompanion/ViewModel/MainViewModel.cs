@@ -2,8 +2,8 @@
 using System.Globalization;
 using System.Net.Http;
 using System.Windows.Threading;
-using Currency_Exchange.Service.Domain;
 using Newtonsoft.Json;
+using WPF_WinCompanion.Widgets.CurrencyExchange;
 
 namespace WPF_WinCompanion.ViewModel;
 

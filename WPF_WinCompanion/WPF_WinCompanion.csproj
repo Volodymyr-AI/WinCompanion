@@ -16,10 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Currency_Exchange.Service\Currency_Exchange.Service.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Page Update="Apps_Windows\Chess_App\Views\ChessWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <XamlRuntime>Wpf</XamlRuntime>
