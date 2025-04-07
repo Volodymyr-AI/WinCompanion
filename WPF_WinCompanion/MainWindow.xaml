@@ -53,19 +53,19 @@
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0,0,0" Grid.Column="0">
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0,0,0">
                     <TextBlock Text="$" Foreground="Black" FontFamily="Arial" FontWeight="Heavy" FontSize="17" VerticalAlignment="Center"/>
-                    <TextBlock Name="DollarValue" Text="40.40" FontFamily="Arial" Foreground="Black" FontWeight="Medium" FontSize="17" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding UsdRate}" FontFamily="Arial" Foreground="Black" FontWeight="Medium" FontSize="17" Margin="5,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="10,0,10,0">
                     <TextBlock Text="€" Foreground="Black" FontFamily="Arial" FontWeight="Heavy" FontSize="17" VerticalAlignment="Center"/>
-                    <TextBlock Name="EuroValue" Text="41.30" FontFamily="Arial" Foreground="Black" FontWeight="Medium" FontSize="17" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding EurRate}" FontFamily="Arial" Foreground="Black" FontWeight="Medium" FontSize="17" Margin="5,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="1">
                     <TextBlock Text="£" Foreground="Black" FontFamily="Arial" FontWeight="Heavy" FontSize="17" VerticalAlignment="Center"/>
-                    <TextBlock Name="PoundValue" Text="45.15" FontFamily="Arial" Foreground="Black" FontWeight="Medium" FontSize="17" Margin="5,0,0,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding GbpRate}" FontFamily="Arial" Foreground="Black" FontWeight="Medium" FontSize="17" Margin="5,0,0,0" VerticalAlignment="Center"/>
                 </StackPanel>
             </StackPanel>
             <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="10,0,15,0" Grid.Column="1">
-                <TextBlock Name="DateTimeText" Foreground="Black" FontFamily="Arial" FontWeight="ExtraLight" FontSize="17" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock Text="{Binding DateTimeText}" Foreground="Black" FontFamily="Arial" FontWeight="ExtraLight" FontSize="17" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             </StackPanel>
         </Grid>
         <!-- Apps -->
@@ -94,7 +94,7 @@
                 </Border>
                 <TextBlock Text="Chess" HorizontalAlignment="Center" Foreground="White" FontFamily="Andalus" FontWeight="Medium" FontSize="15"/>
             </StackPanel>
-            <!-- Добавьте другие иконки для других приложений здесь -->
+            <!-- Add another app icon here -->
         </WrapPanel>
         <!-- Widgets -->
         <WrapPanel>

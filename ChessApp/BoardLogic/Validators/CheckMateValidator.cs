@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using ChessApp.Models.Chess;
 using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
 using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess;
 using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess.Pieces;

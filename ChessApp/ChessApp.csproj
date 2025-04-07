@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="BoardLogic\Handlers\" />
+      <Folder Include="BoardLogic\Validators\" />
+      <Folder Include="Commands\" />
+      <Folder Include="Models\" />
+      <Folder Include="ViewModels\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="PresentationCore">
+        <HintPath>C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\9.0.1\PresentationCore.dll</HintPath>
+      </Reference>
+      <Reference Include="PresentationFramework">
+        <HintPath>C:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\9.0.1\PresentationFramework.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

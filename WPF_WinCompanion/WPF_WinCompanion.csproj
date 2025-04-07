@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows</TargetFramework>
+    <TargetFramework>net9.0-windows7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
@@ -13,11 +13,6 @@
     <PackageReference Include="MaterialDesignThemes" Version="5.1.0" />
     <PackageReference Include="NewsAPI" Version="0.7.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Currency_Exchange.Service\Currency_Exchange.Service.csproj" />
-    <ProjectReference Include="..\News_Widget.MainPage\News_Widget.MainPage.csproj" />
   </ItemGroup>
 
   <ItemGroup>
