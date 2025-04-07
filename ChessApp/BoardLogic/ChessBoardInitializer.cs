@@ -1,9 +1,10 @@
 ﻿using ChessApp.Models.Chess;
+using WPF_WinCompanion.Apps_Windows.Chess_App.BoardLogic;
 using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
 using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess;
 using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess.Pieces;
 
-namespace WPF_WinCompanion.Apps_Windows.Chess_App.BoardLogic;
+namespace ChessApp.BoardLogic;
 
 public static class ChessBoardInitializer
 {
@@ -44,5 +45,26 @@ public static class ChessBoardInitializer
             4 => new King { Color = color },
             _ => throw new InvalidOperationException("Invalid column for piece"),
         };
+    }
+    
+    // Method for testing
+    public static ChessBoardModel InitializeEmptyBoard()
+    {
+        var model = new ChessBoardModel();
+        
+        for (int row = 0; row < 8; row++)
+        {
+            for (int col = 0; col < 8; col++)
+            {
+                model.Squares.Add(new ChessSquare
+                {
+                    Row = row,
+                    Column = col,
+                    Piece = null
+                });
+            }
+        }
+
+        return model;
     }
 }
