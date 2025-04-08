@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
 
-namespace WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
+namespace ChessApp.Models.Board;
 
 public class ChessBoardModel
 {

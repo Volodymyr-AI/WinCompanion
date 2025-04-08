@@ -3,7 +3,7 @@ using System.Windows.Data;
 using System.Windows.Media;
 using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
 
-namespace WPF_WinCompanion.Apps_Windows.Chess_App.Helpers;
+namespace ChessApp.Helpers;
 
 public class SelectionToBrushConverter : IValueConverter
 {

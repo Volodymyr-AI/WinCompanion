@@ -1,12 +1,11 @@
 ﻿using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows;
-using ChessApp.BoardLogic;
-using WPF_WinCompanion.Apps_Windows.Chess_App.BoardLogic.Validators;
+using ChessApp.BoardLogic.Validators;
+using ChessApp.Models.Board;
 using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
 using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess;
 
-namespace WPF_WinCompanion.Apps_Windows.Chess_App.BoardLogic.Handlers;
+namespace ChessApp.BoardLogic.Handlers;
 
 public class GameHandler : INotifyPropertyChanged
 {

@@ -1,6 +1,6 @@
 ﻿using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
 
-namespace WPF_WinCompanion.Apps_Windows.Chess_App.BoardLogic.Handlers;
+namespace ChessApp.BoardLogic.Handlers;
 
 public interface IChessMoveHandler
 {

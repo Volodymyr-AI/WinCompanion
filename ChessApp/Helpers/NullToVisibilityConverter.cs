@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Data;
 
-namespace WPF_WinCompanion.Apps_Windows.Chess_App.Helpers;
+namespace ChessApp.Helpers;
 
 public class NullToVisibilityConverter : IValueConverter
 {

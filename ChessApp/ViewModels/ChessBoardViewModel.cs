@@ -1,21 +1,15 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using ChessApp.BoardLogic;
-using WPF_WinCompanion.Apps_Windows.Chess_App.BoardLogic;
-using WPF_WinCompanion.Apps_Windows.Chess_App.BoardLogic.Handlers;
-using WPF_WinCompanion.Apps_Windows.Chess_App.BoardLogic.Validators;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Commands;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Helpers;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models;
+using ChessApp.BoardLogic.Handlers;
+using ChessApp.BoardLogic.Validators;
+using ChessApp.Commands;
+using ChessApp.Models.Board;
 using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
 using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess.Pieces;
 
-namespace WPF_WinCompanion.Apps_Windows.Chess_App.ViewModels;
+namespace ChessApp.ViewModels;
 
 public class ChessBoardViewModel : INotifyPropertyChanged
 {

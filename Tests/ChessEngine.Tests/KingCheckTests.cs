@@ -1,9 +1,8 @@
 ﻿using ChessApp.BoardLogic;
-using WPF_WinCompanion.Apps_Windows.Chess_App.BoardLogic;
-using WPF_WinCompanion.Apps_Windows.Chess_App.BoardLogic.Validators;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
+using ChessApp.BoardLogic.Validators;
 using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess;
 using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess.Pieces;
+
 
 namespace ChessEngine.Tests;
 

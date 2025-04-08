@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 
-namespace WPF_WinCompanion.Apps_Windows.Chess_App.Commands;
+namespace ChessApp.Commands;
 
 public class RelayCommand : ICommand
 {

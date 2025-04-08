@@ -1,9 +1,8 @@
 ﻿using System.Collections.ObjectModel;
-using System.Windows.Controls;
-using ChessApp.Models.Chess;
 using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
+using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess;
 
-namespace WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess.Pieces;
+namespace ChessApp.Models.Chess.Pieces;
 
 public class Rook : ChessPiece
 {

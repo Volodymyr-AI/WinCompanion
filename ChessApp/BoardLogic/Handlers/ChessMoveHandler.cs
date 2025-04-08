@@ -1,12 +1,11 @@
-﻿using System.Diagnostics;
-using System.Windows;
-using System.Windows.Media;
-using WPF_WinCompanion.Apps_Windows.Chess_App.BoardLogic.Validators;
+﻿using System.Windows;
+using ChessApp.BoardLogic.Validators;
+using ChessApp.Models.Board;
+using ChessApp.Models.Chess.Pieces;
 using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess;
 using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess.Pieces;
 
-namespace WPF_WinCompanion.Apps_Windows.Chess_App.BoardLogic.Handlers;
+namespace ChessApp.BoardLogic.Handlers;
 
 public class ChessMoveHandler : IChessMoveHandler
 {
