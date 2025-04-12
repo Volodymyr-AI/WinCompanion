@@ -1,9 +1,10 @@
-﻿using System.Windows;
-using System.Windows.Markup;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Views;
-using WPF_WinCompanion.Apps_Windows.FinanceTracker_App;
-using WPF_WinCompanion.Apps_Windows.Notes_App;
-using WPF_WinCompanion.Apps_Windows.Weather_App;
+﻿using System;
+using System.Collections.Generic;
+using System.Windows;
+using WPF_WinCompanion.Apps_Views.Chess_App.Views;
+using WPF_WinCompanion.Apps_Views.FinanceTracker_App;
+using WPF_WinCompanion.Apps_Views.Notes_App;
+using WPF_WinCompanion.Apps_Views.Weather_App;
 using WPF_WinCompanion.ViewModel;
 
 namespace WPF_WinCompanion

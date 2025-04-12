@@ -1,6 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Windows.Threading;
 using Newtonsoft.Json;
 using WPF_WinCompanion.Widgets.CurrencyExchange;
