@@ -2,8 +2,7 @@
 using System.Windows;
 using ChessApp.BoardLogic.Validators;
 using ChessApp.Models.Board;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess;
+using ChessApp.Models.Chess;
 
 namespace ChessApp.BoardLogic.Handlers;
 

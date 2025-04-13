@@ -1,6 +1,6 @@
-﻿using ChessApp.Models.Board;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess;
+﻿using System.Collections.Generic;
+using ChessApp.Models.Board;
+using ChessApp.Models.Chess;
 
 namespace ChessApp.BoardLogic;
 

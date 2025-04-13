@@ -1,7 +1,8 @@
-﻿using System.Globalization;
+﻿using System;
+using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
+using ChessApp.Models.Board;
 
 namespace ChessApp.Helpers;
 

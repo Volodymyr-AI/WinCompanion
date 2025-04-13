@@ -1,4 +1,5 @@
-﻿using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
+﻿using System;
+using ChessApp.Models.Board;
 
 namespace ChessApp.BoardLogic.Handlers;
 

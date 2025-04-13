@@ -1,9 +1,9 @@
-﻿using System.Windows;
+﻿using System;
+using System.Linq;
+using System.Windows;
 using ChessApp.BoardLogic.Validators;
 using ChessApp.Models.Board;
 using ChessApp.Models.Chess.Pieces;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess.Pieces;
 
 namespace ChessApp.BoardLogic.Handlers;
 

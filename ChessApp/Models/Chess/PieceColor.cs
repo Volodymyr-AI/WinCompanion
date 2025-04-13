@@ -1,4 +1,4 @@
-﻿namespace WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess;
+﻿namespace ChessApp.Models.Chess;
 
 public enum PieceColor
 {

@@ -23,4 +23,31 @@
       </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="PiecesImg\Black\Bishop.png" />
+      <Resource Include="PiecesImg\Black\Bishop.png" />
+      <None Remove="PiecesImg\Black\King.png" />
+      <Resource Include="PiecesImg\Black\King.png" />
+      <None Remove="PiecesImg\Black\Knight.png" />
+      <Resource Include="PiecesImg\Black\Knight.png" />
+      <None Remove="PiecesImg\Black\Pawn.png" />
+      <Resource Include="PiecesImg\Black\Pawn.png" />
+      <None Remove="PiecesImg\Black\Queen.png" />
+      <Resource Include="PiecesImg\Black\Queen.png" />
+      <None Remove="PiecesImg\Black\Rook.png" />
+      <Resource Include="PiecesImg\Black\Rook.png" />
+      <None Remove="PiecesImg\White\Bishop.png" />
+      <Resource Include="PiecesImg\White\Bishop.png" />
+      <None Remove="PiecesImg\White\King.png" />
+      <Resource Include="PiecesImg\White\King.png" />
+      <None Remove="PiecesImg\White\Knight.png" />
+      <Resource Include="PiecesImg\White\Knight.png" />
+      <None Remove="PiecesImg\White\Pawn.png" />
+      <Resource Include="PiecesImg\White\Pawn.png" />
+      <None Remove="PiecesImg\White\Queen.png" />
+      <Resource Include="PiecesImg\White\Queen.png" />
+      <None Remove="PiecesImg\White\Rook.png" />
+      <Resource Include="PiecesImg\White\Rook.png" />
+    </ItemGroup>
+
 </Project>

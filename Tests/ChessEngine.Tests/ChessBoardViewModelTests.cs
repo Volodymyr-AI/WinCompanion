@@ -1,6 +1,6 @@
-﻿using ChessApp.ViewModels;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess.Pieces;
+﻿using ChessApp.Models.Chess;
+using ChessApp.Models.Chess.Pieces;
+using ChessApp.ViewModels;
 
 namespace ChessEngine.Tests;
 

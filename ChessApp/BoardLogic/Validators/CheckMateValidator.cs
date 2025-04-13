@@ -1,9 +1,10 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using ChessApp.Models.Board;
 using ChessApp.Models.Chess;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess.Pieces;
+using ChessApp.Models.Chess.Pieces;
 
 namespace ChessApp.BoardLogic.Validators;
 
