@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Diagnostics;
 using ChessApp.Models.Board;
 
 namespace ChessApp.Models.Chess;
@@ -11,8 +12,8 @@ public abstract class ChessPiece
     
     // Image path for binding
     public string ImagePath 
-        => $"/ChessApp;component/PiecesImg/{Color}/{Type}.png";
-    //ChessApp/PiecesImg
+        => $"/WPF_WinCompanion;component/Images/PiecesImg/{Color}/{Type}.png";
+    //WPF_WinCompanion/Images/PiecesImg
     
     public abstract bool IsValidMove(ChessSquare from, ChessSquare to, ObservableCollection<ChessSquare> board);
 }

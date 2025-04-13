@@ -131,10 +131,10 @@
                                             Command="{Binding DataContext.SquareClickCommand, ElementName=ChessWindowRoot}"
                                             CommandParameter="{Binding }"
                                             Style="{StaticResource FlatChessButton}">
-                                        <Image Source="{Binding ChessPiece.ImagePath}"
-                                            Visibility="{Binding ChessPiece, Converter={StaticResource NullToVisibilityConverter}}"
-                                            Stretch="Uniform"
-                                            Margin="4" d:DataContext="{d:DesignInstance }" />
+                                        <Image Source="{Binding Piece.ImagePath}"
+                                               Visibility="{Binding Piece, Converter={StaticResource NullToVisibilityConverter}}"
+                                               Stretch="Uniform"
+                                               Margin="4" />
                                     </Button>
                                 </Border>
                             </DataTemplate>
