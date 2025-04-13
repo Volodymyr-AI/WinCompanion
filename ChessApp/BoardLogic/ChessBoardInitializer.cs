@@ -1,9 +1,7 @@
-﻿using ChessApp.Models.Board;
+﻿using System;
+using ChessApp.Models.Board;
 using ChessApp.Models.Chess;
 using ChessApp.Models.Chess.Pieces;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess.Pieces;
 
 
 namespace ChessApp.BoardLogic;
@@ -14,19 +12,10 @@ public static class ChessBoardInitializer
     {
         boardModel.Squares.Clear();
 
-        for (int row = 0; row < 8; row++)
+        foreach (var square in BoardGenerator.GenerateSquares())
         {
-            for (int col = 0; col < 8; col++)
-            {
-                var square = new ChessSquare
-                {
-                    Row = row,
-                    Column = col,
-                    Piece = GetInitialPiece(row, col)
-                };
-
-                boardModel.Squares.Add(square);
-            }
+            square.Piece = GetInitialPiece(square.Row, square.Column);
+            boardModel.Squares.Add(square);
         }
     }
 

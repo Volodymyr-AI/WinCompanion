@@ -1,10 +1,8 @@
 ﻿using System.ComponentModel;
-using System.Runtime.CompilerServices;
 using System.Windows.Media;
 using ChessApp.Models.Chess;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess;
 
-namespace WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
+namespace ChessApp.Models.Board;
 
 public class ChessSquare : INotifyPropertyChanged
 {

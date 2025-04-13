@@ -1,5 +1,6 @@
-﻿using System.Collections.ObjectModel;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace ChessApp.Models.Board;
 

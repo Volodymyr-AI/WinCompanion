@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WPF_WinCompanion.Apps_Windows.Notes_App"
+        xmlns:local="clr-namespace:WPF_WinCompanion.Apps_Views.Notes_App"
         mc:Ignorable="d"
         Title="NotesAppWindow" Height="450" Width="800">
     <Grid>

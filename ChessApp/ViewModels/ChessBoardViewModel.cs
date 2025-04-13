@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Windows.Input;
 using ChessApp.BoardLogic;
@@ -6,8 +7,7 @@ using ChessApp.BoardLogic.Handlers;
 using ChessApp.BoardLogic.Validators;
 using ChessApp.Commands;
 using ChessApp.Models.Board;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess;
+using ChessApp.Models.Chess;
 
 namespace ChessApp.ViewModels;
 

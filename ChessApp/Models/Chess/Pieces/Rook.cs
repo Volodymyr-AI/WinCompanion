@@ -1,6 +1,5 @@
 ﻿using System.Collections.ObjectModel;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess;
+using ChessApp.Models.Board;
 
 namespace ChessApp.Models.Chess.Pieces;
 

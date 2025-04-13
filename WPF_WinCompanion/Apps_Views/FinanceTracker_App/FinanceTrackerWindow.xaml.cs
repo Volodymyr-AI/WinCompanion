@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Collections.Generic;
+using System.Windows;
 
 namespace WPF_WinCompanion.Apps_Views.FinanceTracker_App
 {
@@ -7,8 +8,6 @@ namespace WPF_WinCompanion.Apps_Views.FinanceTracker_App
     /// </summary>
     public partial class FinanceTrackerWindow : Window
     {
-        private List<decimal> Incomes = new List<decimal>();
-        private List<decimal> Outcomes = new List<decimal>();
         public FinanceTrackerWindow()
         {
             InitializeComponent();

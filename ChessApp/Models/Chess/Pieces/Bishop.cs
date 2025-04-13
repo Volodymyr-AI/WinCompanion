@@ -1,8 +1,7 @@
 ﻿using System.Collections.ObjectModel;
-using ChessApp.Models.Chess;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
+using ChessApp.Models.Board;
 
-namespace WPF_WinCompanion.Apps_Windows.Chess_App.Models.Chess.Pieces;
+namespace ChessApp.Models.Chess.Pieces;
 
 /// <summary>
 /// Represents a bishop chess piece.

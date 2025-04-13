@@ -4,9 +4,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:WPF_WinCompanion.Apps_Windows.Chess_App"
-        xmlns:helpers="clr-namespace:WPF_WinCompanion.Apps_Windows.Chess_App.Helpers"
-        xmlns:helpers1="clr-namespace:WPF_WinCompanion.Apps_Windows.Chess_App.Helpers;assembly=ChessApp"
+        xmlns:helpers="clr-namespace:ChessApp.Helpers;assembly=ChessApp"
         mc:Ignorable="d"
         Title="Chess Board" Height="650" Width="900"
         ResizeMode="NoResize"
@@ -134,9 +132,9 @@
                                             CommandParameter="{Binding }"
                                             Style="{StaticResource FlatChessButton}">
                                         <Image Source="{Binding Piece.ImagePath}"
-                                            Visibility="{Binding Piece, Converter={StaticResource NullToVisibilityConverter}}"
-                                            Stretch="Uniform"
-                                            Margin="4"/>
+                                               Visibility="{Binding Piece, Converter={StaticResource NullToVisibilityConverter}}"
+                                               Stretch="Uniform"
+                                               Margin="4" />
                                     </Button>
                                 </Border>
                             </DataTemplate>

@@ -1,5 +1,6 @@
-﻿using System.Windows.Media;
-using WPF_WinCompanion.Apps_Windows.Chess_App.Models.Board;
+﻿using System.Collections.Generic;
+using System.Windows.Media;
+using ChessApp.Models.Board;
 
 namespace ChessApp.BoardLogic;
 
