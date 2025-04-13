@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Windows;
+using System.Windows.Media;
 using ChessApp.BoardLogic.Validators;
 using ChessApp.Models.Board;
 using ChessApp.Models.Chess.Pieces;
@@ -45,12 +46,14 @@ public class ChessMoveHandler : IChessMoveHandler
         if (clickedSquare.Piece != null && clickedSquare.Piece.Color == _gameHandler.CurrentTurn)
         {
             clickedSquare.IsSelected = true;
+            clickedSquare.Background = Brushes.LimeGreen;
             selectedSquare = clickedSquare;
         }
     }
     private void UnselectPiece(ChessSquare clickedSquare)
     {
         selectedSquare.IsSelected = false;
+        selectedSquare.Background = selectedSquare.BaseBackground;
         selectedSquare = null;
     }
     
