@@ -226,10 +226,23 @@ public class ChessMoveHandler : IChessMoveHandler
     private void HighlightPossibleMoves(ChessSquare selectedSquare)
     {
         List<ChessSquare> possibleMoves = MoveGenerator.GetPossibleMoves(selectedSquare, _chessBoardModel);
+        
         Debug.WriteLine("Possible moves count: " + possibleMoves.Count);
         foreach (var square in possibleMoves)
         {
-            square.Background = Brushes.LightBlue;
+            if (selectedSquare.Piece is King &&
+                CheckMateValidator.IsKingCheckAfterMove(_chessBoardModel, selectedSquare, square))
+            {
+                square.Background = square.BaseBackground;
+            }
+            else if (square.Piece != null)
+            {
+                square.Background = Brushes.LightCoral;
+            }
+            else
+            {
+                square.Background = Brushes.LightBlue;
+            }
         }
     }
     
