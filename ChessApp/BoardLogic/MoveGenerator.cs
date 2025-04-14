@@ -35,7 +35,7 @@ public static class MoveGenerator
     private static List<ChessSquare> GetPawnMoves(ChessSquare pawn, ChessBoardModel board)
     {
         var moves = new List<ChessSquare>();
-        int direction = (pawn.Piece.Color == PieceColor.White) ? 1 : -1;
+        int direction = (pawn.Piece.Color == PieceColor.White) ? -1 : 1;
         int startRow = (pawn.Piece.Color == PieceColor.White) ? 6 : 1;
         
         // One move forward
