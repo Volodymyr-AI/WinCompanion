@@ -14,11 +14,13 @@ public class BoardGenerator
             isWhite = row % 2 == 0;
             for (int col = 0; col < 8; col++)
             {
+                var baseColor = isWhite ? Brushes.White : Brushes.Gray;
                 yield return new ChessSquare
                 {
                     Row = row,
                     Column = col,
-                    Background = isWhite ? Brushes.White : Brushes.Gray
+                    Background = baseColor,
+                    BaseBackground = baseColor
                 };
                 isWhite = !isWhite;
             }

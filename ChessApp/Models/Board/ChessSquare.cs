@@ -20,6 +20,8 @@ public class ChessSquare : INotifyPropertyChanged
         }
     }
     
+    public Brush BaseBackground { get; set; }
+    
     private bool _isSelected;
     public bool IsSelected
     {
