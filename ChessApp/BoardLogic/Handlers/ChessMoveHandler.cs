@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
@@ -47,6 +48,7 @@ public class ChessMoveHandler : IChessMoveHandler
         {
             clickedSquare.IsSelected = true;
             clickedSquare.Background = Brushes.LightGreen;
+            HighlightPossibleMoves(clickedSquare);
             selectedSquare = clickedSquare;
         }
     }
@@ -54,6 +56,7 @@ public class ChessMoveHandler : IChessMoveHandler
     {
         selectedSquare.IsSelected = false;
         selectedSquare.Background = selectedSquare.BaseBackground;
+        ClearHighlightedMoves();
         selectedSquare = null;
     }
     
@@ -136,6 +139,7 @@ public class ChessMoveHandler : IChessMoveHandler
         selectedSquare.Piece = null;
         selectedSquare.IsSelected = false;
         selectedSquare.Background = selectedSquare.BaseBackground; 
+        ClearHighlightedMoves();
 
         HandlePawnPromotion(destinationSquare);
         
@@ -214,5 +218,43 @@ public class ChessMoveHandler : IChessMoveHandler
     public void SetGameHandler(GameHandler gameHandler)
     {
         _gameHandler = gameHandler;
+    }
+
+    /// <summary>
+    /// Highlight selected pieces possible moves
+    /// </summary>
+    private void HighlightPossibleMoves(ChessSquare selectedSquare)
+    {
+        List<ChessSquare> possibleMoves = MoveGenerator.GetPossibleMoves(selectedSquare, _chessBoardModel);
+        
+        Debug.WriteLine("Possible moves count: " + possibleMoves.Count);
+        foreach (var square in possibleMoves)
+        {
+            if (selectedSquare.Piece is King &&
+                CheckMateValidator.IsKingCheckAfterMove(_chessBoardModel, selectedSquare, square))
+            {
+                square.Background = square.BaseBackground;
+            }
+            else if (square.Piece != null)
+            {
+                square.Background = Brushes.LightCoral;
+            }
+            else
+            {
+                square.Background = Brushes.LightBlue;
+            }
+        }
+    }
+    
+    // <summary>
+    /// Clears the highlighting of all squares by resetting 
+    /// their Background property to the BaseBackground.
+    /// </summary>
+    private void ClearHighlightedMoves()
+    {
+        foreach (var square in _chessBoardModel.Squares)
+        {
+            square.Background = square.BaseBackground;
+        }
     }
 }
