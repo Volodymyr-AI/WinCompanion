@@ -46,7 +46,7 @@ public class ChessMoveHandler : IChessMoveHandler
         if (clickedSquare.Piece != null && clickedSquare.Piece.Color == _gameHandler.CurrentTurn)
         {
             clickedSquare.IsSelected = true;
-            clickedSquare.Background = Brushes.LimeGreen;
+            clickedSquare.Background = Brushes.LightGreen;
             selectedSquare = clickedSquare;
         }
     }
@@ -118,7 +118,9 @@ public class ChessMoveHandler : IChessMoveHandler
         }
 
         if (selectedSquare.Piece is King && Math.Abs(selectedSquare.Column - destinationSquare.Column) == 2)
+        {
             HandleCastling(selectedSquare, destinationSquare);
+        }
         else
             MovePiece(destinationSquare);
     }
@@ -133,6 +135,7 @@ public class ChessMoveHandler : IChessMoveHandler
         destinationSquare.Piece = selectedSquare.Piece;
         selectedSquare.Piece = null;
         selectedSquare.IsSelected = false;
+        selectedSquare.Background = selectedSquare.BaseBackground; 
 
         HandlePawnPromotion(destinationSquare);
         
