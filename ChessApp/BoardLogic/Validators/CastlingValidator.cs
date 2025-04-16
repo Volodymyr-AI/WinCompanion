@@ -62,4 +62,15 @@ public class CastlingValidator
     {
         _rookMoved[(pieceColor, column)] = true;
     }
+
+    public void Reset()
+    {
+        _kingMoved[PieceColor.White] = false;
+        _kingMoved[PieceColor.Black] = false;
+
+        _rookMoved[(PieceColor.White, 0)] = false;
+        _rookMoved[(PieceColor.White, 7)] = false;
+        _rookMoved[(PieceColor.Black, 0)] = false;
+        _rookMoved[(PieceColor.Black, 7)] = false;
+    }
 }

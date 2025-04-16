@@ -26,8 +26,9 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     {
         ChessBoardInitializer.InitializeBoard(BoardModel);
 
-        _moveHandler = new ChessMoveHandler(BoardModel, new CastlingValidator(), null);
-        _gameHandler = new GameHandler(BoardModel, _moveHandler);
+        var castlingValidator = new CastlingValidator();
+        _moveHandler = new ChessMoveHandler(BoardModel, castlingValidator, null);
+        _gameHandler = new GameHandler(BoardModel, _moveHandler,castlingValidator);
         _gameHandler.PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == nameof(GameHandler.CurrentTurn))

@@ -11,6 +11,7 @@ public class GameHandler : INotifyPropertyChanged
     private readonly ChessBoardModel _boardModel;
     private readonly IChessMoveHandler _moveHandler;
     private PieceColor _currentTurn = PieceColor.White;
+    private CastlingValidator _castlingValidator;
 
     public PieceColor CurrentTurn
     {
@@ -27,13 +28,18 @@ public class GameHandler : INotifyPropertyChanged
 
     public event Action GameUpdated;
     public event PropertyChangedEventHandler PropertyChanged;
-    public GameHandler(ChessBoardModel boardModel, IChessMoveHandler moveHandler)
+    public GameHandler(ChessBoardModel boardModel, IChessMoveHandler moveHandler, CastlingValidator castlingValidator)
     {
         _boardModel = boardModel;
         _moveHandler = moveHandler;
         _currentTurn = PieceColor.White;
-        
+        _castlingValidator = castlingValidator;
         _moveHandler.BoardUpdated += OnMoveMade;
+    }
+
+    public GameHandler(CastlingValidator castlingValidator)
+    {
+        _castlingValidator = castlingValidator;
     }
     
     /// <summary>
@@ -84,6 +90,7 @@ public class GameHandler : INotifyPropertyChanged
     public void RestartGame()
     {
         ChessBoardInitializer.InitializeBoard(_boardModel);
+        _castlingValidator.Reset();
         CurrentTurn = PieceColor.White;
         GameUpdated?.Invoke();
     }
