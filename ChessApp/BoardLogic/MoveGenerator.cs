@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using ChessApp.BoardLogic.Validators;
 using ChessApp.Models.Board;
 using ChessApp.Models.Chess;
 
@@ -125,7 +126,7 @@ public static class MoveGenerator
         ]);
     }
 
-    private static List<ChessSquare> GetKingMoves(ChessSquare king, ChessBoardModel board)
+    public static List<ChessSquare> GetKingMoves(ChessSquare king, ChessBoardModel board, CastlingValidator? castlingValidator = null)
     {
         var moves = new List<ChessSquare>();
         int[][] directions =
@@ -141,6 +142,20 @@ public static class MoveGenerator
             {
                 moves.Add(targetSquare);
             }
+        }
+
+        if (castlingValidator != null)
+        {
+            var row = king.Row;
+            var rookKingSide = board.GetSquare(row, 7);
+            var kingSide = board.GetSquare(row, 6);
+            if(castlingValidator.CanCastle(king, rookKingSide, board))
+                moves.Add(kingSide);
+            
+            var rookQueenSide = board.GetSquare(row, 0);
+            var queenSide = board.GetSquare(row, 2);
+            if(castlingValidator.CanCastle(king, rookQueenSide, board))
+                moves.Add(queenSide);
         }
         return moves;
     }
