@@ -135,14 +135,25 @@ public class ChessMoveHandler : IChessMoveHandler
     /// <param name="destinationSquare">The cell where you want to move the figure.</param>
     private void MovePiece(ChessSquare destinationSquare)
     {
-        destinationSquare.Piece = selectedSquare.Piece;
+        var movedPiece = selectedSquare.Piece;
+        
+        destinationSquare.Piece = movedPiece;
         selectedSquare.Piece = null;
+        // mark King moved
+        if (movedPiece is King)
+        {
+            _castlingValidator.MarkKingMoved(movedPiece.Color);
+        }
+        // mark Rook moved
+        if (movedPiece is Rook)
+        {
+            _castlingValidator.MarkRookMoved(movedPiece.Color, selectedSquare.Column);
+        }
+        
         selectedSquare.IsSelected = false;
-        selectedSquare.Background = selectedSquare.BaseBackground; 
         ClearHighlightedMoves();
 
         HandlePawnPromotion(destinationSquare);
-        
         selectedSquare = null;
         
         BoardUpdated?.Invoke(); // Inform viewmodel
@@ -208,8 +219,7 @@ public class ChessMoveHandler : IChessMoveHandler
             return;
         }
         
-        _castlingValidator.MarkKingMoved(king.Color);
-        _castlingValidator.MarkRookMoved(rook.Color, rookSquare.Column);
+        
         
         selectedSquare = null; // unselect king square
         _gameHandler.CurrentTurn = _gameHandler.Opponent(_gameHandler.CurrentTurn); // giving turn to opponent
