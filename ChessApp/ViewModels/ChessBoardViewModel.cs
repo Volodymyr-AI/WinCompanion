@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Windows.Input;
 using ChessApp.BoardLogic;
 using ChessApp.BoardLogic.Board;
+using ChessApp.BoardLogic.Game;
 using ChessApp.BoardLogic.Game.Validators;
 using ChessApp.BoardLogic.Handlers;
 using ChessApp.BoardLogic.Interfaces;
@@ -22,6 +23,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     public PieceColor CurrentTurn => _gameHandler.CurrentTurn;
     
     private readonly IChessMoveHandler _moveHandler;
+    private readonly IMoveHighlighter _highlighter;
     private readonly GameHandler _gameHandler;
 
     public ChessBoardViewModel()
@@ -29,7 +31,8 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         ChessBoardInitializer.InitializeBoard(BoardModel);
 
         var castlingValidator = new CastlingValidator();
-        _moveHandler = new ChessMoveHandler(BoardModel, castlingValidator, null);
+        _highlighter = new MoveHighlighter();
+        _moveHandler = new ChessMoveHandler(BoardModel, castlingValidator, null, _highlighter);
         _gameHandler = new GameHandler(BoardModel, _moveHandler,castlingValidator);
         _gameHandler.PropertyChanged += (sender, args) =>
         {

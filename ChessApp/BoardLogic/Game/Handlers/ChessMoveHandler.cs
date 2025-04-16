@@ -17,16 +17,21 @@ public class ChessMoveHandler : IChessMoveHandler
     private ChessSquare selectedSquare;
     
     private readonly ChessBoardModel _chessBoardModel;
+    
     private readonly CastlingValidator _castlingValidator;
+    
     private GameHandler _gameHandler;
+    
+    private readonly IMoveHighlighter _highlighter;
     
     public event Action BoardUpdated;
 
-    public ChessMoveHandler(ChessBoardModel boardModel, CastlingValidator castlingValidator, GameHandler gameHandler)
+    public ChessMoveHandler(ChessBoardModel boardModel, CastlingValidator castlingValidator, GameHandler gameHandler, IMoveHighlighter highlighter)
     {
         _chessBoardModel = boardModel;
         _castlingValidator = castlingValidator;
         _gameHandler = gameHandler;
+        _highlighter = highlighter;
     }
     
     public void OnSquareClicked(ChessSquare clickedSquare)
@@ -51,7 +56,7 @@ public class ChessMoveHandler : IChessMoveHandler
         {
             clickedSquare.IsSelected = true;
             clickedSquare.Background = Brushes.LightGreen;
-            HighlightPossibleMoves(clickedSquare);
+            _highlighter.HighlightMoves(clickedSquare, _chessBoardModel, _castlingValidator);
             selectedSquare = clickedSquare;
         }
     }
@@ -59,7 +64,7 @@ public class ChessMoveHandler : IChessMoveHandler
     {
         selectedSquare.IsSelected = false;
         selectedSquare.Background = selectedSquare.BaseBackground;
-        ClearHighlightedMoves();
+        _highlighter.ClearHighlights(_chessBoardModel);
         selectedSquare = null;
     }
     
@@ -154,7 +159,7 @@ public class ChessMoveHandler : IChessMoveHandler
         }
         
         selectedSquare.IsSelected = false;
-        ClearHighlightedMoves();
+        _highlighter.ClearHighlights(_chessBoardModel);
 
         HandlePawnPromotion(destinationSquare);
         selectedSquare = null;
@@ -179,7 +184,7 @@ public class ChessMoveHandler : IChessMoveHandler
         {
             HandlePawnPromotion(destinationSquare);
         }
-        ClearHighlightedMoves();
+        _highlighter.ClearHighlights(_chessBoardModel);
         BoardUpdated?.Invoke();
     }
     
@@ -229,45 +234,5 @@ public class ChessMoveHandler : IChessMoveHandler
     public void SetGameHandler(GameHandler gameHandler)
     {
         _gameHandler = gameHandler;
-    }
-
-    /// <summary>
-    /// Highlight selected pieces possible moves
-    /// </summary>
-    private void HighlightPossibleMoves(ChessSquare selectedSquare)
-    {
-        List<ChessSquare> possibleMoves = selectedSquare.Piece is King
-            ? MoveGenerator.GetKingMoves(selectedSquare, _chessBoardModel, _castlingValidator)
-            : MoveGenerator.GetPossibleMoves(selectedSquare, _chessBoardModel);
-        
-        Debug.WriteLine("Possible moves count: " + possibleMoves.Count);
-        foreach (var square in possibleMoves)
-        {
-            if (selectedSquare.Piece is King &&
-                CheckMateValidator.IsKingCheckAfterMove(_chessBoardModel, selectedSquare, square))
-            {
-                square.Background = square.BaseBackground;
-            }
-            else if (square.Piece != null)
-            {
-                square.Background = Brushes.LightCoral;
-            }
-            else
-            {
-                square.Background = Brushes.LightBlue;
-            }
-        }
-    }
-    
-    // <summary>
-    /// Clears the highlighting of all squares by resetting 
-    /// their Background property to the BaseBackground.
-    /// </summary>
-    private void ClearHighlightedMoves()
-    {
-        foreach (var square in _chessBoardModel.Squares)
-        {
-            square.Background = square.BaseBackground;
-        }
     }
 }
