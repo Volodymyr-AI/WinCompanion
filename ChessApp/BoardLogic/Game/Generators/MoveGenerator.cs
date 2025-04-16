@@ -1,9 +1,8 @@
-﻿using System.Collections.Generic;
-using ChessApp.BoardLogic.Validators;
+﻿using ChessApp.BoardLogic.Game.Validators;
 using ChessApp.Models.Board;
 using ChessApp.Models.Chess;
 
-namespace ChessApp.BoardLogic;
+namespace ChessApp.BoardLogic.Game.Generators;
 
 public static class MoveGenerator
 {

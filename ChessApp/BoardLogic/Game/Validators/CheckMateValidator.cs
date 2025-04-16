@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
+﻿using System.Diagnostics;
+using ChessApp.BoardLogic.Game.Generators;
 using ChessApp.Models.Board;
 using ChessApp.Models.Chess;
 using ChessApp.Models.Chess.Pieces;
 
-namespace ChessApp.BoardLogic.Validators;
+namespace ChessApp.BoardLogic.Game.Validators;
 
 public static class CheckMateValidator
 {

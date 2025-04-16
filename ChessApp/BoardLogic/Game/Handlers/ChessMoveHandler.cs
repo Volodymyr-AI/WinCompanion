@@ -3,7 +3,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Windows;
 using System.Windows.Media;
-using ChessApp.BoardLogic.Validators;
+using ChessApp.BoardLogic.Board;
+using ChessApp.BoardLogic.Game.Generators;
+using ChessApp.BoardLogic.Game.Validators;
+using ChessApp.BoardLogic.Interfaces;
 using ChessApp.Models.Board;
 using ChessApp.Models.Chess.Pieces;
 

@@ -1,5 +1,6 @@
 ﻿using ChessApp.BoardLogic;
-using ChessApp.BoardLogic.Validators;
+using ChessApp.BoardLogic.Board;
+using ChessApp.BoardLogic.Game.Validators;
 using ChessApp.Models.Chess;
 using ChessApp.Models.Chess.Pieces;
 

@@ -1,10 +1,8 @@
-﻿using System;
-using ChessApp.Models.Board;
+﻿using ChessApp.Models.Board;
 using ChessApp.Models.Chess;
 using ChessApp.Models.Chess.Pieces;
 
-
-namespace ChessApp.BoardLogic;
+namespace ChessApp.BoardLogic.Board;
 
 public static class ChessBoardInitializer
 {
