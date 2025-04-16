@@ -176,7 +176,7 @@ public class ChessMoveHandler : IChessMoveHandler
         {
             HandlePawnPromotion(destinationSquare);
         }
-        
+        ClearHighlightedMoves();
         BoardUpdated?.Invoke();
     }
     
@@ -204,12 +204,12 @@ public class ChessMoveHandler : IChessMoveHandler
             return;
         }
 
-        King king = (King)kingSquare.Piece; // Save the King before moving
+        //King king = (King)kingSquare.Piece; // Save the King before moving
         MovePiece(destination, kingSquare); // moving King piece to a new place deleting it from the old square
 
         int rookNewColumn = destination.Column - step; // Count new column for Rook
         ChessSquare rookNewSquare = _chessBoardModel.Squares.First(sq => sq.Row == rookSquare.Row && sq.Column == rookNewColumn); // Searching for the square where Rook should step
-        Rook rook = rookSquare.Piece as Rook;
+        //Rook rook = rookSquare.Piece as Rook;
         MovePiece(rookNewSquare, rookSquare); // Moving Rook to a rookNewSquare
         
         // Check new position of a King
@@ -218,8 +218,6 @@ public class ChessMoveHandler : IChessMoveHandler
             MessageBox.Show("King is missing after castling.");
             return;
         }
-        
-        
         
         selectedSquare = null; // unselect king square
         _gameHandler.CurrentTurn = _gameHandler.Opponent(_gameHandler.CurrentTurn); // giving turn to opponent
@@ -235,7 +233,9 @@ public class ChessMoveHandler : IChessMoveHandler
     /// </summary>
     private void HighlightPossibleMoves(ChessSquare selectedSquare)
     {
-        List<ChessSquare> possibleMoves = MoveGenerator.GetPossibleMoves(selectedSquare, _chessBoardModel);
+        List<ChessSquare> possibleMoves = selectedSquare.Piece is King
+            ? MoveGenerator.GetKingMoves(selectedSquare, _chessBoardModel, _castlingValidator)
+            : MoveGenerator.GetPossibleMoves(selectedSquare, _chessBoardModel);
         
         Debug.WriteLine("Possible moves count: " + possibleMoves.Count);
         foreach (var square in possibleMoves)
