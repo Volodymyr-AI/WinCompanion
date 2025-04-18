@@ -1,7 +1,8 @@
 ﻿using ChessApp.BoardLogic.Game.Validators;
+using ChessApp.BoardLogic.Game.Validators.CastlingValidation;
 using ChessApp.Models.Board;
 
-namespace ChessApp.BoardLogic.Interfaces;
+namespace ChessApp.BoardLogic.Game.Actions.Highlight;
 
 public interface IMoveHighlighter
 {

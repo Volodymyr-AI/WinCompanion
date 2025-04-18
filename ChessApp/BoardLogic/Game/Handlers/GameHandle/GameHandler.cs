@@ -1,12 +1,15 @@
 ﻿using System.ComponentModel;
 using System.Windows;
 using ChessApp.BoardLogic.Board;
+using ChessApp.BoardLogic.Game.Handlers.MoveHandle;
 using ChessApp.BoardLogic.Game.Validators;
-using ChessApp.BoardLogic.Interfaces;
+using ChessApp.BoardLogic.Game.Validators.CastlingValidation;
+using ChessApp.BoardLogic.Game.Validators.CheckmateValidation;
+using ChessApp.BoardLogic.Game.Validators.StalemateValidation;
 using ChessApp.Models.Board;
 using ChessApp.Models.Chess;
 
-namespace ChessApp.BoardLogic.Handlers;
+namespace ChessApp.BoardLogic.Game.Handlers.GameHandle;
 
 public class GameHandler : INotifyPropertyChanged
 {

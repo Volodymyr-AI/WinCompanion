@@ -1,7 +1,6 @@
-﻿using System;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
-namespace ChessApp.Commands;
+namespace ChessApp.Infrastructure.Commands;
 
 public class RelayCommand : ICommand
 {

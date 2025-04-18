@@ -4,13 +4,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:helpers="clr-namespace:ChessApp.Helpers;assembly=ChessApp"
+        xmlns:helpers1="clr-namespace:ChessApp.Infrastructure.Helpers;assembly=ChessApp"
         mc:Ignorable="d"
         Title="Chess Board" Height="650" Width="900"
         ResizeMode="NoResize"
         Background="LightSlateGray">
     <Window.Resources>
-        <helpers:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <helpers1:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <!-- Flat button style -->
         <Style x:Key="FlatChessButton" TargetType="Button">
             <Setter Property="Padding" Value="0"/>

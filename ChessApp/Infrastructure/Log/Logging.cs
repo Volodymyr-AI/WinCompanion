@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace ChessApp.Log;
+namespace ChessApp.Infrastructure.Log;
 
 public class Logging
 {

@@ -1,16 +1,14 @@
-﻿using System;
-using System.Diagnostics;
-using System.Linq;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media;
-using ChessApp.BoardLogic.Board;
-using ChessApp.BoardLogic.Game.Generators;
+using ChessApp.BoardLogic.Game.Actions.Highlight;
+using ChessApp.BoardLogic.Game.Handlers.GameHandle;
 using ChessApp.BoardLogic.Game.Validators;
-using ChessApp.BoardLogic.Interfaces;
+using ChessApp.BoardLogic.Game.Validators.CastlingValidation;
+using ChessApp.BoardLogic.Game.Validators.CheckmateValidation;
 using ChessApp.Models.Board;
 using ChessApp.Models.Chess.Pieces;
 
-namespace ChessApp.BoardLogic.Handlers;
+namespace ChessApp.BoardLogic.Game.Handlers.MoveHandle;
 
 public class ChessMoveHandler : IChessMoveHandler
 {

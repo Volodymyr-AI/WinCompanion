@@ -1,7 +1,7 @@
 ﻿using ChessApp.Models.Board;
 using ChessApp.Models.Chess;
 
-namespace ChessApp.BoardLogic.Interfaces;
+namespace ChessApp.BoardLogic.Game.Validators.MoveValidation;
 
 public interface IMoveValidator
 {

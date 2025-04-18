@@ -5,10 +5,14 @@ using System.Windows.Input;
 using ChessApp.BoardLogic;
 using ChessApp.BoardLogic.Board;
 using ChessApp.BoardLogic.Game;
+using ChessApp.BoardLogic.Game.Actions;
+using ChessApp.BoardLogic.Game.Actions.Highlight;
+using ChessApp.BoardLogic.Game.Handlers;
+using ChessApp.BoardLogic.Game.Handlers.GameHandle;
+using ChessApp.BoardLogic.Game.Handlers.MoveHandle;
 using ChessApp.BoardLogic.Game.Validators;
-using ChessApp.BoardLogic.Handlers;
-using ChessApp.BoardLogic.Interfaces;
-using ChessApp.Commands;
+using ChessApp.BoardLogic.Game.Validators.CastlingValidation;
+using ChessApp.Infrastructure.Commands;
 using ChessApp.Models.Board;
 using ChessApp.Models.Chess;
 
@@ -31,7 +35,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         ChessBoardInitializer.InitializeBoard(BoardModel);
 
         var castlingValidator = new CastlingValidator();
-        _highlighter = new MoveHighlighter();
+        _highlighter = new MoveHighlight();
         _moveHandler = new ChessMoveHandler(BoardModel, castlingValidator, null, _highlighter);
         _gameHandler = new GameHandler(BoardModel, _moveHandler,castlingValidator);
         _gameHandler.PropertyChanged += (sender, args) =>

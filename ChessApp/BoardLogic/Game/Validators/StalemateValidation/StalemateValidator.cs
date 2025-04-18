@@ -1,9 +1,10 @@
 ﻿using ChessApp.BoardLogic.Game.Generators;
+using ChessApp.BoardLogic.Game.Validators.CheckmateValidation;
 using ChessApp.Models.Board;
 using ChessApp.Models.Chess;
 using ChessApp.Models.Chess.Pieces;
 
-namespace ChessApp.BoardLogic.Game.Validators;
+namespace ChessApp.BoardLogic.Game.Validators.StalemateValidation;
 
 public class StalemateValidator
 {

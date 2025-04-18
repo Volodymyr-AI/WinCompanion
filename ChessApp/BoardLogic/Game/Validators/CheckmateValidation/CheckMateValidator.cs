@@ -4,7 +4,7 @@ using ChessApp.Models.Board;
 using ChessApp.Models.Chess;
 using ChessApp.Models.Chess.Pieces;
 
-namespace ChessApp.BoardLogic.Game.Validators;
+namespace ChessApp.BoardLogic.Game.Validators.CheckmateValidation;
 
 public static class CheckMateValidator
 {

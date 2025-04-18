@@ -7,8 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Folder Include="Commands\" />
+      <Folder Include="Infrastructure\Database\" />
       <Folder Include="Models\" />
+      <Folder Include="Services\GameHistory\" />
       <Folder Include="ViewModels\" />
     </ItemGroup>
 

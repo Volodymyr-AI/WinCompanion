@@ -1,13 +1,14 @@
 ﻿using System.Windows.Media;
 using ChessApp.BoardLogic.Game.Generators;
 using ChessApp.BoardLogic.Game.Validators;
-using ChessApp.BoardLogic.Interfaces;
+using ChessApp.BoardLogic.Game.Validators.CastlingValidation;
+using ChessApp.BoardLogic.Game.Validators.CheckmateValidation;
 using ChessApp.Models.Board;
 using ChessApp.Models.Chess.Pieces;
 
-namespace ChessApp.BoardLogic.Game;
+namespace ChessApp.BoardLogic.Game.Actions.Highlight;
 
-public class MoveHighlighter : IMoveHighlighter
+public class MoveHighlight : IMoveHighlighter
 {
     /// <summary>
     /// Highlight selected pieces possible moves
