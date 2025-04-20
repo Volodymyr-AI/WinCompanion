@@ -41,11 +41,6 @@ public class GameHandler : INotifyPropertyChanged
         _castlingValidator = castlingValidator;
         _moveHandler.BoardUpdated += OnMoveMade;
     }
-
-    public GameHandler(CastlingValidator castlingValidator)
-    {
-        _castlingValidator = castlingValidator;
-    }
     
     /// <summary>
     /// Check game status after every move

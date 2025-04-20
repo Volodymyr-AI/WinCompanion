@@ -12,6 +12,7 @@ using ChessApp.BoardLogic.Game.Handlers.GameHandle;
 using ChessApp.BoardLogic.Game.Handlers.MoveHandle;
 using ChessApp.BoardLogic.Game.Validators;
 using ChessApp.BoardLogic.Game.Validators.CastlingValidation;
+using ChessApp.BoardLogic.Game.Validators.MoveValidation;
 using ChessApp.Infrastructure.Commands;
 using ChessApp.Models.Board;
 using ChessApp.Models.Chess;
@@ -27,17 +28,29 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     public PieceColor CurrentTurn => _gameHandler.CurrentTurn;
     
     private readonly IChessMoveHandler _moveHandler;
-    private readonly IMoveHighlighter _highlighter;
     private readonly GameHandler _gameHandler;
 
     public ChessBoardViewModel()
     {
         ChessBoardInitializer.InitializeBoard(BoardModel);
 
-        var castlingValidator = new CastlingValidator();
-        _highlighter = new MoveHighlight();
-        _moveHandler = new ChessMoveHandler(BoardModel, castlingValidator, null, _highlighter);
-        _gameHandler = new GameHandler(BoardModel, _moveHandler,castlingValidator);
+        var castling = new CastlingValidator();
+        var moveValidator = new MoveValidator();
+        
+        var highlighter = new MoveHighlight();
+        
+        _moveHandler = new ChessMoveHandler(
+            BoardModel,
+            castling,
+            null,
+            highlighter,
+            moveValidator);
+        
+        _gameHandler = new GameHandler(
+            BoardModel,
+            _moveHandler,
+            castling);
+        
         _gameHandler.PropertyChanged += (sender, args) =>
         {
             if (args.PropertyName == nameof(GameHandler.CurrentTurn))
