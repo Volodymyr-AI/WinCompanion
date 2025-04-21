@@ -1,7 +1,6 @@
-﻿using System;
-using ChessApp.Models.Board;
+﻿using ChessApp.Models.Board;
 
-namespace ChessApp.BoardLogic.Handlers;
+namespace ChessApp.BoardLogic.Game.Handlers.MoveHandle;
 
 public interface IChessMoveHandler
 {

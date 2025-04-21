@@ -1,10 +1,9 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media;
 using ChessApp.Models.Board;
 
-namespace ChessApp.Helpers;
+namespace ChessApp.Infrastructure.Helpers;
 
 public class SelectionToBrushConverter : IValueConverter
 {

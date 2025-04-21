@@ -1,7 +1,8 @@
-﻿using ChessApp.Models.Board;
+﻿using ChessApp.BoardLogic.Game.Validators.CheckmateValidation;
+using ChessApp.Models.Board;
 using ChessApp.Models.Chess;
 
-namespace ChessApp.BoardLogic.Validators;
+namespace ChessApp.BoardLogic.Game.Validators.CastlingValidation;
 
 public class CastlingValidator
 {

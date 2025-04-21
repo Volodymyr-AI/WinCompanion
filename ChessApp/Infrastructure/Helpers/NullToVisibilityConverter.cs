@@ -1,9 +1,8 @@
-﻿using System;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace ChessApp.Helpers;
+namespace ChessApp.Infrastructure.Helpers;
 
 public class NullToVisibilityConverter : IValueConverter
 {
