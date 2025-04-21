@@ -1,11 +1,8 @@
-﻿using System.Runtime.CompilerServices;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Media;
 using ChessApp.BoardLogic.Game.Actions.Highlight;
 using ChessApp.BoardLogic.Game.Handlers.GameHandle;
-using ChessApp.BoardLogic.Game.Validators;
 using ChessApp.BoardLogic.Game.Validators.CastlingValidation;
-using ChessApp.BoardLogic.Game.Validators.CheckmateValidation;
 using ChessApp.BoardLogic.Game.Validators.MoveValidation;
 using ChessApp.Infrastructure.Log;
 using ChessApp.Models.Board;
@@ -39,6 +36,11 @@ public class ChessMoveHandler : IChessMoveHandler
         _moveValidator = moveValidator;
     }
     
+    
+    /// <summary>
+    /// Entry point of a class handling different piece movements
+    /// </summary>
+    /// <param name="clickedSquare"></param>
     public void OnSquareClicked(ChessSquare clickedSquare)
     {
         if (clickedSquare == null)
@@ -164,16 +166,6 @@ public class ChessMoveHandler : IChessMoveHandler
         _highlighter.ClearHighlights(_chessBoardModel);
         BoardUpdated?.Invoke();
     }
-
-    /// <summary>
-    /// Checks if the move player wants to make is castling
-    /// </summary>
-    /// <returns></returns>
-    private bool IsCastlingMove(ChessSquare selectedSquare, ChessSquare destinationSquare)
-    {
-        return _selectedSquare.Piece is King 
-               && Math.Abs(_selectedSquare.Column - destinationSquare.Column) == 2;
-    }
     
     /// <summary>
     /// Promote Pawn to Queen if it has reached another edge of a board
@@ -184,6 +176,16 @@ public class ChessMoveHandler : IChessMoveHandler
         {
             selectedSquare.Piece = new Queen {Color = selectedSquare.Piece.Color};
         }
+    }
+    
+    /// <summary>
+    /// Checks if the move player wants to make is castling
+    /// </summary>
+    /// <returns></returns>
+    private bool IsCastlingMove(ChessSquare selectedSquare, ChessSquare destinationSquare)
+    {
+        return _selectedSquare.Piece is King 
+               && Math.Abs(_selectedSquare.Column - destinationSquare.Column) == 2;
     }
 
     /// <summary>
@@ -198,12 +200,12 @@ public class ChessMoveHandler : IChessMoveHandler
         ChessSquare rookSquare = _chessBoardModel.Squares.FirstOrDefault(sq => sq.Row == kingSquare.Row && sq.Column == rookColumn); // Square of rook must be same to king's row and be on a start column to castle successfully
         if (rookSquare == null) 
         {
-            MessageBox.Show("No rook found for castling.");
+            Logging.ShowError("No rook found for castling.");
             return;
         }
         if (!_castlingValidator.CanCastle(kingSquare, rookSquare, _chessBoardModel))
         {
-            MessageBox.Show("Invalid castling");
+            Logging.ShowError("Invalid castling");
             return;
         }
         MovePiece(destination, kingSquare); // moving King piece to a new place deleting it from the old square
@@ -215,7 +217,7 @@ public class ChessMoveHandler : IChessMoveHandler
         // Check new position of a King
         if (destination.Piece == null || !(destination.Piece is King))
         {
-            MessageBox.Show("King is missing after castling.");
+            Logging.ShowError("King is missing after castling.");
             return;
         }
         

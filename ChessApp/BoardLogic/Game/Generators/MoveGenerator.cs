@@ -5,7 +5,7 @@ using ChessApp.Models.Chess;
 
 namespace ChessApp.BoardLogic.Game.Generators;
 
-public static class MoveGenerator
+public sealed class MoveGenerator
 {
     public static List<ChessSquare> GetPossibleMoves(ChessSquare square, ChessBoardModel board)
     {
