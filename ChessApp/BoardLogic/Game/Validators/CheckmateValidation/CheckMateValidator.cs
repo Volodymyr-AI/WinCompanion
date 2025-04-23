@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using ChessApp.BoardLogic.Game.Generators;
+using ChessApp.Infrastructure.Log;
 using ChessApp.Models.Board;
 using ChessApp.Models.Chess;
 using ChessApp.Models.Chess.Pieces;
@@ -33,6 +34,8 @@ public static class CheckMateValidator
             else
             {
                 possibleMoves = MoveGenerator.GetPossibleMoves(square, board); // For all other pieces
+                Debug.WriteLine($"{square.Piece} at {square.Row},{square.Column} -> " +
+                                string.Join(", ", possibleMoves.Select(s => $"[{s.Row},{s.Column}]")));
             }
 
             if (possibleMoves.Contains(kingSquare))
@@ -74,7 +77,7 @@ public static class CheckMateValidator
         // Check if other allie pieces can protect the King
         if(CanDefendKing(board, kingColor))
             return false;
-
+        
         return true; // Mate if no possible moves
     }
 
@@ -217,7 +220,8 @@ public static class CheckMateValidator
     /// </summary>
     public static bool IsSafeForKingToMove(ChessBoardModel board, ChessSquare selectedSquare, ChessSquare destinationSquare)
     {
-        return !(selectedSquare.Piece is King && IsKingCheckAfterMove(board, selectedSquare, destinationSquare));
+        return !(selectedSquare.Piece is King 
+                 && IsKingCheckAfterMove(board, selectedSquare, destinationSquare));
     }
     
     /// <summary>

@@ -1,11 +1,11 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using ChessApp.BoardLogic.Game.Actions.Highlight;
-using ChessApp.BoardLogic.Game.Handlers.GameHandle;
 using ChessApp.BoardLogic.Game.Validators.CastlingValidation;
 using ChessApp.BoardLogic.Game.Validators.MoveValidation;
 using ChessApp.Infrastructure.Log;
 using ChessApp.Models.Board;
+using ChessApp.Models.Chess;
 using ChessApp.Models.Chess.Pieces;
 
 namespace ChessApp.BoardLogic.Game.Handlers.MoveHandle;
@@ -13,29 +13,32 @@ namespace ChessApp.BoardLogic.Game.Handlers.MoveHandle;
 public class ChessMoveHandler : IChessMoveHandler
 {
     private ChessSquare _selectedSquare;
-    private GameHandler _gameHandler;
     
     private readonly ChessBoardModel _chessBoardModel;
     private readonly CastlingValidator _castlingValidator;
     
     private readonly IMoveHighlighter _highlighter;
     private readonly IMoveValidator _moveValidator;
+    
+    private readonly Func<PieceColor> _getCurrentTurn;
+    private readonly Func<bool> _isGameOver;
     public event Action BoardUpdated;
 
     public ChessMoveHandler(
         ChessBoardModel boardModel,
         CastlingValidator castlingValidator,
-        GameHandler gameHandler,
         IMoveHighlighter highlighter,
-        IMoveValidator moveValidator)
+        IMoveValidator moveValidator,
+        Func<PieceColor> getCurrentTurn,
+        Func<bool> isGameOver)
     {
         _chessBoardModel = boardModel;
         _castlingValidator = castlingValidator;
-        _gameHandler = gameHandler;
         _highlighter = highlighter;
         _moveValidator = moveValidator;
+        _getCurrentTurn = getCurrentTurn;
+        _isGameOver = isGameOver;
     }
-    
     
     /// <summary>
     /// Entry point of a class handling different piece movements
@@ -43,12 +46,12 @@ public class ChessMoveHandler : IChessMoveHandler
     /// <param name="clickedSquare"></param>
     public void OnSquareClicked(ChessSquare clickedSquare)
     {
+        if (_isGameOver())
+            return;
+        
         if (clickedSquare == null)
             return;
-
-        // Check game status before doing anything
-        if (_gameHandler.CheckGameStatus())
-            return;
+        
         if (_selectedSquare == null)
             SelectPiece(clickedSquare);
         else if (_selectedSquare == clickedSquare)
@@ -59,13 +62,10 @@ public class ChessMoveHandler : IChessMoveHandler
     
     private void SelectPiece(ChessSquare clickedSquare)
     {
-        if (clickedSquare.Piece != null && clickedSquare.Piece.Color == _gameHandler.CurrentTurn)
-        {
-            clickedSquare.IsSelected = true;
-            clickedSquare.Background = Brushes.LightGreen;
-            _highlighter.HighlightMoves(clickedSquare, _chessBoardModel, _castlingValidator);
-            _selectedSquare = clickedSquare;
-        }
+        clickedSquare.IsSelected = true;
+        clickedSquare.Background = Brushes.LightGreen;
+        _highlighter.HighlightMoves(clickedSquare, _chessBoardModel, _castlingValidator);
+        _selectedSquare = clickedSquare;
     }
     private void UnselectPiece(ChessSquare clickedSquare)
     {
@@ -97,14 +97,18 @@ public class ChessMoveHandler : IChessMoveHandler
             return;
         }
 
-        if (!_moveValidator.IsMoveValid(
-                _chessBoardModel,
-                _selectedSquare,
-                destinationSquare,
-                _gameHandler.CurrentTurn,
-                out var errorMessage))
+        if (destinationSquare.Piece != null && 
+            destinationSquare.Piece.Color == _selectedSquare.Piece.Color)
         {
-            Logging.ShowError(errorMessage);
+            Logging.ShowError("Invalid move");
+            UnselectPiece(_selectedSquare);
+            return;
+        }
+        
+        if (!_moveValidator.IsMoveValid(_chessBoardModel, _selectedSquare, destinationSquare, _getCurrentTurn(), out string error))
+        {
+            error = "Invalid move";
+            Logging.ShowError(error);
             UnselectPiece(_selectedSquare);
             return;
         }
@@ -144,7 +148,6 @@ public class ChessMoveHandler : IChessMoveHandler
         _selectedSquare = null;
         
         BoardUpdated?.Invoke(); // Inform viewmodel
-        _gameHandler.CheckGameStatus();
     }
 
     /// <summary>
@@ -153,7 +156,7 @@ public class ChessMoveHandler : IChessMoveHandler
     /// </summary>
     /// <param name="destinationSquare">The cell where the figure moves.</param>
     /// <param name="source">The cell from which the piece moves.</param>
-    private void MovePiece(ChessSquare destinationSquare, ChessSquare sourceSquare)
+    public void MovePiece(ChessSquare destinationSquare, ChessSquare sourceSquare)
     {
         destinationSquare.Piece = sourceSquare.Piece;
         sourceSquare.Piece = null;
@@ -164,7 +167,7 @@ public class ChessMoveHandler : IChessMoveHandler
             HandlePawnPromotion(destinationSquare);
         }
         _highlighter.ClearHighlights(_chessBoardModel);
-        BoardUpdated?.Invoke();
+        BoardUpdated?.Invoke();// Inform viewmodel
     }
     
     /// <summary>
@@ -222,11 +225,6 @@ public class ChessMoveHandler : IChessMoveHandler
         }
         
         _selectedSquare = null; // unselect king square
-        _gameHandler.CurrentTurn = _gameHandler.Opponent(_gameHandler.CurrentTurn); // giving turn to opponent
-    }
-    
-    public void SetGameHandler(GameHandler gameHandler)
-    {
-        _gameHandler = gameHandler;
+        BoardUpdated?.Invoke();
     }
 }

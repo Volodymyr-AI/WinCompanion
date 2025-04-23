@@ -9,32 +9,33 @@ using ChessApp.Infrastructure.Log;
 using ChessApp.Models.Board;
 using ChessApp.Models.Chess;
 
-namespace ChessApp.BoardLogic.Game.Handlers.GameHandle;
+namespace ChessApp.BoardLogic.Game.Manager.GameManager;
 
 /// <summary>
 /// Central game flow coordinator: handles move turns,
 /// listens for actions <see cref="IChessMoveHandler"/> and informs UI
 /// </summary>
-public sealed class GameHandler : IGameHandler
+public sealed class GameSessionManager : IGameSessionManager
 {
     #region ctor / fields --------------------------------------------------------------------
     private readonly ChessBoardModel _board;
     private readonly CastlingValidator _castling;
-    private readonly IChessMoveHandler _moveHandler;
+    private bool _isGameOver;
     
-    public GameHandler(
-        ChessBoardModel board, 
-        IChessMoveHandler moveHandler, 
+    public bool IsGameOver => _isGameOver;
+    
+    public GameSessionManager(
+        ChessBoardModel board,
         CastlingValidator castling)
     {
         _board       = board;
-        _moveHandler = moveHandler;
         _castling    = castling;
-
-        _moveHandler.BoardUpdated += OnMoveMade;
     }
     
     #endregion
+    
+    private PieceColor _currentTurn = PieceColor.White;
+    private PieceColor _lastTurn = PieceColor.Black;
     public PieceColor CurrentTurn
     {
         get => _currentTurn;
@@ -47,8 +48,7 @@ public sealed class GameHandler : IGameHandler
             }
         }
     }
-    private PieceColor _currentTurn = PieceColor.White;
-
+    public PieceColor LastTurn => _lastTurn;
 
     public event Action GameUpdated = delegate { };
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -60,8 +60,10 @@ public sealed class GameHandler : IGameHandler
     {
         ChessBoardInitializer.InitializeBoard(_board);
         _castling.Reset();
-        
+
+        _isGameOver = false;
         CurrentTurn = PieceColor.White;
+
         GameUpdated?.Invoke();
     }
     
@@ -74,34 +76,28 @@ public sealed class GameHandler : IGameHandler
         if (CheckMateValidator.IsKingCheck(_board, _currentTurn))
         {
             if (CheckMateValidator.IsCheckmate(_board, _currentTurn))
-            {
-                Logging.ShowInfo($"Checkmate! {_currentTurn} lost.");
                 return true;
-            }
-            else
-            {
-                Console.WriteLine($"{_currentTurn} - King Check!");
-                return false;
-            }
         }
         else if (StalemateValidator.IsStalemate(_board, _currentTurn))
-        {
-            Logging.ShowInfo($"Game finished. Stalemate!");
             return true;
-        }
+        
         return false;
     }
     
-    /// <summary>
-    /// Calls after every move, to check status of the game and change side
-    /// </summary>
-    private void OnMoveMade()
+    // Calls after every move, to check status of the game and change side
+    public void OnMoveMade()
     {
-        if (!CheckGameStatus())
+        _lastTurn = _currentTurn;
+        
+        var gameEnded = CheckGameStatus();
+
+        if (!gameEnded)
         {
-            CurrentTurn = Opponent(CurrentTurn);
-            GameUpdated.Invoke();
+            _lastTurn = _currentTurn;
+            CurrentTurn = Opponent(_currentTurn);
         }
+
+        GameUpdated.Invoke();
     }
     
     /// <summary>

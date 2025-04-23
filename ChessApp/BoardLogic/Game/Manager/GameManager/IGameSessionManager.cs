@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
 using ChessApp.Models.Chess;
 
-namespace ChessApp.BoardLogic.Game.Handlers.GameHandle;
+namespace ChessApp.BoardLogic.Game.Manager.GameManager;
 
-public interface IGameHandler : INotifyPropertyChanged
+public interface IGameSessionManager : INotifyPropertyChanged
 {
     /// <summary> Colour that must move now </summary>
     PieceColor CurrentTurn { get; }
@@ -16,4 +16,12 @@ public interface IGameHandler : INotifyPropertyChanged
 
     /// <summary> Checks the game position and returns <c>true</c>, if it already finished. </summary>
     bool CheckGameStatus();
+    
+    /// <summary> Informs manager about move made </summary>
+    void OnMoveMade();
+    
+    /// <summary> Check if game has ended </summary>
+    bool IsGameOver { get; }
+    
+    PieceColor LastTurn { get; }
 }
