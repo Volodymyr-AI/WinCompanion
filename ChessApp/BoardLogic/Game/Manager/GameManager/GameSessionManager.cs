@@ -76,7 +76,10 @@ public sealed class GameSessionManager : IGameSessionManager
         if (CheckMateValidator.IsKingCheck(_board, _currentTurn))
         {
             if (CheckMateValidator.IsCheckmate(_board, _currentTurn))
+            {
+                Logging.ShowInfo($"Checkmate! {_currentTurn} lost.");
                 return true;
+            }
         }
         else if (StalemateValidator.IsStalemate(_board, _currentTurn))
             return true;
@@ -87,17 +90,11 @@ public sealed class GameSessionManager : IGameSessionManager
     // Calls after every move, to check status of the game and change side
     public void OnMoveMade()
     {
-        _lastTurn = _currentTurn;
-        
-        var gameEnded = CheckGameStatus();
-
-        if (!gameEnded)
+        if (!CheckGameStatus())
         {
-            _lastTurn = _currentTurn;
-            CurrentTurn = Opponent(_currentTurn);
+            CurrentTurn = Opponent(CurrentTurn);
+            GameUpdated.Invoke();
         }
-
-        GameUpdated.Invoke();
     }
     
     /// <summary>

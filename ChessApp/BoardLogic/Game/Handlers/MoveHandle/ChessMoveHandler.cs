@@ -107,7 +107,6 @@ public class ChessMoveHandler : IChessMoveHandler
         
         if (!_moveValidator.IsMoveValid(_chessBoardModel, _selectedSquare, destinationSquare, _getCurrentTurn(), out string error))
         {
-            error = "Invalid move";
             Logging.ShowError(error);
             UnselectPiece(_selectedSquare);
             return;
