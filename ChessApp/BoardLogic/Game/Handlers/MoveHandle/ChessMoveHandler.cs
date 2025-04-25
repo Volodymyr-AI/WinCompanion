@@ -153,7 +153,7 @@ public class ChessMoveHandler : IChessMoveHandler
     /// </summary>
     /// <param name="destinationSquare">The cell where the figure moves.</param>
     /// <param name="source">The cell from which the piece moves.</param>
-    private void MovePiece(ChessSquare destinationSquare, ChessSquare sourceSquare)
+    private void CastlePiece(ChessSquare destinationSquare, ChessSquare sourceSquare)
     {
         destinationSquare.Piece = sourceSquare.Piece;
         sourceSquare.Piece = null;
@@ -208,11 +208,11 @@ public class ChessMoveHandler : IChessMoveHandler
             Logging.ShowError("Invalid castling");
             return;
         }
-        MovePiece(destination, kingSquare); // moving King piece to a new place deleting it from the old square
+        CastlePiece(destination, kingSquare); // moving King piece to a new place deleting it from the old square
 
         int rookNewColumn = destination.Column - step; // Count new column for Rook
         ChessSquare rookNewSquare = _chessBoardModel.Squares.First(sq => sq.Row == rookSquare.Row && sq.Column == rookNewColumn); // Searching for the square where Rook should step
-        MovePiece(rookNewSquare, rookSquare); // Moving Rook to a rookNewSquare
+        CastlePiece(rookNewSquare, rookSquare); // Moving Rook to a rookNewSquare
         
         // Check new position of a King
         if (destination.Piece == null || !(destination.Piece is King))
