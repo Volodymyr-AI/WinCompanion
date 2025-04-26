@@ -8,8 +8,8 @@ using ChessApp.BoardLogic.Game;
 using ChessApp.BoardLogic.Game.Actions;
 using ChessApp.BoardLogic.Game.Actions.Highlight;
 using ChessApp.BoardLogic.Game.Handlers;
-using ChessApp.BoardLogic.Game.Handlers.GameHandle;
 using ChessApp.BoardLogic.Game.Handlers.MoveHandle;
+using ChessApp.BoardLogic.Game.Managers.GameManager;
 using ChessApp.BoardLogic.Game.Validators;
 using ChessApp.BoardLogic.Game.Validators.CastlingValidation;
 using ChessApp.BoardLogic.Game.Validators.MoveValidation;
@@ -31,7 +31,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     public ChessBoardModel BoardModel { get; } = new();
 
     /// <summary> Current turn color. Indicates whose turn right now </summary>
-    public PieceColor CurrentTurn => _gameHandler.CurrentTurn;
+    public PieceColor CurrentTurn => _gameStatusManager.CurrentTurn;
 
     /// <summary> Board square click </summary>
     public ICommand SquareClickCommand { get; }
@@ -57,20 +57,20 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         _moveHandler = new ChessMoveHandler(
             BoardModel,
             castling,
-            gameHandler : null,
+            gameStatusManager : null,
             highlighter,
             moveValidator);
 
-        _gameHandler = new GameHandler(
+        _gameStatusManager = new GameStatusManager(
             BoardModel,
             _moveHandler,
             castling);
 
         // «circular‑ctor»
-        ((ChessMoveHandler)_moveHandler).SetGameHandler(_gameHandler);
+        ((ChessMoveHandler)_moveHandler).SetGameHandler(_gameStatusManager);
 
         /* 3. -------------  data‑binding callbacks ---------------------------*/
-        _gameHandler.PropertyChanged += OnGameHandlerPropertyChanged;
+        _gameStatusManager.PropertyChanged += OnGameStatusManagerPropertyChanged;
         _moveHandler.BoardUpdated    += () => OnPropertyChanged(nameof(BoardModel));
 
         /* 4. -------------  UI commands --------------------------------------*/
@@ -80,7 +80,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
                 _moveHandler.OnSquareClicked(square);
         });
 
-        RestartCommand = new RelayCommand(_ => _gameHandler.RestartGame());
+        RestartCommand = new RelayCommand(_ => _gameStatusManager.RestartGame());
     }
 
     #endregion
@@ -88,11 +88,11 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     #region private‑helpers --------------------------------------------------
 
     private readonly IChessMoveHandler _moveHandler;
-    private readonly GameHandler       _gameHandler;
+    private readonly GameStatusManager       _gameStatusManager;
 
-    private void OnGameHandlerPropertyChanged(object? sender, PropertyChangedEventArgs e)
+    private void OnGameStatusManagerPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(GameHandler.CurrentTurn))
+        if (e.PropertyName == nameof(GameStatusManager.CurrentTurn))
             OnPropertyChanged(nameof(CurrentTurn));
     }
 
