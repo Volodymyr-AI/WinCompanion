@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel;
-using System.Windows;
 using ChessApp.BoardLogic.Board;
 using ChessApp.BoardLogic.Game.Handlers.MoveHandle;
 using ChessApp.BoardLogic.Game.Validators.CastlingValidation;
@@ -9,20 +8,20 @@ using ChessApp.Infrastructure.Log;
 using ChessApp.Models.Board;
 using ChessApp.Models.Chess;
 
-namespace ChessApp.BoardLogic.Game.Handlers.GameHandle;
+namespace ChessApp.BoardLogic.Game.Managers.GameManager;
 
 /// <summary>
 /// Central game flow coordinator: handles move turns,
 /// listens for actions <see cref="IChessMoveHandler"/> and informs UI
 /// </summary>
-public sealed class GameHandler : IGameHandler
+public sealed class GameStatusManager : IGameStatusManager
 {
     #region ctor / fields --------------------------------------------------------------------
     private readonly ChessBoardModel _board;
     private readonly CastlingValidator _castling;
     private readonly IChessMoveHandler _moveHandler;
     
-    public GameHandler(
+    public GameStatusManager(
         ChessBoardModel board, 
         IChessMoveHandler moveHandler, 
         CastlingValidator castling)

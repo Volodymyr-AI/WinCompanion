@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel;
 using ChessApp.Models.Chess;
 
-namespace ChessApp.BoardLogic.Game.Handlers.GameHandle;
+namespace ChessApp.BoardLogic.Game.Managers.GameManager;
 
-public interface IGameHandler : INotifyPropertyChanged
+public interface IGameStatusManager : INotifyPropertyChanged
 {
     /// <summary> Colour that must move now </summary>
     PieceColor CurrentTurn { get; }
