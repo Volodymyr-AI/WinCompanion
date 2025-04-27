@@ -10,6 +10,7 @@ using ChessApp.BoardLogic.Game.Actions.Highlight;
 using ChessApp.BoardLogic.Game.Coordinators.Game;
 using ChessApp.BoardLogic.Game.Handlers;
 using ChessApp.BoardLogic.Game.Handlers.MoveHandle;
+using ChessApp.BoardLogic.Game.Handlers.SelectHandle;
 using ChessApp.BoardLogic.Game.Managers.GameManager;
 using ChessApp.BoardLogic.Game.Validators;
 using ChessApp.BoardLogic.Game.Validators.CastlingValidation;
@@ -54,12 +55,16 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         var highlighter   = new MoveHighlight();
 
         /* 2. -------------  domain services ----------------------------------*/
-        // Move‑handler still does not know about GameHandler → transmit null
+        _pieceSelectHandler = new PieceSelectHandler(
+            highlighter,
+            BoardModel,
+            castling);
+        
         _moveHandler = new ChessMoveHandler(
             BoardModel,
             castling,
             highlighter,
-            moveValidator);
+            _pieceSelectHandler);
 
         _gameStatusManager = new GameStatusManager(
             BoardModel,
@@ -69,6 +74,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             _moveHandler,
             _gameStatusManager,
             moveValidator,
+            _pieceSelectHandler,
             BoardModel);
 
         /* 3. -------------  data‑binding callbacks ---------------------------*/
@@ -93,6 +99,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
     #region private‑helpers --------------------------------------------------
 
+    private readonly IPieceSelectHandler     _pieceSelectHandler;
     private readonly IChessMoveHandler       _moveHandler;
     private readonly IGameStatusManager      _gameStatusManager;
     private readonly IGameCoordinator        _gameCoordinator;
