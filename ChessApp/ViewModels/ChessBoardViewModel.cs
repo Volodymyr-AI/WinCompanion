@@ -7,6 +7,7 @@ using ChessApp.BoardLogic.Board;
 using ChessApp.BoardLogic.Game;
 using ChessApp.BoardLogic.Game.Actions;
 using ChessApp.BoardLogic.Game.Actions.Highlight;
+using ChessApp.BoardLogic.Game.Coordinators.Game;
 using ChessApp.BoardLogic.Game.Handlers;
 using ChessApp.BoardLogic.Game.Handlers.MoveHandle;
 using ChessApp.BoardLogic.Game.Managers.GameManager;
@@ -57,17 +58,18 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         _moveHandler = new ChessMoveHandler(
             BoardModel,
             castling,
-            gameStatusManager : null,
             highlighter,
             moveValidator);
 
         _gameStatusManager = new GameStatusManager(
             BoardModel,
-            _moveHandler,
             castling);
 
-        // «circular‑ctor»
-        ((ChessMoveHandler)_moveHandler).SetGameHandler(_gameStatusManager);
+        _gameCoordinator = new GameCoordinator(
+            _moveHandler,
+            _gameStatusManager,
+            moveValidator,
+            BoardModel);
 
         /* 3. -------------  data‑binding callbacks ---------------------------*/
         _gameStatusManager.PropertyChanged += OnGameStatusManagerPropertyChanged;
@@ -77,18 +79,23 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         SquareClickCommand = new RelayCommand(obj =>
         {
             if (obj is ChessSquare square)
-                _moveHandler.OnSquareClicked(square);
+                _gameCoordinator.OnSquareClicked(square);
         });
 
-        RestartCommand = new RelayCommand(_ => _gameStatusManager.RestartGame());
+        RestartCommand = new RelayCommand(_ =>
+        {
+            _gameStatusManager.RestartGame();
+            CommandManager.InvalidateRequerySuggested();
+        });
     }
 
     #endregion
 
     #region private‑helpers --------------------------------------------------
 
-    private readonly IChessMoveHandler _moveHandler;
-    private readonly GameStatusManager       _gameStatusManager;
+    private readonly IChessMoveHandler       _moveHandler;
+    private readonly IGameStatusManager      _gameStatusManager;
+    private readonly IGameCoordinator        _gameCoordinator;
 
     private void OnGameStatusManagerPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {

@@ -19,21 +19,20 @@ public sealed class GameStatusManager : IGameStatusManager
     #region ctor / fields --------------------------------------------------------------------
     private readonly ChessBoardModel _board;
     private readonly CastlingValidator _castling;
-    private readonly IChessMoveHandler _moveHandler;
     
     public GameStatusManager(
         ChessBoardModel board, 
-        IChessMoveHandler moveHandler, 
         CastlingValidator castling)
     {
         _board       = board;
-        _moveHandler = moveHandler;
         _castling    = castling;
-
-        _moveHandler.BoardUpdated += OnMoveMade;
     }
     
     #endregion
+    
+    public ChessBoardModel BoardModel => _board;
+    
+    private PieceColor _currentTurn = PieceColor.White;
     public PieceColor CurrentTurn
     {
         get => _currentTurn;
@@ -46,7 +45,8 @@ public sealed class GameStatusManager : IGameStatusManager
             }
         }
     }
-    private PieceColor _currentTurn = PieceColor.White;
+    
+    public bool IsGameOver { get; private set; }
 
 
     public event Action GameUpdated = delegate { };
@@ -60,6 +60,7 @@ public sealed class GameStatusManager : IGameStatusManager
         ChessBoardInitializer.InitializeBoard(_board);
         _castling.Reset();
         
+        IsGameOver = false;
         CurrentTurn = PieceColor.White;
         GameUpdated?.Invoke();
     }
@@ -74,33 +75,25 @@ public sealed class GameStatusManager : IGameStatusManager
         {
             if (CheckMateValidator.IsCheckmate(_board, _currentTurn))
             {
-                Logging.ShowInfo($"Checkmate! {_currentTurn} lost.");
+                IsGameOver = true;
                 return true;
             }
-            else
-            {
-                Console.WriteLine($"{_currentTurn} - King Check!");
-                return false;
-            }
+            
+            return false;
         }
         else if (StalemateValidator.IsStalemate(_board, _currentTurn))
         {
-            Logging.ShowInfo($"Game finished. Stalemate!");
+            IsGameOver = true;
             return true;
         }
+        
         return false;
     }
     
-    /// <summary>
-    /// Calls after every move, to check status of the game and change side
-    /// </summary>
-    private void OnMoveMade()
+    public void SwitchTurn()
     {
-        if (!CheckGameStatus())
-        {
-            CurrentTurn = Opponent(CurrentTurn);
-            GameUpdated.Invoke();
-        }
+        CurrentTurn = Opponent(CurrentTurn);
+        GameUpdated?.Invoke();
     }
     
     /// <summary>
@@ -114,4 +107,13 @@ public sealed class GameStatusManager : IGameStatusManager
     /// </summary>
     private void OnPropertyChanged(string name) =>
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+
+    public bool TrySetGameOver()
+    {
+        if (IsGameOver)
+            return false;
+        
+        IsGameOver = true;
+        return true;
+    }
 }
