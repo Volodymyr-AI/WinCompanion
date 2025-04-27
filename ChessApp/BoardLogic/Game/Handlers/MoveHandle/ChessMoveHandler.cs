@@ -13,7 +13,6 @@ namespace ChessApp.BoardLogic.Game.Handlers.MoveHandle;
 public class ChessMoveHandler : IChessMoveHandler
 {
     private ChessSquare _selectedSquare;
-    private GameStatusManager _gameStatusManager;
     
     private readonly ChessBoardModel _chessBoardModel;
     private readonly CastlingValidator _castlingValidator;
@@ -25,49 +24,27 @@ public class ChessMoveHandler : IChessMoveHandler
     public ChessMoveHandler(
         ChessBoardModel boardModel,
         CastlingValidator castlingValidator,
-        GameStatusManager gameStatusManager,
         IMoveHighlighter highlighter,
         IMoveValidator moveValidator)
     {
         _chessBoardModel = boardModel;
         _castlingValidator = castlingValidator;
-        _gameStatusManager = gameStatusManager;
         _highlighter = highlighter;
         _moveValidator = moveValidator;
     }
     
+    public ChessSquare? SelectedSquare => _selectedSquare;
+    public bool HasSelectedPiece => _selectedSquare != null;
     
-    /// <summary>
-    /// Entry point of a class handling different piece movements
-    /// </summary>
-    /// <param name="clickedSquare"></param>
-    public void OnSquareClicked(ChessSquare clickedSquare)
+    public void SelectPiece(ChessSquare clickedSquare)
     {
-        if (clickedSquare == null)
-            return;
-
-        // Check game status before doing anything
-        if (_gameStatusManager.CheckGameStatus())
-            return;
-        if (_selectedSquare == null)
-            SelectPiece(clickedSquare);
-        else if (_selectedSquare == clickedSquare)
-            UnselectPiece(clickedSquare);
-        else
-            HandlePieceMovement(clickedSquare);
+         clickedSquare.IsSelected = true;
+         clickedSquare.Background = Brushes.LightGreen;
+         _highlighter.HighlightMoves(clickedSquare, _chessBoardModel, _castlingValidator);
+         _selectedSquare = clickedSquare;
+        
     }
-    
-    private void SelectPiece(ChessSquare clickedSquare)
-    {
-        if (clickedSquare.Piece != null && clickedSquare.Piece.Color == _gameStatusManager.CurrentTurn)
-        {
-            clickedSquare.IsSelected = true;
-            clickedSquare.Background = Brushes.LightGreen;
-            _highlighter.HighlightMoves(clickedSquare, _chessBoardModel, _castlingValidator);
-            _selectedSquare = clickedSquare;
-        }
-    }
-    private void UnselectPiece(ChessSquare clickedSquare)
+    public void UnselectPiece(ChessSquare clickedSquare)
     {
         _selectedSquare.IsSelected = false;
         _selectedSquare.Background = _selectedSquare.BaseBackground;
@@ -89,23 +66,11 @@ public class ChessMoveHandler : IChessMoveHandler
     /// - Executes the move if all conditions are met.
     /// </summary>
     /// <param name="destinationSquare">The target square for the move.</param>
-    private void HandlePieceMovement(ChessSquare destinationSquare)
+    public void HandlePieceMovement(ChessSquare destinationSquare)
     {
         if (_chessBoardModel?.Squares == null)
         {
             Logging.ShowError("Board is not empty");
-            return;
-        }
-
-        if (!_moveValidator.IsMoveValid(
-                _chessBoardModel,
-                _selectedSquare,
-                destinationSquare,
-                _gameStatusManager.CurrentTurn,
-                out var errorMessage))
-        {
-            Logging.ShowError(errorMessage);
-            UnselectPiece(_selectedSquare);
             return;
         }
         
@@ -144,7 +109,6 @@ public class ChessMoveHandler : IChessMoveHandler
         _selectedSquare = null;
         
         BoardUpdated?.Invoke(); // Inform viewmodel
-        _gameStatusManager.CheckGameStatus();
     }
 
     /// <summary>
@@ -184,8 +148,8 @@ public class ChessMoveHandler : IChessMoveHandler
     /// <returns></returns>
     private bool IsCastlingMove(ChessSquare selectedSquare, ChessSquare destinationSquare)
     {
-        return _selectedSquare.Piece is King 
-               && Math.Abs(_selectedSquare.Column - destinationSquare.Column) == 2;
+        return selectedSquare?.Piece is King 
+               && Math.Abs(selectedSquare.Column - destinationSquare.Column) == 2;
     }
 
     /// <summary>
@@ -222,11 +186,5 @@ public class ChessMoveHandler : IChessMoveHandler
         }
         
         _selectedSquare = null; // unselect king square
-        _gameStatusManager.CurrentTurn = _gameStatusManager.Opponent(_gameStatusManager.CurrentTurn); // giving turn to opponent
-    }
-    
-    public void SetGameHandler(GameStatusManager gameStatusManager)
-    {
-        _gameStatusManager = gameStatusManager;
     }
 }
