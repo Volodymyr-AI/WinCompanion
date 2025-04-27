@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Media;
 using ChessApp.BoardLogic.Game.Actions.Highlight;
+using ChessApp.BoardLogic.Game.Handlers.SelectHandle;
 using ChessApp.BoardLogic.Game.Managers.GameManager;
 using ChessApp.BoardLogic.Game.Validators.CastlingValidation;
 using ChessApp.BoardLogic.Game.Validators.MoveValidation;
@@ -12,44 +13,23 @@ namespace ChessApp.BoardLogic.Game.Handlers.MoveHandle;
 
 public class ChessMoveHandler : IChessMoveHandler
 {
-    private ChessSquare _selectedSquare;
-    
     private readonly ChessBoardModel _chessBoardModel;
     private readonly CastlingValidator _castlingValidator;
     
     private readonly IMoveHighlighter _highlighter;
-    private readonly IMoveValidator _moveValidator;
+    private readonly IPieceSelectHandler _pieceSelectHandler;
     public event Action BoardUpdated;
 
     public ChessMoveHandler(
         ChessBoardModel boardModel,
         CastlingValidator castlingValidator,
         IMoveHighlighter highlighter,
-        IMoveValidator moveValidator)
+        IPieceSelectHandler pieceSelectHandler)
     {
         _chessBoardModel = boardModel;
         _castlingValidator = castlingValidator;
         _highlighter = highlighter;
-        _moveValidator = moveValidator;
-    }
-    
-    public ChessSquare? SelectedSquare => _selectedSquare;
-    public bool HasSelectedPiece => _selectedSquare != null;
-    
-    public void SelectPiece(ChessSquare clickedSquare)
-    {
-         clickedSquare.IsSelected = true;
-         clickedSquare.Background = Brushes.LightGreen;
-         _highlighter.HighlightMoves(clickedSquare, _chessBoardModel, _castlingValidator);
-         _selectedSquare = clickedSquare;
-        
-    }
-    public void UnselectPiece(ChessSquare clickedSquare)
-    {
-        _selectedSquare.IsSelected = false;
-        _selectedSquare.Background = _selectedSquare.BaseBackground;
-        _highlighter.ClearHighlights(_chessBoardModel);
-        _selectedSquare = null;
+        _pieceSelectHandler = pieceSelectHandler;
     }
     
     /// <summary>
@@ -74,8 +54,8 @@ public class ChessMoveHandler : IChessMoveHandler
             return;
         }
         
-        if(IsCastlingMove(_selectedSquare, destinationSquare))
-            HandleCastling(_selectedSquare, destinationSquare);
+        if(IsCastlingMove(_pieceSelectHandler.SelectedSquare!, destinationSquare))
+            HandleCastlingMove(_pieceSelectHandler.SelectedSquare!, destinationSquare);
         else
             MovePiece(destinationSquare);
     }
@@ -87,10 +67,10 @@ public class ChessMoveHandler : IChessMoveHandler
     /// <param name="destinationSquare">The cell where you want to move the figure.</param>
     private void MovePiece(ChessSquare destinationSquare)
     {
-        var movedPiece = _selectedSquare.Piece;
+        var movedPiece = _pieceSelectHandler.SelectedSquare!.Piece;
         
         destinationSquare.Piece = movedPiece;
-        _selectedSquare.Piece = null;
+        _pieceSelectHandler.SelectedSquare!.Piece = null;
         // mark King moved
         if (movedPiece is King)
         {
@@ -99,14 +79,14 @@ public class ChessMoveHandler : IChessMoveHandler
         // mark Rook moved
         if (movedPiece is Rook)
         {
-            _castlingValidator.MarkRookMoved(movedPiece.Color, _selectedSquare.Column);
+            _castlingValidator.MarkRookMoved(movedPiece.Color, _pieceSelectHandler.SelectedSquare!.Column);
         }
         
-        _selectedSquare.IsSelected = false;
+        _pieceSelectHandler.SelectedSquare.IsSelected = false;
         _highlighter.ClearHighlights(_chessBoardModel);
 
-        HandlePawnPromotion(destinationSquare);
-        _selectedSquare = null;
+        HandlePawnPromotionMove(destinationSquare);
+        _pieceSelectHandler.SetSelectedSquareToNull();
         
         BoardUpdated?.Invoke(); // Inform viewmodel
     }
@@ -117,7 +97,7 @@ public class ChessMoveHandler : IChessMoveHandler
     /// </summary>
     /// <param name="destinationSquare">The cell where the figure moves.</param>
     /// <param name="source">The cell from which the piece moves.</param>
-    private void CastlePiece(ChessSquare destinationSquare, ChessSquare sourceSquare)
+    private void CastlePieceMove(ChessSquare destinationSquare, ChessSquare sourceSquare)
     {
         destinationSquare.Piece = sourceSquare.Piece;
         sourceSquare.Piece = null;
@@ -125,7 +105,7 @@ public class ChessMoveHandler : IChessMoveHandler
 
         if (destinationSquare.Piece is Pawn)
         {
-            HandlePawnPromotion(destinationSquare);
+            HandlePawnPromotionMove(destinationSquare);
         }
         _highlighter.ClearHighlights(_chessBoardModel);
         BoardUpdated?.Invoke();
@@ -134,7 +114,7 @@ public class ChessMoveHandler : IChessMoveHandler
     /// <summary>
     /// Promote Pawn to Queen if it has reached another edge of a board
     /// </summary>
-    private void HandlePawnPromotion(ChessSquare selectedSquare)
+    private void HandlePawnPromotionMove(ChessSquare selectedSquare)
     {
         if (selectedSquare.Piece is Pawn && (selectedSquare.Row == 0 || selectedSquare.Row == 7))
         {
@@ -157,7 +137,7 @@ public class ChessMoveHandler : IChessMoveHandler
     /// </summary>
     /// <param name="kingSquare">Square where King stands ( for success must be on a start pos )</param>
     /// <param name="destination">Square where King should stand for castling</param>
-    private void HandleCastling(ChessSquare kingSquare, ChessSquare destination)
+    private void HandleCastlingMove(ChessSquare kingSquare, ChessSquare destination)
     {
         int step = destination.Column > kingSquare.Column ? 1 : -1; // Check in which direction we should move to make castling
         int rookColumn = (step == 1) ? 7 : 0; // Check column of Rook
@@ -172,11 +152,11 @@ public class ChessMoveHandler : IChessMoveHandler
             Logging.ShowError("Invalid castling");
             return;
         }
-        CastlePiece(destination, kingSquare); // moving King piece to a new place deleting it from the old square
+        CastlePieceMove(destination, kingSquare); // moving King piece to a new place deleting it from the old square
 
         int rookNewColumn = destination.Column - step; // Count new column for Rook
         ChessSquare rookNewSquare = _chessBoardModel.Squares.First(sq => sq.Row == rookSquare.Row && sq.Column == rookNewColumn); // Searching for the square where Rook should step
-        CastlePiece(rookNewSquare, rookSquare); // Moving Rook to a rookNewSquare
+        CastlePieceMove(rookNewSquare, rookSquare); // Moving Rook to a rookNewSquare
         
         // Check new position of a King
         if (destination.Piece == null || !(destination.Piece is King))
@@ -185,6 +165,6 @@ public class ChessMoveHandler : IChessMoveHandler
             return;
         }
         
-        _selectedSquare = null; // unselect king square
+        _pieceSelectHandler.SetSelectedSquareToNull(); // unselect king square
     }
 }

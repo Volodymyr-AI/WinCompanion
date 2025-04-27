@@ -1,4 +1,5 @@
 using ChessApp.BoardLogic.Game.Handlers.MoveHandle;
+using ChessApp.BoardLogic.Game.Handlers.SelectHandle;
 using ChessApp.BoardLogic.Game.Managers.GameManager;
 using ChessApp.BoardLogic.Game.Validators.CheckmateValidation;
 using ChessApp.BoardLogic.Game.Validators.MoveValidation;
@@ -13,6 +14,7 @@ public class GameCoordinator : IGameCoordinator
     private readonly IChessMoveHandler _moveHandler;
     private readonly IGameStatusManager _gameStatusManager;
     private readonly IMoveValidator _moveValidator;
+    private readonly IPieceSelectHandler _pieceSelectHandler;
 
     private readonly ChessBoardModel _board;
     
@@ -20,11 +22,13 @@ public class GameCoordinator : IGameCoordinator
         IChessMoveHandler moveHandler,
         IGameStatusManager gameStatusManager,
         IMoveValidator moveValidator,
+        IPieceSelectHandler pieceSelectHandler,
         ChessBoardModel board)
     {
         _moveHandler = moveHandler;
         _gameStatusManager = gameStatusManager;
         _moveValidator = moveValidator;
+        _pieceSelectHandler = pieceSelectHandler;
         _board = board;
     }
     
@@ -42,13 +46,13 @@ public class GameCoordinator : IGameCoordinator
         if (_gameStatusManager.IsGameOver)
             return;
 
-        if (!_moveHandler.HasSelectedPiece)
+        if (!_pieceSelectHandler.HasSelectedPiece)
         {
             TrySelectPiece(clickedSquare);
         }
-        else if (_moveHandler.SelectedSquare == clickedSquare)
+        else if (_pieceSelectHandler.SelectedSquare == clickedSquare)
         {
-            _moveHandler.UnselectPiece(clickedSquare);
+            _pieceSelectHandler.UnselectPiece(clickedSquare);
         }
         else
         {
@@ -61,7 +65,7 @@ public class GameCoordinator : IGameCoordinator
     {
         if (clickedSquare.Piece != null && clickedSquare.Piece.Color == _gameStatusManager.CurrentTurn)
         {
-            _moveHandler.SelectPiece(clickedSquare);
+            _pieceSelectHandler.SelectPiece(clickedSquare);
         }
         else
         {
@@ -71,7 +75,7 @@ public class GameCoordinator : IGameCoordinator
 
     private void CoordinateMove(ChessSquare destination)
     {
-        var from = _moveHandler.SelectedSquare!;
+        var from = _pieceSelectHandler.SelectedSquare!;
         
         if (!_moveValidator.IsMoveValid(
                 board: _board,
@@ -81,7 +85,7 @@ public class GameCoordinator : IGameCoordinator
                 out string errorMessage))
         {
             Logging.ShowError(errorMessage);
-            _moveHandler.UnselectPiece(from);
+            _pieceSelectHandler.UnselectPiece(from);
             return;
         }
 
