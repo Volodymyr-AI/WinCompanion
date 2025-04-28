@@ -1,25 +1,18 @@
-﻿using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
+﻿using System.ComponentModel;
 using System.Windows.Input;
-using ChessApp.BoardLogic;
 using ChessApp.BoardLogic.Board;
-using ChessApp.BoardLogic.Game;
-using ChessApp.BoardLogic.Game.Actions;
 using ChessApp.BoardLogic.Game.Actions.Highlight;
 using ChessApp.BoardLogic.Game.Coordinators.Game;
-using ChessApp.BoardLogic.Game.Handlers;
 using ChessApp.BoardLogic.Game.Handlers.MoveHandle;
 using ChessApp.BoardLogic.Game.Handlers.SelectHandle;
 using ChessApp.BoardLogic.Game.Managers.GameManager;
-using ChessApp.BoardLogic.Game.Validators;
 using ChessApp.BoardLogic.Game.Validators.CastlingValidation;
 using ChessApp.BoardLogic.Game.Validators.MoveValidation;
 using ChessApp.Infrastructure.Commands;
 using ChessApp.Models.Board;
 using ChessApp.Models.Chess;
 
-namespace ChessApp.ViewModels;
+namespace AppViewModels.Chess;
 
 /// <summary>
 /// View‑model that hosts the board state, reacts on square clicks
