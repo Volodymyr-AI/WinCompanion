@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using ChessApp.ViewModels;
+using AppViewModels.Chess;
 
 namespace WPF_WinCompanion.Apps_Views.Chess_App.Views;
 

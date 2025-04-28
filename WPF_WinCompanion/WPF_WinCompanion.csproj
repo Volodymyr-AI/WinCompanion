@@ -123,6 +123,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AppViewModels\AppViewModels.csproj" />
     <ProjectReference Include="..\ChessApp\ChessApp.csproj" />
   </ItemGroup>
 
