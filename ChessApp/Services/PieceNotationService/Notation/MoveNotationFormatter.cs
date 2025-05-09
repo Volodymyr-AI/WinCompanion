@@ -1,42 +1,35 @@
+using System.Numerics;
 using ChessApp.Services.PieceNotationService.Entity;
+using ChessApp.Services.PieceNotationService.Notation.Types;
+using ChessApp.Services.PieceNotationService.Notation.Types.Interfaces;
 
 namespace ChessApp.Services.PieceNotationService.Notation;
 
 public class MoveNotationFormatter : IMoveNotationFormatter
 {
+    private readonly List<INotationPartProvider> _providers;
+    private readonly ISuffixProvider _suffixProvider;
+
+    public MoveNotationFormatter()
+    {
+        _providers = new List<INotationPartProvider>()
+        {
+            new CastleNotationProvider(),
+            new PawnNotationProvider(),
+            new PieceNotationProvider(new DisambiguationService())
+        };
+        _suffixProvider = new SuffixProvider();
+    }
+
     public string Format(Move move)
     {
-        // 1) Castling
-        if (move.IsKingSideCastle)  return "O-O";
-        if (move.IsQueenSideCastle) return "O-O-O";
-
-        var piece = move.NotationString;// "" for pawn, or "N","B","R","Q","K"
-        var isPawn = string.IsNullOrEmpty(piece);
-
-        // Capture sign
-        var capture = move.IsCapture ? "x" : "";
-        // check/mate suffix
-        var suffix = move.IsCheckmate ? "#" :
-            move.IsCheck     ? "+" : "";
-
-        // 2) Pawn
-        if (isPawn)
+        foreach (var provider in _providers)
         {
-            // if pawn attacks add column sign
-            if (move.IsCapture)
+            if (provider.IsApplicable(move))
             {
-                var file = move.FromSquare[0]; // 'a'..'h'
-                return $"{file}{capture}{move.ToSquare}{suffix}";
+                return provider.Format(move) + _suffixProvider.GetSuffix(move);
             }
-            if (move.IsPawnPromotion)
-            {
-                return $"{move.ToSquare}=Q"; // або =N/R/B в залежності від вибору
-            }
-            // else just square and suffix
-            return $"{move.ToSquare}{suffix}";
         }
-
-        // 3) Other pieces: letter + (x?) + square + (+/#?)
-        return $"{piece}{capture}{move.ToSquare}{suffix}";
+        throw new InvalidOperationException("No applicable formatter found.");
     }
 }
