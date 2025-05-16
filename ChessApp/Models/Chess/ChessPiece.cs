@@ -16,4 +16,9 @@ public abstract class ChessPiece
     //WPF_WinCompanion/Images/PiecesImg
     
     public abstract bool IsValidMove(ChessSquare from, ChessSquare to, ObservableCollection<ChessSquare> board);
+
+    public virtual ChessPiece Clone()
+    {
+        return (ChessPiece)MemberwiseClone();
+    }
 }

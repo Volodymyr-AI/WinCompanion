@@ -3,11 +3,15 @@ using System.Windows.Media;
 using ChessApp.BoardLogic.Game.Actions.Highlight;
 using ChessApp.BoardLogic.Game.Handlers.SelectHandle;
 using ChessApp.BoardLogic.Game.Managers.GameManager;
+using ChessApp.BoardLogic.Game.Tracker;
 using ChessApp.BoardLogic.Game.Validators.CastlingValidation;
+using ChessApp.BoardLogic.Game.Validators.CheckmateValidation;
 using ChessApp.BoardLogic.Game.Validators.MoveValidation;
 using ChessApp.Infrastructure.Log;
 using ChessApp.Models.Board;
+using ChessApp.Models.Chess;
 using ChessApp.Models.Chess.Pieces;
+using ChessApp.Services.PieceNotationService.Entity;
 
 namespace ChessApp.BoardLogic.Game.Handlers.MoveHandle;
 
@@ -18,7 +22,9 @@ public class ChessMoveHandler : IChessMoveHandler
     
     private readonly IMoveHighlighter _highlighter;
     private readonly IPieceSelectHandler _pieceSelectHandler;
+    private readonly MoveTracker _moveTracker;
     public event Action BoardUpdated;
+    public event Action<Move> MoveExecuted;
 
     public ChessMoveHandler(
         ChessBoardModel boardModel,
@@ -30,6 +36,7 @@ public class ChessMoveHandler : IChessMoveHandler
         _castlingValidator = castlingValidator;
         _highlighter = highlighter;
         _pieceSelectHandler = pieceSelectHandler;
+        _moveTracker = new MoveTracker(boardModel);
     }
     
     /// <summary>
@@ -54,10 +61,48 @@ public class ChessMoveHandler : IChessMoveHandler
             return;
         }
         
-        if(IsCastlingMove(_pieceSelectHandler.SelectedSquare!, destinationSquare))
+        ChessSquare fromSquare = _pieceSelectHandler.SelectedSquare!;
+        ChessPiece movingPiece = fromSquare.Piece!;
+        PieceColor pieceColor = movingPiece.Color;
+        
+        bool isPawnPromotion = movingPiece is Pawn && 
+                               (destinationSquare.Row == 0 || destinationSquare.Row == 7);
+        
+        // Record beginning of the move
+        _moveTracker.RecordMoveStart(fromSquare);
+        
+        if (destinationSquare.Piece != null)
+        {
+            _moveTracker.RecordCapture(destinationSquare.Piece);
+        }
+        
+        bool isKingSideCastle = false;
+        bool isQueenSideCastle = false;
+
+        if (IsCastlingMove(_pieceSelectHandler.SelectedSquare!, destinationSquare))
+        {
+            isKingSideCastle = destinationSquare.Column > _pieceSelectHandler.SelectedSquare!.Column;
+            isQueenSideCastle = !isKingSideCastle;
             HandleCastlingMove(_pieceSelectHandler.SelectedSquare!, destinationSquare);
+        }
         else
+        {
             MovePiece(destinationSquare);
+        }
+        
+        _moveTracker.RecordMoveEnd(destinationSquare, isKingSideCastle, isQueenSideCastle, isPawnPromotion);
+        
+        // Check if this is checked or mate
+        PieceColor opponentColor = pieceColor == PieceColor.White 
+            ? PieceColor.Black : PieceColor.White;
+        
+        bool isCheck = CheckMateValidator.IsKingCheck(_chessBoardModel, opponentColor);
+        bool isCheckmate = isCheck && CheckMateValidator.IsCheckmate(_chessBoardModel, opponentColor);
+        
+        // Create an object of a Move and calling event
+        int moveNumber = 1;
+        var move = _moveTracker.CreateMove(moveNumber, pieceColor, isCheck, isCheckmate);
+        MoveExecuted?.Invoke(move);
     }
     
     /// <summary>

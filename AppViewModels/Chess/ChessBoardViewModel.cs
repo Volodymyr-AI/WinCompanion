@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows.Input;
 using ChessApp.BoardLogic.Board;
 using ChessApp.BoardLogic.Game.Actions.Highlight;
@@ -11,6 +12,10 @@ using ChessApp.BoardLogic.Game.Validators.MoveValidation;
 using ChessApp.Infrastructure.Commands;
 using ChessApp.Models.Board;
 using ChessApp.Models.Chess;
+using ChessApp.Services.GameHistory.Models;
+using ChessApp.Services.PieceNotationService.Entity;
+using ChessApp.Services.PieceNotationService.Notation;
+using ChessApp.Services.PieceNotationService.Notation.Types;
 
 namespace AppViewModels.Chess;
 
@@ -33,6 +38,9 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
     /// <summary> Start a new game command </summary>
     public ICommand RestartCommand  { get; }
+    
+    /// <summary> History of game moves</summary>
+    public ObservableCollection<MoveHistoryItem> MoveHistory { get; } = new();
 
     #endregion
 
@@ -69,10 +77,15 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             moveValidator,
             _pieceSelectHandler,
             BoardModel);
+        
+        // Initialize notation formatter
+        var disambiguationService = new DisambiguationService(BoardModel);
+        _moveFormatter = new MoveNotationFormatter(BoardModel);
 
         /* 3. -------------  data‑binding callbacks ---------------------------*/
         _gameStatusManager.PropertyChanged += OnGameStatusManagerPropertyChanged;
         _moveHandler.BoardUpdated    += () => OnPropertyChanged(nameof(BoardModel));
+        _moveHandler.MoveExecuted += OnMoveExecuted;
 
         /* 4. -------------  UI commands --------------------------------------*/
         SquareClickCommand = new RelayCommand(obj =>
@@ -84,6 +97,9 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         RestartCommand = new RelayCommand(_ =>
         {
             _gameStatusManager.RestartGame();
+            MoveHistory.Clear();
+            _moveCount = 1;
+            _lastMoveColor = PieceColor.Black;
             CommandManager.InvalidateRequerySuggested();
         });
     }
@@ -96,11 +112,42 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     private readonly IChessMoveHandler       _moveHandler;
     private readonly IGameStatusManager      _gameStatusManager;
     private readonly IGameCoordinator        _gameCoordinator;
+    private readonly IMoveNotationFormatter  _moveFormatter;
+
+    private int _moveCount = 1;
+    private PieceColor _lastMoveColor = PieceColor.Black;
 
     private void OnGameStatusManagerPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(GameStatusManager.CurrentTurn))
             OnPropertyChanged(nameof(CurrentTurn));
+    }
+
+    private void OnMoveExecuted(Move move)
+    {
+        if (move.Color == "White")
+        {
+            MoveHistory.Add(new MoveHistoryItem(_moveCount, _moveFormatter.Format(move), null));
+        }
+        else
+        {
+            if (MoveHistory.Count > 0)
+            {
+                var lastItem = MoveHistory.Last();
+                lastItem.BlackMove = _moveFormatter.Format(move);
+                
+                var temp = MoveHistory[MoveHistory.Count - 1];
+                MoveHistory[MoveHistory.Count - 1] = null;
+                MoveHistory[MoveHistory.Count - 1] = temp;
+                
+                _moveCount++;
+            }
+            else
+            {
+                MoveHistory.Add(new MoveHistoryItem(_moveCount, "", _moveFormatter.Format(move)));
+                _moveCount++;
+            }
+        }
     }
 
     #endregion
