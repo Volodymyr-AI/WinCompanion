@@ -182,9 +182,22 @@
                 <!-- Move history container -->
                 <Border Height="400" Background="Lavender" CornerRadius="20" Padding="10" Margin="10" BorderBrush="DarkSlateBlue" BorderThickness="1">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
-                        <StackPanel VerticalAlignment="Bottom">
-                            <TextBlock FontSize="14" FontWeight="Bold" TextAlignment="Left" Foreground="Black"/>
-                        </StackPanel>
+                        <ItemsControl ItemsSource="{Binding MoveHistory}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Margin="2">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="30"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" Text="{Binding MoveNumber}" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding WhiteMove}" Margin="5,0,0,0" Foreground="Black" FontWeight="SemiBold"/>
+                                        <TextBlock Grid.Column="2" Text="{Binding BlackMove}" Margin="5,0,0,0" Foreground="Black" FontWeight="SemiBold"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
                     </ScrollViewer>
                 </Border>
 
