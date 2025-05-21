@@ -132,8 +132,8 @@ public sealed class MoveGenerator
         int[][] directions =
         [
             [-1, -1],[-1, 0],[-1, 1],
-            [0, -1],       [0, 1],
-            [1, -1],[1, 0],[1, 1]
+            [0, -1],         [0, 1 ],
+            [1, -1],[ 1, 0 ],[1, 1 ]
         ];
         foreach (var direction in directions)
         {

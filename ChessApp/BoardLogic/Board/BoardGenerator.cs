@@ -13,7 +13,7 @@ public class BoardGenerator
             isWhite = row % 2 == 0;
             for (int col = 0; col < 8; col++)
             {
-                var baseColor = isWhite ? Brushes.White : Brushes.Gray;
+                var baseColor = isWhite ? Brushes.WhiteSmoke : Brushes.SlateGray;
                 yield return new ChessSquare
                 {
                     Row = row,
