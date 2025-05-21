@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         Title="Chess Board" Height="650" Width="900"
         ResizeMode="NoResize"
-        Background="LightSlateGray">
+        Background="#34495E">
     <Window.Resources>
         <helpers1:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
         <!-- Flat button style -->
@@ -145,7 +145,7 @@
         </Border>
         
         <!-- Right panel -->
-        <Border Grid.Column="2" Background="PeachPuff" CornerRadius="20" Padding="3">
+        <Border Grid.Column="2" Background="#E1E8ED" CornerRadius="20" Padding="3">
             <StackPanel HorizontalAlignment="Center">
         
                 <!-- Turn indicators -->
@@ -180,7 +180,7 @@
                 </StackPanel>
 
                 <!-- Move history container -->
-                <Border Height="400" Background="Lavender" CornerRadius="20" Padding="10" Margin="10" BorderBrush="DarkSlateBlue" BorderThickness="1">
+                <Border Height="400" Background="#8CA2AD" CornerRadius="20" Padding="10" Margin="10" BorderBrush="DarkSlateBlue" BorderThickness="1">
                     <ScrollViewer VerticalScrollBarVisibility="Auto">
                         <ItemsControl ItemsSource="{Binding MoveHistory}">
                             <ItemsControl.ItemTemplate>
@@ -204,15 +204,15 @@
                 <!-- Control buttons -->
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10">
                     <Button Content="Restart"
-                            Background="Gold"
+                            Background="#3498DB"
                             FontWeight="Bold"
                             Foreground=" Black"
                             Padding="10,5"
                             Margin="8"
                             Command="{Binding RestartCommand}"/>
-                    <Button Content="&lt;" Background="White" FontWeight="Bold" Foreground="Black" Padding="10,5" Margin="8"/>
-                    <Button Content=">" Background="White" FontWeight="Bold" Foreground="Black" Padding="10,5" Margin="8"/>
-                    <Button Content="Analysis" Background="White" FontWeight="Bold" Foreground="Black" Padding="10,5" Margin="8"/>
+                    <Button Content="&lt;" Background="#ECF0F1" FontWeight="Bold" Foreground="Black" Padding="10,5" Margin="8"/>
+                    <Button Content=">" Background="#ECF0F1" FontWeight="Bold" Foreground="Black" Padding="10,5" Margin="8"/>
+                    <Button Content="Analysis" Background="#2ECC71" FontWeight="Bold" Foreground="Black" Padding="10,5" Margin="8"/>
                 </StackPanel>
 
             </StackPanel>
