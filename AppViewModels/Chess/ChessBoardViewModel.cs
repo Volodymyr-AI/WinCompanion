@@ -136,10 +136,6 @@ public class ChessBoardViewModel : INotifyPropertyChanged
                 var lastItem = MoveHistory.Last();
                 lastItem.BlackMove = _moveFormatter.Format(move);
                 
-                var temp = MoveHistory[MoveHistory.Count - 1];
-                MoveHistory[MoveHistory.Count - 1] = null;
-                MoveHistory[MoveHistory.Count - 1] = temp;
-                
                 _moveCount++;
             }
             else

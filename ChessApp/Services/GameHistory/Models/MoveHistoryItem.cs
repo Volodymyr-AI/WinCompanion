@@ -2,7 +2,7 @@ using System.ComponentModel;
 
 namespace ChessApp.Services.GameHistory.Models;
 
-public class MoveHistoryItem
+public class MoveHistoryItem : INotifyPropertyChanged
 {
     public int MoveNumber { get; }
     public string WhiteMove { get; }
