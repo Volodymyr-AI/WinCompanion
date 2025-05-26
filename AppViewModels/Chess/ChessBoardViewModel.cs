@@ -32,15 +32,23 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
     /// <summary> Current turn color. Indicates whose turn right now </summary>
     public PieceColor CurrentTurn => _gameStatusManager.CurrentTurn;
+    
+    /// <summary> Current halfmove counter for 50-move rule </summary>
+    public int HalfMoveCounter => _gameStatusManager.HalfMoveCounter;
 
     /// <summary> Board square click </summary>
     public ICommand SquareClickCommand { get; }
 
     /// <summary> Start a new game command </summary>
     public ICommand RestartCommand  { get; }
+    /// <summary> Claim draw by 50-move rule </summary>
+    public ICommand ClaimFiftyMoveDrawCommand { get; }
     
     /// <summary> History of game moves</summary>
     public ObservableCollection<MoveHistoryItem> MoveHistory { get; } = new();
+    
+    /// <summary> Indicates if fifty-move draw can be claimed </summary>
+    public bool CanClaimFiftyMoveDraw => _gameStatusManager.CanClaimFiftyMoveDraw();
 
     #endregion
 
@@ -100,8 +108,18 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             MoveHistory.Clear();
             _moveCount = 1;
             _lastMoveColor = PieceColor.Black;
+            OnPropertyChanged(nameof(HalfMoveCounter));
+            OnPropertyChanged(nameof(CanClaimFiftyMoveDraw));
             CommandManager.InvalidateRequerySuggested();
         });
+        
+        ClaimFiftyMoveDrawCommand = new RelayCommand(_ =>
+        {
+            if (_gameStatusManager.CanClaimFiftyMoveDraw())
+            {
+                _gameStatusManager.TrySetGameOver();
+            }
+        }, _ => _gameStatusManager.CanClaimFiftyMoveDraw());
     }
 
     #endregion
@@ -125,6 +143,11 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
     private void OnMoveExecuted(Move move)
     {
+        _gameStatusManager.UpdateFiftyMoveRule(move);
+        
+        OnPropertyChanged(nameof(HalfMoveCounter));
+        OnPropertyChanged(nameof(CanClaimFiftyMoveDraw));
+        
         if (move.Color == "White")
         {
             MoveHistory.Add(new MoveHistoryItem(_moveCount, _moveFormatter.Format(move), null));
