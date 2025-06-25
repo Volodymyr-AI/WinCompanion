@@ -402,29 +402,44 @@
                             Background="#3498DB"
                             FontWeight="Bold"
                             Foreground=" Black"
-                            Padding="10,5"
-                            Margin="8"
-                            Command="{Binding RestartCommand}"/>
+                            Padding="8,5"
+                            Margin="6"
+                            FontSize="11"
+                            Command="{Binding RestartCommand}">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsViewingHistory}" Value="True">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                        <Setter Property="Opacity" Value="0.5"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                     <Button Content="&lt;" 
                             Background="#ECF0F1" 
                             FontWeight="Bold" 
                             Foreground="Black" 
-                            Padding="10,5" 
-                            Margin="8"
+                            Padding="8,5" 
+                            Margin="6"
+                            FontSize="11"
                             Command="{Binding NavigateBackCommand}"/>
                     <Button Content=">" 
                             Background="#ECF0F1" 
                             FontWeight="Bold" 
                             Foreground="Black" 
-                            Padding="10,5" 
-                            Margin="8"
+                            Padding="8,5" 
+                            Margin="6"
+                            FontSize="11"
                             Command="{Binding NavigateForwardCommand}"/>
                     <Button Content="Live" 
                             Background="#E67E22" 
                             FontWeight="Bold" 
                             Foreground="White" 
-                            Padding="10,5" 
-                            Margin="8"
+                            Padding="8,5" 
+                            Margin="6"
+                            FontSize="11"
                             Command="{Binding ReturnToLiveGameCommand}">
                         <Button.Style>
                             <Style TargetType="Button">
@@ -437,7 +452,25 @@
                             </Style>
                         </Button.Style>
                     </Button>
-                    <Button Content="Menu" Background="#2ECC71" FontWeight="Bold" Foreground="Black" Padding="10,5" Margin="8" Command="{Binding ShowMenuCommand}"/>
+                    <Button Content="Menu" 
+                            Background="#2ECC71" 
+                            FontWeight="Bold" 
+                            Foreground="Black" 
+                            Padding="8,5" 
+                            Margin="4"
+                            FontSize="11"
+                            Command="{Binding ShowMenuCommand}">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsViewingHistory}" Value="True">
+                                        <Setter Property="IsEnabled" Value="False"/>
+                                        <Setter Property="Opacity" Value="0.5"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
                 </StackPanel>
 
             </StackPanel>
