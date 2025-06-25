@@ -12,6 +12,7 @@ using ChessApp.BoardLogic.Game.Validators.MoveValidation;
 using ChessApp.Infrastructure.Commands;
 using ChessApp.Models.Board;
 using ChessApp.Models.Chess;
+using ChessApp.Models.Game.Enums;
 using ChessApp.Services.GameHistory.Models;
 using ChessApp.Services.PieceNotationService.Entity;
 using ChessApp.Services.PieceNotationService.Notation;
@@ -49,6 +50,30 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     
     /// <summary> Indicates if fifty-move draw can be claimed </summary>
     public bool CanClaimFiftyMoveDraw => _gameStatusManager.CanClaimFiftyMoveDraw();
+    
+    /// <summary> Indicates if game menu should be shown </summary>
+    public bool ShowGameMenu
+    {
+        get => _showGameMenu;
+        set
+        {
+            if (_showGameMenu != value)
+            {
+                _showGameMenu = value;
+                OnPropertyChanged(nameof(ShowGameMenu));
+            }
+        }
+    }
+
+    /// <summary> Command to start solo game </summary>
+    public ICommand StartSoloGameCommand { get; }
+
+    /// <summary> Command to start AI game </summary>
+    public ICommand StartAIGameCommand { get; }
+
+    /// <summary> Command to start online game </summary>
+    public ICommand StartOnlineGameCommand { get; }
+
 
     #endregion
 
@@ -120,6 +145,24 @@ public class ChessBoardViewModel : INotifyPropertyChanged
                 _gameStatusManager.TrySetGameOver();
             }
         }, _ => _gameStatusManager.CanClaimFiftyMoveDraw());
+        // Game menu commands
+        StartSoloGameCommand = new RelayCommand(_ =>
+        {
+            StartGame(GameMode.Solo);
+        });
+
+        StartAIGameCommand = new RelayCommand(_ =>
+        {
+            StartGame(GameMode.AI);
+        });
+
+        StartOnlineGameCommand = new RelayCommand(_ =>
+        {
+            StartGame(GameMode.Online);
+        });
+
+        // Show menu at startup
+        ShowGameMenu = true;
     }
 
     #endregion
@@ -134,6 +177,8 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
     private int _moveCount = 1;
     private PieceColor _lastMoveColor = PieceColor.Black;
+    private bool _showGameMenu;
+    private GameMode _currentGameMode = GameMode.Solo;
 
     private void OnGameStatusManagerPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
@@ -168,7 +213,35 @@ public class ChessBoardViewModel : INotifyPropertyChanged
             }
         }
     }
+    
+    private void StartGame(GameMode gameMode)
+    {
+        _currentGameMode = gameMode;
+        ShowGameMenu = false;
+        
+        // Reset game state
+        _gameStatusManager.RestartGame();
+        MoveHistory.Clear();
+        _moveCount = 1;
+        _lastMoveColor = PieceColor.Black;
+        OnPropertyChanged(nameof(HalfMoveCounter));
+        OnPropertyChanged(nameof(CanClaimFiftyMoveDraw));
+        CommandManager.InvalidateRequerySuggested();
 
+        // TODO: Initialize specific game mode logic here
+        switch (gameMode)
+        {
+            case GameMode.Solo:
+                // Solo game logic - already implemented
+                break;
+            case GameMode.AI:
+                // TODO: Initialize AI opponent
+                break;
+            case GameMode.Online:
+                // TODO: Initialize online game connection
+                break;
+        }
+    }
     #endregion
 
     #region INotifyPropertyChanged ------------------------------------------

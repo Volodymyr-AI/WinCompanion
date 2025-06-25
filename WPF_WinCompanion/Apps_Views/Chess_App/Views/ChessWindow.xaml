@@ -26,6 +26,77 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        
+        <!-- 3D Menu Button Style -->
+        <Style x:Key="Menu3DButton" TargetType="Button">
+            <Setter Property="Width" Value="120"/>
+            <Setter Property="Height" Value="120"/>
+            <Setter Property="Margin" Value="15"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Grid>
+                            <Border x:Name="ShadowBorder"
+                                    Background="#1A1A1A"
+                                    CornerRadius="8"
+                                    Margin="3,3,0,0"/>
+                            <Border x:Name="MainBorder"
+                                    Background="{TemplateBinding Background}"
+                                    CornerRadius="8"
+                                    BorderBrush="#2C3E50"
+                                    BorderThickness="2">
+                                <Border.Effect>
+                                    <DropShadowEffect Color="Black" 
+                                                      Direction="315" 
+                                                      ShadowDepth="2" 
+                                                      Opacity="0.5"
+                                                      BlurRadius="4"/>
+                                </Border.Effect>
+                                <ContentPresenter HorizontalAlignment="Center" 
+                                                  VerticalAlignment="Center"
+                                                  TextBlock.TextAlignment="Center"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="MainBorder" Property="Background">
+                                    <Setter.Value>
+                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                            <GradientStop Color="#4A90E2" Offset="0"/>
+                                            <GradientStop Color="#357ABD" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="MainBorder" Property="Effect">
+                                    <Setter.Value>
+                                        <DropShadowEffect Color="Blue" 
+                                                          Direction="315" 
+                                                          ShadowDepth="3" 
+                                                          Opacity="0.7"
+                                                          BlurRadius="6"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="MainBorder" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <TranslateTransform X="1" Y="1"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Setter TargetName="ShadowBorder" Property="Margin" Value="2,2,1,1"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Blur effect for background -->
+        <BlurEffect x:Key="BlurEffect" Radius="3"/>
     </Window.Resources>
     <Grid Margin="10">
         <Grid.ColumnDefinitions>
@@ -37,6 +108,16 @@
         <!-- Chess board -->
         <Border Grid.Column="0" BorderBrush="Black" BorderThickness="1" Margin="1">
             <Grid>
+                <Grid.Style>
+                    <Style TargetType="Grid">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding ShowGameMenu}" Value="True">
+                                <Setter Property="Effect" Value="{StaticResource BlurEffect}"/>
+                                <Setter Property="IsEnabled" Value="False"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Style>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="20"/> <!-- Top letters -->
                     <RowDefinition/>             <!-- Chess board -->
@@ -142,6 +223,88 @@
                     </ItemsControl> 
                 </Border>
             </Grid>
+        </Border>
+        
+        <!-- Game Menu Overlay -->
+        <Border Grid.Column="0" 
+                x:Name="GameMenuOverlay"
+                Background="#80000000"
+                VerticalAlignment="Center"
+                Height="250"
+                CornerRadius="15"
+                BorderBrush="#3498DB"
+                BorderThickness="3">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ShowGameMenu}" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Border.Effect>
+                <DropShadowEffect Color="Black" 
+                                  Direction="315" 
+                                  ShadowDepth="10" 
+                                  Opacity="0.8"
+                                  BlurRadius="15"/>
+            </Border.Effect>
+            
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="Choose Game Mode" 
+                           FontSize="24" 
+                           FontWeight="Bold" 
+                           Foreground="White" 
+                           HorizontalAlignment="Center" 
+                           Margin="0,0,0,30"
+                           />
+                
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button Style="{StaticResource Menu3DButton}"
+                            Command="{Binding StartSoloGameCommand}">
+                        <Button.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#27AE60" Offset="0"/>
+                                <GradientStop Color="#229954" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Button.Background>
+                        <StackPanel>
+                            <TextBlock Text="🏁" FontSize="32" HorizontalAlignment="Center" Margin="0,0,0,5"/>
+                            <TextBlock Text="Solo Game" FontSize="12" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource Menu3DButton}"
+                            Command="{Binding StartAIGameCommand}">
+                        <Button.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#E74C3C" Offset="0"/>
+                                <GradientStop Color="#C0392B" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Button.Background>
+                        <StackPanel>
+                            <TextBlock Text="🤖" FontSize="32" HorizontalAlignment="Center" Margin="0,0,0,5"/>
+                            <TextBlock Text="AI Opponent" FontSize="12" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+
+                    <Button Style="{StaticResource Menu3DButton}"
+                            Command="{Binding StartOnlineGameCommand}">
+                        <Button.Background>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                <GradientStop Color="#3498DB" Offset="0"/>
+                                <GradientStop Color="#2980B9" Offset="1"/>
+                            </LinearGradientBrush>
+                        </Button.Background>
+                        <StackPanel>
+                            <TextBlock Text="🌐" FontSize="32" HorizontalAlignment="Center" Margin="0,0,0,5"/>
+                            <TextBlock Text="Online Game" FontSize="12" TextWrapping="Wrap" HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
         </Border>
         
         <!-- Right panel -->

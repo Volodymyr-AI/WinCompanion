@@ -8,7 +8,6 @@
 
     <ItemGroup>
       <Folder Include="BoardLogic\Game\Managers\" />
-      <Folder Include="Models\" />
     </ItemGroup>
 
     <ItemGroup>
