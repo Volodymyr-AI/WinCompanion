@@ -375,7 +375,7 @@
                             Command="{Binding RestartCommand}"/>
                     <Button Content="&lt;" Background="#ECF0F1" FontWeight="Bold" Foreground="Black" Padding="10,5" Margin="8"/>
                     <Button Content=">" Background="#ECF0F1" FontWeight="Bold" Foreground="Black" Padding="10,5" Margin="8"/>
-                    <Button Content="Analysis" Background="#2ECC71" FontWeight="Bold" Foreground="Black" Padding="10,5" Margin="8"/>
+                    <Button Content="Menu" Background="#2ECC71" FontWeight="Bold" Foreground="Black" Padding="10,5" Margin="8" Command="{Binding ShowMenuCommand}"/>
                 </StackPanel>
 
             </StackPanel>

@@ -73,7 +73,9 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
     /// <summary> Command to start online game </summary>
     public ICommand StartOnlineGameCommand { get; }
-
+    
+    /// <summary> Command to show game menu </summary>
+    public ICommand ShowMenuCommand { get; }
 
     #endregion
 
@@ -159,6 +161,11 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         StartOnlineGameCommand = new RelayCommand(_ =>
         {
             StartGame(GameMode.Online);
+        });
+
+        ShowMenuCommand = new RelayCommand(_ =>
+        {
+            ShowGameMenu = true;
         });
 
         // Show menu at startup
