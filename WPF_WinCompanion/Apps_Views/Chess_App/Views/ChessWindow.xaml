@@ -403,7 +403,7 @@
                             FontWeight="Bold"
                             Foreground=" Black"
                             Padding="8,5"
-                            Margin="6"
+                            Margin="8"
                             FontSize="11"
                             Command="{Binding RestartCommand}">
                         <Button.Style>
@@ -422,7 +422,7 @@
                             FontWeight="Bold" 
                             Foreground="Black" 
                             Padding="8,5" 
-                            Margin="6"
+                            Margin="8"
                             FontSize="11"
                             Command="{Binding NavigateBackCommand}"/>
                     <Button Content=">" 
@@ -430,7 +430,7 @@
                             FontWeight="Bold" 
                             Foreground="Black" 
                             Padding="8,5" 
-                            Margin="6"
+                            Margin="8"
                             FontSize="11"
                             Command="{Binding NavigateForwardCommand}"/>
                     <Button Content="Live" 
@@ -438,7 +438,7 @@
                             FontWeight="Bold" 
                             Foreground="White" 
                             Padding="8,5" 
-                            Margin="6"
+                            Margin="8"
                             FontSize="11"
                             Command="{Binding ReturnToLiveGameCommand}">
                         <Button.Style>
@@ -457,7 +457,7 @@
                             FontWeight="Bold" 
                             Foreground="Black" 
                             Padding="8,5" 
-                            Margin="4"
+                            Margin="8"
                             FontSize="11"
                             Command="{Binding ShowMenuCommand}">
                         <Button.Style>
