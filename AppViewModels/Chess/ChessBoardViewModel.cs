@@ -153,10 +153,14 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         {
             _gameStatusManager.RestartGame();
             MoveHistory.Clear();
+            _historyManager.ClearHistory();
             _moveCount = 1;
             _lastMoveColor = PieceColor.Black;
             OnPropertyChanged(nameof(HalfMoveCounter));
             OnPropertyChanged(nameof(CanClaimFiftyMoveDraw));
+            OnPropertyChanged(nameof(CanNavigateBack));
+            OnPropertyChanged(nameof(CanNavigateForward));
+            OnPropertyChanged(nameof(IsViewingHistory));
             CommandManager.InvalidateRequerySuggested();
         });
         
