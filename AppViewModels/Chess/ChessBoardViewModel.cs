@@ -8,6 +8,7 @@ using ChessApp.BoardLogic.Game.Handlers.MoveHandle;
 using ChessApp.BoardLogic.Game.Handlers.SelectHandle;
 using ChessApp.BoardLogic.Game.Managers.GameManager;
 using ChessApp.BoardLogic.Game.Validators.CastlingValidation;
+using ChessApp.BoardLogic.Game.Validators.EnPassantValidation;
 using ChessApp.BoardLogic.Game.Validators.MoveValidation;
 using ChessApp.Infrastructure.Commands;
 using ChessApp.Models.Board;
@@ -106,6 +107,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         ChessBoardInitializer.InitializeBoard(BoardModel);
 
         _castlingValidator = new CastlingValidator();
+        _enPassantValidator = new EnPassantValidator();
         var moveValidator = new MoveValidator();
         var highlighter   = new MoveHighlight();
 
@@ -123,7 +125,8 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
         _gameStatusManager = new GameStatusManager(
             BoardModel,
-            _castlingValidator);
+            _castlingValidator,
+            _enPassantValidator);
 
         _gameCoordinator = new GameCoordinator(
             _moveHandler,
@@ -223,6 +226,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     private readonly IMoveNotationFormatter  _moveFormatter;
     private readonly GameHistoryManager      _historyManager;
     private readonly CastlingValidator       _castlingValidator;
+    private readonly EnPassantValidator       _enPassantValidator;
 
     private int _moveCount = 1;
     private PieceColor _lastMoveColor = PieceColor.Black;

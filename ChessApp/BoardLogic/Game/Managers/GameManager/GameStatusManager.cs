@@ -3,6 +3,7 @@ using ChessApp.BoardLogic.Board;
 using ChessApp.BoardLogic.Game.Handlers.MoveHandle;
 using ChessApp.BoardLogic.Game.Validators.CastlingValidation;
 using ChessApp.BoardLogic.Game.Validators.CheckmateValidation;
+using ChessApp.BoardLogic.Game.Validators.EnPassantValidation;
 using ChessApp.BoardLogic.Game.Validators.FiftyMoveRuleValidation;
 using ChessApp.BoardLogic.Game.Validators.StalemateValidation;
 using ChessApp.Infrastructure.Log;
@@ -22,14 +23,17 @@ public sealed class GameStatusManager : IGameStatusManager
     private readonly ChessBoardModel _board;
     private readonly CastlingValidator _castling;
     private readonly FiftyMoveRuleValidator _fiftyMoveRule;
+    private readonly EnPassantValidator _enPassant;
     
     public GameStatusManager(
         ChessBoardModel board, 
-        CastlingValidator castling)
+        CastlingValidator castling,
+        EnPassantValidator enPassant)
     {
         _board       = board;
         _castling    = castling;
         _fiftyMoveRule = new FiftyMoveRuleValidator();
+        _enPassant = enPassant;
     }
     
     #endregion
@@ -67,6 +71,7 @@ public sealed class GameStatusManager : IGameStatusManager
     {
         ChessBoardInitializer.InitializeBoard(_board);
         _castling.Reset();
+        _enPassant.Reset();
         
         IsGameOver = false;
         CurrentTurn = PieceColor.White;
@@ -147,5 +152,25 @@ public sealed class GameStatusManager : IGameStatusManager
         
         IsGameOver = true;
         return true;
+    }
+
+    /// <summary>
+    /// Update en passant state after a move
+    /// </summary>
+    /// <param name="fromSquare"></param>
+    /// <param name="toSquare"></param>
+    /// <param name="moveNumber"></param>
+    public void UpdateEnPassant(ChessSquare fromSquare, ChessSquare toSquare, int moveNumber)
+    {
+        _enPassant.UpdateAfterMove(_board, toSquare, fromSquare, moveNumber);
+    }
+
+    /// <summary>
+    /// Get en passant validator for other components
+    /// </summary>
+    /// <returns></returns>
+    public EnPassantValidator GetEnPassantValidator()
+    {
+        return _enPassant;
     }
 }

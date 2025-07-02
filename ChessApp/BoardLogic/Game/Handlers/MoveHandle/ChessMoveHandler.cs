@@ -6,6 +6,7 @@ using ChessApp.BoardLogic.Game.Managers.GameManager;
 using ChessApp.BoardLogic.Game.Tracker;
 using ChessApp.BoardLogic.Game.Validators.CastlingValidation;
 using ChessApp.BoardLogic.Game.Validators.CheckmateValidation;
+using ChessApp.BoardLogic.Game.Validators.EnPassantValidation;
 using ChessApp.BoardLogic.Game.Validators.MoveValidation;
 using ChessApp.Infrastructure.Log;
 using ChessApp.Models.Board;
@@ -19,6 +20,7 @@ public class ChessMoveHandler : IChessMoveHandler
 {
     private readonly ChessBoardModel _chessBoardModel;
     private readonly CastlingValidator _castlingValidator;
+    private readonly EnPassantValidator _enPassantValidator;
     
     private readonly IMoveHighlighter _highlighter;
     private readonly IPieceSelectHandler _pieceSelectHandler;

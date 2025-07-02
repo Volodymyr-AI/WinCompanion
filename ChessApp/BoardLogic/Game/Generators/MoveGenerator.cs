@@ -1,5 +1,6 @@
 ﻿using ChessApp.BoardLogic.Game.Validators;
 using ChessApp.BoardLogic.Game.Validators.CastlingValidation;
+using ChessApp.BoardLogic.Game.Validators.EnPassantValidation;
 using ChessApp.Models.Board;
 using ChessApp.Models.Chess;
 
@@ -7,7 +8,7 @@ namespace ChessApp.BoardLogic.Game.Generators;
 
 public sealed class MoveGenerator
 {
-    public static List<ChessSquare> GetPossibleMoves(ChessSquare square, ChessBoardModel board)
+    public static List<ChessSquare> GetPossibleMoves(ChessSquare square, ChessBoardModel board, EnPassantValidator? enPassantValidator = null)
     {
         if (square.Piece == null)
         {
@@ -17,7 +18,7 @@ public sealed class MoveGenerator
         switch (square.Piece.Type)
         {
             case PieceType.Pawn:
-                return GetPawnMoves(square, board);
+                return GetPawnMoves(square, board, enPassantValidator);
             case PieceType.Knight:
                 return GetKnightMoves(square, board);
             case PieceType.Bishop:
@@ -33,7 +34,7 @@ public sealed class MoveGenerator
         }
     }
 
-    private static List<ChessSquare> GetPawnMoves(ChessSquare pawn, ChessBoardModel board)
+    private static List<ChessSquare> GetPawnMoves(ChessSquare pawn, ChessBoardModel board, EnPassantValidator? enPassantValidator = null)
     {
         var moves = new List<ChessSquare>();
         int direction = (pawn.Piece.Color == PieceColor.White) ? -1 : 1;
@@ -61,9 +62,17 @@ public sealed class MoveGenerator
         foreach (int side in attackColumns)
         {
            ChessSquare? diagonal = board.GetSquare(pawn.Row + direction, pawn.Column + side);
-           if (diagonal != null && diagonal.Piece != null && diagonal.Piece.Color != pawn.Piece.Color)
+           if (diagonal != null)
            {
-               moves.Add(diagonal);
+               //Regular capture
+               if (diagonal.Piece != null && diagonal.Piece.Color != pawn.Piece.Color)
+               {
+                   moves.Add(diagonal);
+               }
+               else if (enPassantValidator != null && enPassantValidator.IsEnPassantCapture(pawn, diagonal, board))
+               {
+                   moves.Add(diagonal);
+               }
            }
         }
         return moves;
