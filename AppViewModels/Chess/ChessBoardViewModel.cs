@@ -52,29 +52,6 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     /// <summary> Indicates if fifty-move draw can be claimed </summary>
     public bool CanClaimFiftyMoveDraw => _gameStatusManager.CanClaimFiftyMoveDraw();
     
-    /// <summary> Indicates if game menu should be shown </summary>
-    public bool ShowGameMenu
-    {
-        get => _showGameMenu;
-        set
-        {
-            if (_showGameMenu != value)
-            {
-                _showGameMenu = value;
-                OnPropertyChanged(nameof(ShowGameMenu));
-            }
-        }
-    }
-
-    /// <summary> Command to start solo game </summary>
-    public ICommand StartSoloGameCommand { get; }
-
-    /// <summary> Command to start AI game </summary>
-    public ICommand StartAIGameCommand { get; }
-
-    /// <summary> Command to start online game </summary>
-    public ICommand StartOnlineGameCommand { get; }
-    
     /// <summary> Command to show game menu </summary>
     public ICommand ShowMenuCommand { get; }
     
@@ -95,6 +72,70 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
     /// <summary> Can navigate forward in history </summary>
     public bool CanNavigateForward => _historyManager.CanNavigateForward;
+
+    #endregion
+    
+    #region Menu Properties
+
+    /// <summary> Current menu state </summary>
+    private MenuState _currentMenuState = MenuState.MainMenu;
+    public MenuState CurrentMenuState
+    {
+        get => _currentMenuState;
+        set
+        {
+            if (_currentMenuState != value)
+            {
+                _currentMenuState = value;
+                OnPropertyChanged(nameof(CurrentMenuState));
+                OnPropertyChanged(nameof(ShowGameMenu));
+                OnPropertyChanged(nameof(ShowMainMenu));
+                OnPropertyChanged(nameof(ShowSoloSettings));
+                OnPropertyChanged(nameof(ShowAISettings));
+                OnPropertyChanged(nameof(ShowOnlineSettings));
+            }
+        }
+    }
+
+    /// <summary> Show any menu overlay </summary>
+    public bool ShowGameMenu => CurrentMenuState != MenuState.Hidden;
+
+    /// <summary> Show main menu </summary>
+    public bool ShowMainMenu => CurrentMenuState == MenuState.MainMenu;
+
+    /// <summary> Show solo game settings </summary>
+    public bool ShowSoloSettings => CurrentMenuState == MenuState.SoloGameSettings;
+
+    /// <summary> Show AI game settings </summary>
+    public bool ShowAISettings => CurrentMenuState == MenuState.AIGameSettings;
+
+    /// <summary> Show online game settings </summary>
+    public bool ShowOnlineSettings => CurrentMenuState == MenuState.OnlineGameSettings;
+
+    #endregion
+    
+    #region Menu Commands
+
+    /// <summary> Command to show solo game settings </summary>
+    public ICommand ShowSoloSettingsCommand { get; }
+
+    /// <summary> Command to show AI game settings </summary>
+    public ICommand ShowAISettingsCommand { get; }
+
+    /// <summary> Command to show online game settings </summary>
+    public ICommand ShowOnlineSettingsCommand { get; }
+
+    /// <summary> Command to go back to main menu </summary>
+    public ICommand BackToMainMenuCommand { get; }
+
+    /// <summary> Command to confirm solo game with settings </summary>
+    public ICommand ConfirmSoloGameCommand { get; }
+
+    /// <summary> Command to confirm AI game with settings </summary>
+    public ICommand ConfirmAIGameCommand { get; }
+
+    /// <summary> Command to connect online game </summary>
+    public ICommand ConnectOnlineGameCommand { get; }
 
     #endregion
 
@@ -173,24 +214,48 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }, _ => _gameStatusManager.CanClaimFiftyMoveDraw());
         
         // Game menu commands
-        StartSoloGameCommand = new RelayCommand(_ =>
+        ShowSoloSettingsCommand = new RelayCommand(_ =>
+        {
+            CurrentMenuState = MenuState.SoloGameSettings;
+        });
+
+        ShowAISettingsCommand = new RelayCommand(_ =>
+        {
+            CurrentMenuState = MenuState.AIGameSettings;
+        });
+
+        ShowOnlineSettingsCommand = new RelayCommand(_ =>
+        {
+            CurrentMenuState = MenuState.OnlineGameSettings;
+        });
+
+        BackToMainMenuCommand = new RelayCommand(_ =>
+        {
+            CurrentMenuState = MenuState.MainMenu;
+        });
+
+        ConfirmSoloGameCommand = new RelayCommand(_ =>
         {
             StartGame(GameMode.Solo);
+            CurrentMenuState = MenuState.Hidden;
         });
 
-        StartAIGameCommand = new RelayCommand(_ =>
+        ConfirmAIGameCommand = new RelayCommand(_ =>
         {
             StartGame(GameMode.AI);
+            CurrentMenuState = MenuState.Hidden;
         });
 
-        StartOnlineGameCommand = new RelayCommand(_ =>
+        ConnectOnlineGameCommand = new RelayCommand(_ =>
         {
+            // TODO: Implement online connection logic
             StartGame(GameMode.Online);
+            CurrentMenuState = MenuState.Hidden;
         });
 
         ShowMenuCommand = new RelayCommand(_ =>
         {
-            ShowGameMenu = true;
+            CurrentMenuState = MenuState.MainMenu;
         });
         
         NavigateBackCommand = new RelayCommand(_ =>
@@ -209,7 +274,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
         }, _ => IsViewingHistory);
 
         // Show menu at startup
-        ShowGameMenu = true;
+        CurrentMenuState = MenuState.MainMenu;
     }
 
     #endregion
@@ -277,7 +342,7 @@ public class ChessBoardViewModel : INotifyPropertyChanged
     private void StartGame(GameMode gameMode)
     {
         _currentGameMode = gameMode;
-        ShowGameMenu = false;
+        CurrentMenuState = MenuState.Hidden;
         
         // Reset game state
         _gameStatusManager.RestartGame();
