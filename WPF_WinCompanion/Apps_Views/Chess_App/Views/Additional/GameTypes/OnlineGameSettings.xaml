@@ -1,0 +1,163 @@
+<UserControl x:Class="WPF_WinCompanion.Apps_Views.Chess_App.Views.Additional.GameTypes.OnlineGameSettings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:WPF_WinCompanion.Apps_Views.Chess_App.Views.Additional.GameTypes"
+             mc:Ignorable="d">
+    <UserControl.Resources>
+        <Style x:Key="SettingsButton" TargetType="Button">
+            <Setter Property="Background" Value="#3498DB"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="15,10"/>
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="5"
+                                Padding="{TemplateBinding Padding}"
+                                BorderThickness="0">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                              VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter Property="Opacity" Value="0.6"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Border Background="#80000000"
+            VerticalAlignment="Center"
+            Height="400"
+            CornerRadius="15"
+            BorderBrush="#3498DB"
+            BorderThickness="3">
+        <Border.Effect>
+            <DropShadowEffect Color="Black" 
+                              Direction="315" 
+                              ShadowDepth="10" 
+                              Opacity="0.8"
+                              BlurRadius="15"/>
+        </Border.Effect>
+        
+        <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">
+            <TextBlock Text="🌐 Online Game Settings" 
+                       FontSize="24" 
+                       FontWeight="Bold" 
+                       Foreground="White" 
+                       HorizontalAlignment="Center" 
+                       Margin="0,0,0,20"/>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
+                <TextBlock Text="Player Name:" 
+                           FontSize="16" 
+                           Foreground="White" 
+                           VerticalAlignment="Center" 
+                           Margin="0,0,10,0"/>
+                <TextBox x:Name="PlayerNameTextBox" 
+                         Width="150" 
+                         Height="25"
+                         Text="Player1"/>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
+                <TextBlock Text="Server:" 
+                           FontSize="16" 
+                           Foreground="White" 
+                           VerticalAlignment="Center" 
+                           Margin="0,0,10,0"/>
+                <TextBox x:Name="ServerTextBox" 
+                         Width="150" 
+                         Height="25"
+                         Text="localhost:8080"/>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
+                <TextBlock Text="Game Mode:" 
+                           FontSize="16" 
+                           Foreground="White" 
+                           VerticalAlignment="Center" 
+                           Margin="0,0,10,0"/>
+                <ComboBox x:Name="GameModeComboBox" 
+                          Width="150" 
+                          SelectedIndex="0">
+                    <ComboBoxItem Content="Create Game"/>
+                    <ComboBoxItem Content="Join Game"/>
+                    <ComboBoxItem Content="Quick Match"/>
+                </ComboBox>
+            </StackPanel>
+            
+            <StackPanel x:Name="GameRoomPanel" 
+                        Orientation="Horizontal" 
+                        HorizontalAlignment="Center" 
+                        Margin="0,10">
+                <StackPanel.Style>
+                    <Style TargetType="StackPanel">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding SelectedIndex, ElementName=GameModeComboBox}" Value="1">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </StackPanel.Style>
+                <TextBlock Text="Room ID:" 
+                           FontSize="16" 
+                           Foreground="White" 
+                           VerticalAlignment="Center" 
+                           Margin="0,0,10,0"/>
+                <TextBox x:Name="RoomIdTextBox" 
+                         Width="150" 
+                         Height="25"
+                         Text=""/>
+            </StackPanel>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10">
+                <TextBlock Text="Time Control:" 
+                           FontSize="16" 
+                           Foreground="White" 
+                           VerticalAlignment="Center" 
+                           Margin="0,0,10,0"/>
+                <ComboBox x:Name="TimeControlComboBox" 
+                          Width="150" 
+                          SelectedIndex="2">
+                    <ComboBoxItem Content="1 + 0 (Bullet)"/>
+                    <ComboBoxItem Content="3 + 2 (Blitz)"/>
+                    <ComboBoxItem Content="10 + 0 (Rapid)"/>
+                    <ComboBoxItem Content="15 + 10 (Rapid)"/>
+                    <ComboBoxItem Content="30 + 0 (Classical)"/>
+                </ComboBox>
+            </StackPanel>
+            
+            <TextBlock x:Name="ConnectionStatusText" 
+                       Text="Ready to connect" 
+                       FontSize="14" 
+                       Foreground="#BDC3C7" 
+                       HorizontalAlignment="Center" 
+                       Margin="0,15"/>
+            
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,20,0,0">
+                <Button Content="Connect" 
+                        Style="{StaticResource SettingsButton}"
+                        Background="#3498DB"
+                        Command="{Binding ConnectOnlineGameCommand}"/>
+                <Button Content="Back" 
+                        Style="{StaticResource SettingsButton}"
+                        Background="#95A5A6"
+                        Command="{Binding BackToMainMenuCommand}"/>
+            </StackPanel>
+        </StackPanel>
+    </Border>
+</UserControl>
