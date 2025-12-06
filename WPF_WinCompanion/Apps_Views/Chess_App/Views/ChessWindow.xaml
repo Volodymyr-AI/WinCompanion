@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:helpers1="clr-namespace:ChessApp.Infrastructure.Helpers;assembly=ChessApp"
+        xmlns:additional="clr-namespace:WPF_WinCompanion.Apps_Views.Chess_App.Views.Additional"
+        xmlns:gameTypes="clr-namespace:WPF_WinCompanion.Apps_Views.Chess_App.Views.Additional.GameTypes"
         mc:Ignorable="d"
         Title="Chess Board" Height="650" Width="900"
         ResizeMode="NoResize"
@@ -225,87 +227,66 @@
             </Grid>
         </Border>
         
-        <!-- Game Menu Overlay -->
-        <Border Grid.Column="0" 
-                x:Name="GameMenuOverlay"
-                Background="#80000000"
-                VerticalAlignment="Center"
-                Height="250"
-                CornerRadius="15"
-                BorderBrush="#3498DB"
-                BorderThickness="3">
-            <Border.Style>
-                <Style TargetType="Border">
+        <!-- Game Menu Overlays -->
+        <!-- Main Game Menu -->
+        <additional:GameMenuOverlay Grid.Column="0"
+                                  DataContext="{Binding}">
+            <additional:GameMenuOverlay.Style>
+                <Style TargetType="additional:GameMenuOverlay">
                     <Setter Property="Visibility" Value="Collapsed"/>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding ShowGameMenu}" Value="True">
+                        <DataTrigger Binding="{Binding ShowMainMenu}" Value="True">
                             <Setter Property="Visibility" Value="Visible"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </Border.Style>
-            <Border.Effect>
-                <DropShadowEffect Color="Black" 
-                                  Direction="315" 
-                                  ShadowDepth="10" 
-                                  Opacity="0.8"
-                                  BlurRadius="15"/>
-            </Border.Effect>
-            
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="Choose Game Mode" 
-                           FontSize="24" 
-                           FontWeight="Bold" 
-                           Foreground="White" 
-                           HorizontalAlignment="Center" 
-                           Margin="0,0,0,30"
-                           />
-                
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <Button Style="{StaticResource Menu3DButton}"
-                            Command="{Binding StartSoloGameCommand}">
-                        <Button.Background>
-                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                <GradientStop Color="#27AE60" Offset="0"/>
-                                <GradientStop Color="#229954" Offset="1"/>
-                            </LinearGradientBrush>
-                        </Button.Background>
-                        <StackPanel>
-                            <TextBlock Text="🏁" FontSize="32" HorizontalAlignment="Center" Margin="0,0,0,5"/>
-                            <TextBlock Text="Solo Game" FontSize="12" TextWrapping="Wrap" HorizontalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-
-                    <Button Style="{StaticResource Menu3DButton}"
-                            Command="{Binding StartAIGameCommand}">
-                        <Button.Background>
-                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                <GradientStop Color="#E74C3C" Offset="0"/>
-                                <GradientStop Color="#C0392B" Offset="1"/>
-                            </LinearGradientBrush>
-                        </Button.Background>
-                        <StackPanel>
-                            <TextBlock Text="🤖" FontSize="32" HorizontalAlignment="Center" Margin="0,0,0,5"/>
-                            <TextBlock Text="AI Opponent" FontSize="12" TextWrapping="Wrap" HorizontalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-
-                    <Button Style="{StaticResource Menu3DButton}"
-                            Command="{Binding StartOnlineGameCommand}">
-                        <Button.Background>
-                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                                <GradientStop Color="#3498DB" Offset="0"/>
-                                <GradientStop Color="#2980B9" Offset="1"/>
-                            </LinearGradientBrush>
-                        </Button.Background>
-                        <StackPanel>
-                            <TextBlock Text="🌐" FontSize="32" HorizontalAlignment="Center" Margin="0,0,0,5"/>
-                            <TextBlock Text="Online Game" FontSize="12" TextWrapping="Wrap" HorizontalAlignment="Center"/>
-                        </StackPanel>
-                    </Button>
-                </StackPanel>
-            </StackPanel>
-        </Border>
+            </additional:GameMenuOverlay.Style>
+        </additional:GameMenuOverlay>
+        
+        <!-- Solo Game Settings -->
+        <gameTypes:SoloGameSettings Grid.Column="0"
+                                   DataContext="{Binding}">
+            <gameTypes:SoloGameSettings.Style>
+                <Style TargetType="gameTypes:SoloGameSettings">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ShowSoloSettings}" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </gameTypes:SoloGameSettings.Style>
+        </gameTypes:SoloGameSettings>
+        
+        <!-- AI Game Settings -->
+        <gameTypes:AIGameSettings Grid.Column="0"
+                                 DataContext="{Binding}">
+            <gameTypes:AIGameSettings.Style>
+                <Style TargetType="gameTypes:AIGameSettings">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ShowAISettings}" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </gameTypes:AIGameSettings.Style>
+        </gameTypes:AIGameSettings>
+        
+        <!-- Online Game Settings -->
+        <gameTypes:OnlineGameSettings Grid.Column="0"
+                                     DataContext="{Binding}">
+            <gameTypes:OnlineGameSettings.Style>
+                <Style TargetType="gameTypes:OnlineGameSettings">
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ShowOnlineSettings}" Value="True">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </gameTypes:OnlineGameSettings.Style>
+        </gameTypes:OnlineGameSettings>
         
         <!-- Right panel -->
         <Border Grid.Column="2" Background="#E1E8ED" CornerRadius="20" Padding="3">
