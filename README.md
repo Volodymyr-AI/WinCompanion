@@ -286,7 +286,7 @@ While any menu is visible, the board and side panel are blurred (`BlurEffect`) a
 
 | Layer | Technology |
 |---|---|
-| UI Framework | WPF (.NET 9, `net9.0-windows7.0`) |
+| UI Framework | WPF (.NET 9) |
 | Language | C# 13 |
 | UI Theme | Material Design In XAML (`MaterialDesignThemes 5.1.0`) |
 | Data Binding | MVVM via `INotifyPropertyChanged` + `RelayCommand` |
