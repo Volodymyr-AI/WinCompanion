@@ -3,6 +3,7 @@ using ChessApp.BoardLogic.Game.Generators;
 using ChessApp.BoardLogic.Game.Validators;
 using ChessApp.BoardLogic.Game.Validators.CastlingValidation;
 using ChessApp.BoardLogic.Game.Validators.CheckmateValidation;
+using ChessApp.BoardLogic.Game.Validators.EnPassantValidation;
 using ChessApp.Models.Board;
 using ChessApp.Models.Chess.Pieces;
 
@@ -13,11 +14,11 @@ public class MoveHighlight : IMoveHighlighter
     /// <summary>
     /// Highlight selected pieces possible moves
     /// </summary>
-    public void HighlightMoves(ChessSquare selectedSquare, ChessBoardModel board, CastlingValidator castlingValidator)
+    public void HighlightMoves(ChessSquare selectedSquare, ChessBoardModel board, CastlingValidator castlingValidator, EnPassantValidator enPassantValidator)
     {
         List<ChessSquare> possibleMoves = selectedSquare.Piece is King
             ? MoveGenerator.GetKingMoves(selectedSquare, board, castlingValidator)
-            : MoveGenerator.GetPossibleMoves(selectedSquare, board);
+            : MoveGenerator.GetPossibleMoves(selectedSquare, board, enPassantValidator);
 
         foreach (var square in possibleMoves)
         {
@@ -26,7 +27,7 @@ public class MoveHighlight : IMoveHighlighter
             {
                 square.Background = square.BaseBackground;
             }
-            else if (square.Piece != null)
+            else if (square.Piece != null || square == enPassantValidator?.EnPassantTargetSquare)
             {
                 square.Background = Brushes.LightCoral;
             }

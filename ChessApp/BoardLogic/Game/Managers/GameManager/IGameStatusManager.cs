@@ -21,7 +21,6 @@ public interface IGameStatusManager : INotifyPropertyChanged
     /// <summary> Checks the game position and returns <c>true</c>, if it already finished. </summary>
     bool CheckGameStatus();
     void UpdateFiftyMoveRule(Move move);
-    void UpdateEnPassant(ChessSquare fromSquare, ChessSquare toSquare, int moveNumber);
     bool CanClaimFiftyMoveDraw();
     void SwitchTurn();
     

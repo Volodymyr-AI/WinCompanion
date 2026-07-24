@@ -154,23 +154,4 @@ public sealed class GameStatusManager : IGameStatusManager
         return true;
     }
 
-    /// <summary>
-    /// Update en passant state after a move
-    /// </summary>
-    /// <param name="fromSquare"></param>
-    /// <param name="toSquare"></param>
-    /// <param name="moveNumber"></param>
-    public void UpdateEnPassant(ChessSquare fromSquare, ChessSquare toSquare, int moveNumber)
-    {
-        _enPassant.UpdateAfterMove(_board, toSquare, fromSquare, moveNumber);
-    }
-
-    /// <summary>
-    /// Get en passant validator for other components
-    /// </summary>
-    /// <returns></returns>
-    public EnPassantValidator GetEnPassantValidator()
-    {
-        return _enPassant;
-    }
 }

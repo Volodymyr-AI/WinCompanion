@@ -25,6 +25,7 @@ public class ChessMoveHandler : IChessMoveHandler
     private readonly IMoveHighlighter _highlighter;
     private readonly IPieceSelectHandler _pieceSelectHandler;
     private readonly MoveTracker _moveTracker;
+    private int _plyCount = 0;
     public event Action BoardUpdated;
     public event Action<Move> MoveExecuted;
 
@@ -32,12 +33,14 @@ public class ChessMoveHandler : IChessMoveHandler
         ChessBoardModel boardModel,
         CastlingValidator castlingValidator,
         IMoveHighlighter highlighter,
-        IPieceSelectHandler pieceSelectHandler)
+        IPieceSelectHandler pieceSelectHandler,
+        EnPassantValidator enPassantValidator)
     {
         _chessBoardModel = boardModel;
         _castlingValidator = castlingValidator;
         _highlighter = highlighter;
         _pieceSelectHandler = pieceSelectHandler;
+        _enPassantValidator = enPassantValidator;
         _moveTracker = new MoveTracker(boardModel);
     }
     
@@ -67,17 +70,21 @@ public class ChessMoveHandler : IChessMoveHandler
         ChessPiece movingPiece = fromSquare.Piece!;
         PieceColor pieceColor = movingPiece.Color;
         
-        bool isPawnPromotion = movingPiece is Pawn && 
+        bool isPawnPromotion = movingPiece is Pawn &&
                                (destinationSquare.Row == 0 || destinationSquare.Row == 7);
-        
+
+        // Must be checked before the move happens - it relies on fromSquare still holding the pawn
+        // and on the en passant opportunity recorded from the previous move.
+        bool isEnPassantCapture = _enPassantValidator.IsEnPassantCapture(fromSquare, destinationSquare, _chessBoardModel);
+
         // Record beginning of the move
         _moveTracker.RecordMoveStart(fromSquare);
-        
+
         if (destinationSquare.Piece != null)
         {
             _moveTracker.RecordCapture(destinationSquare.Piece);
         }
-        
+
         bool isKingSideCastle = false;
         bool isQueenSideCastle = false;
 
@@ -90,8 +97,21 @@ public class ChessMoveHandler : IChessMoveHandler
         else
         {
             MovePiece(destinationSquare);
+
+            if (isEnPassantCapture)
+            {
+                ChessPiece? capturedPawn = _enPassantValidator.ExecuteEnPassantCapture(destinationSquare, _chessBoardModel);
+                if (capturedPawn != null)
+                {
+                    _moveTracker.RecordCapture(capturedPawn);
+                }
+            }
         }
-        
+
+        // Must run after the move happened - it relies on the piece already being on destinationSquare
+        // to detect a fresh double pawn push, and expires the opportunity we just consumed above.
+        _enPassantValidator.UpdateAfterMove(_chessBoardModel, fromSquare, destinationSquare, ++_plyCount);
+
         _moveTracker.RecordMoveEnd(destinationSquare, isKingSideCastle, isQueenSideCastle, isPawnPromotion);
         
         // Check if this is checked or mate

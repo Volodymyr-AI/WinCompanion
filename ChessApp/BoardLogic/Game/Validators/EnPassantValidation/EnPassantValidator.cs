@@ -36,15 +36,17 @@ public class EnPassantValidator
         _enPassantTargetSquare = null;
         _enPassantMoveNumber = -1;
         
-        // Check if this move creates en passant opportunity
-        if (fromSquare.Piece is Pawn pawn)
+        // Check if this move creates en passant opportunity.
+        // NOTE: checked on toSquare, not fromSquare - callers invoke this after the piece
+        // has already been relocated on the board, so fromSquare.Piece is null by then.
+        if (toSquare.Piece is Pawn pawn)
         {
             int rowDifference = Math.Abs(fromSquare.Row - toSquare.Row);
             
             //if pawn moved 2 squares
             if (rowDifference == 2)
             {
-                // En passsant targer square is a square the pawn jumped over 
+                // En passant target square is a square the pawn jumped over 
                 int targetRow = (fromSquare.Row + toSquare.Row) / 2;
                 int targetColumn = fromSquare.Column;
                 
@@ -82,24 +84,39 @@ public class EnPassantValidator
     }
 
     /// <summary>
+    /// Finds the square holding the pawn that an en passant capture to toSquare would remove,
+    /// without actually removing it. Used both to execute the capture and to simulate it
+    /// (e.g. for discovered-check checks) before the attacking piece has moved.
+    /// </summary>
+    /// <param name="toSquare"></param>
+    /// <param name="attackingColor"></param>
+    /// <param name="board"></param>
+    public ChessSquare? GetEnPassantCapturedPawnSquare(ChessSquare toSquare, PieceColor attackingColor, ChessBoardModel board)
+    {
+        if (EnPassantTargetSquare is null) return null;
+        if (toSquare.Row != EnPassantTargetSquare.Row || toSquare.Column != EnPassantTargetSquare.Column) return null;
+
+        // The captured pawn is not on the target square, but on the same file as target square
+        // and same rank as the attacking pawn was
+        int capturedPawnRow = attackingColor == PieceColor.White ? toSquare.Row + 1 : toSquare.Row - 1;
+        return board.GetSquare(capturedPawnRow, toSquare.Column);
+    }
+
+    /// <summary>
     /// Executes en passant capture (removes the captured pawn)
     /// </summary>
     /// <param name="toSquare"></param>
     /// <param name="board"></param>
-    public void ExecuteEnPassantCapture(ChessSquare toSquare, ChessBoardModel board)
+    /// <returns>The captured piece, or null if there was nothing to capture</returns>
+    public ChessPiece? ExecuteEnPassantCapture(ChessSquare toSquare, ChessBoardModel board)
     {
-        if(EnPassantTargetSquare is null) return;
-        
-        // The captured pawn is not on the target square, but on the same file as target square
-        // and same rank as the attacking pawn was
         PieceColor attackingColor = toSquare.Piece?.Color ?? PieceColor.White;
-        int capturedPawnRow = attackingColor == PieceColor.White ? toSquare.Row + 1 : toSquare.Row - 1;
-        
-        var capturedPawnSquare = board.GetSquare(capturedPawnRow, toSquare.Column);
-        if (capturedPawnSquare != null)
-        {
-            capturedPawnSquare.Piece = null;
-        }
+        var capturedPawnSquare = GetEnPassantCapturedPawnSquare(toSquare, attackingColor, board);
+        if (capturedPawnSquare == null) return null;
+
+        var capturedPiece = capturedPawnSquare.Piece;
+        capturedPawnSquare.Piece = null;
+        return capturedPiece;
     }
 
     /// <summary>

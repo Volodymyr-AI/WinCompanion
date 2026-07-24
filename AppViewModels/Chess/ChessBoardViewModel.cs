@@ -149,20 +149,22 @@ public class ChessBoardViewModel : INotifyPropertyChanged
 
         _castlingValidator = new CastlingValidator();
         _enPassantValidator = new EnPassantValidator();
-        var moveValidator = new MoveValidator();
+        var moveValidator = new MoveValidator(_enPassantValidator);
         var highlighter   = new MoveHighlight();
 
         /* 2. -------------  domain services ----------------------------------*/
         _pieceSelectHandler = new PieceSelectHandler(
             highlighter,
             BoardModel,
-            _castlingValidator);
-        
+            _castlingValidator,
+            _enPassantValidator);
+
         _moveHandler = new ChessMoveHandler(
             BoardModel,
             _castlingValidator,
             highlighter,
-            _pieceSelectHandler);
+            _pieceSelectHandler,
+            _enPassantValidator);
 
         _gameStatusManager = new GameStatusManager(
             BoardModel,
